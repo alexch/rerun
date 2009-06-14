@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+
+libdir = "#{File.dirname(File.dirname(__FILE__))}/lib"
+$LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
+
+load 'rerun.gemspec' # defines "$spec" variable
+
+require 'optparse'
+
+options = {}
+
+opts = OptionParser.new("", 24, '  ') { |opts|
+  opts.banner = "Usage: rerun cmd"
+
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on_tail("-h", "--help", "--usage", "show this message") do
+    puts opts
+    exit
+  end
+
+  opts.on_tail("--version", "show version") do
+    puts $spec.version
+    exit
+  end
+
+  opts.parse! ARGV
+}
+
+#config = ARGV[0] || "config.ru"
+#abort "configuration #{config} not found"  unless File.exist? config
+#
+#if config =~ /\.ru$/ && File.read(config)[/^#\\(.*)/]
+#  opts.parse! $1.split(/\s+/)
+#end
