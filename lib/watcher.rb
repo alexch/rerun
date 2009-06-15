@@ -149,6 +149,7 @@ module Rerun
           else
             # see if we have found this file already
             found_file = @found[full_file_name]
+            @found[full_file_name] = FoundFile.new(full_file_name, mod_time, size)
 
             if found_file
               if mod_time > found_file.mod_time || size != found_file.size then
@@ -157,7 +158,6 @@ module Rerun
             else
               @client_callback.call(CREATED, full_file_name)
             end
-            @found[full_file_name] = FoundFile.new(full_file_name, mod_time, size)
           end
         end
       end

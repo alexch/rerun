@@ -5,7 +5,7 @@ require 'rubygems'
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
 $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
-load 'rerun.gemspec' # defines "$spec" variable
+load "#{libdir}/../rerun.gemspec" # defines "$spec" variable, which we read the version from
 
 require 'optparse'
 
@@ -47,4 +47,6 @@ end
 
 require 'rerun'
 cmd = ARGV.join(" ")
-Rerun::Runner.new(cmd, options).start
+runner = Rerun::Runner.new(cmd, options)
+runner.start
+runner.join

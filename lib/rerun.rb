@@ -14,8 +14,10 @@ module Rerun
     end
     
     def restart
+      @restarting = true
       stop
       start
+      @restarting = false
     end
 
     def start
@@ -35,11 +37,14 @@ module Rerun
       end
 
       @pid = Kernel.fork do
-        Signal.trap("HUP") { stop; exit }
+        Signal.trap("HUP") { exit }
         exec(@run_command)
       end
 
-      Process.detach(@pid)
+      puts "pid = #{@pid}"
+      Signal.trap("HUP") { stop; exit }
+
+      # Process.detach(@pid)
 
       begin
         sleep 2
@@ -54,17 +59,26 @@ module Rerun
         @already_running = false
       end
 
-      watcher_class = osx? ? OSXWatcher : FSWatcher
-      # watcher_class = FSWatcher
+      unless @watcher
+        watcher_class = osx? ? OSXWatcher : FSWatcher
+        # watcher_class = FSWatcher
       
-      watcher = watcher_class.new do
-        restart
+        watcher = watcher_class.new do
+          puts "@restarting='#{@restarting}'"
+          
+          restart unless @restarting
+        end
+        watcher.add_directory(".", "**/*.rb")
+        watcher.sleep_time = 1
+        watcher.start
+        
+        @watcher = watcher
       end
-      watcher.add_directory(".", "**/*.rb")
-      watcher.sleep_time = 1
-      watcher.start
-      watcher.join
 
+    end
+    
+    def join
+      @watcher.join
     end
 
     def running?
@@ -79,11 +93,11 @@ module Rerun
     end
 
     def stop
-      if @pid && @pid != 0
-        notify "Stopping"
+      if @pid && (@pid != 0)
+        notify "Stopping", "All good things must come to an end." unless @restarting
         signal("KILL") && Process.wait(@pid)
       end
-    rescue
+    rescue => e
       false
     end
 
