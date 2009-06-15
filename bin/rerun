@@ -36,3 +36,7 @@ opts = OptionParser.new("", 24, '  ') { |opts|
 #if config =~ /\.ru$/ && File.read(config)[/^#\\(.*)/]
 #  opts.parse! $1.split(/\s+/)
 #end
+
+require 'lib/rerun'
+cmd = ARGV.join(" ")
+Rerun::Runner.new(cmd, options).start
