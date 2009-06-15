@@ -17,8 +17,12 @@ $spec = Gem::Specification.new do |s|
     LICENSE
     Rakefile
     rerun.gemspec
-    lib/rerun.rb
     bin/rerun
+    lib/rerun.rb
+    lib/fswatcher.rb
+    lib/osxwatcher.rb
+    lib/system.rb
+    lib/watcher.rb
   ]
   s.executables = ['rerun']
   s.test_files = s.files.select {|path| path =~ /^spec\/.*_spec.rb/}

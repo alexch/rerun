@@ -2,7 +2,8 @@
 
 require 'rubygems'
 
-libdir = "#{File.dirname(File.dirname(__FILE__))}/lib"
+libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
+puts "adding #{libdir}"
 $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
 load 'rerun.gemspec' # defines "$spec" variable
@@ -37,6 +38,6 @@ opts = OptionParser.new("", 24, '  ') { |opts|
 #  opts.parse! $1.split(/\s+/)
 #end
 
-require 'lib/rerun'
+require 'rerun'
 cmd = ARGV.join(" ")
 Rerun::Runner.new(cmd, options).start

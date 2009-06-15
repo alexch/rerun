@@ -101,7 +101,7 @@ module Rerun
     def notify(title, body)
       growl title, body if has_growl?
       puts
-      puts "#{Time.now.strftime("%T")} - #{title} #{app_name}: #{body}"
+      puts "#{Time.now.strftime("%T")} - #{app_name} #{title}: #{body}"
       puts
     end
     
