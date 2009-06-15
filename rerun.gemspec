@@ -7,13 +7,13 @@ $spec = Gem::Specification.new do |s|
   s.date = '2009-06-14'
 
   s.description = "Restarts your app when a file changes"
-  s.summary     = s.description + ", man."
+  s.summary     = "Launches an app, and restarts it whenever the filesystem changes."
 
   s.authors = ["Alex Chaffee"]
   s.email = "alex@stinky.com"
 
   s.files = %w[
-    README
+    README.md
     LICENSE
     Rakefile
     rerun.gemspec
@@ -27,7 +27,7 @@ $spec = Gem::Specification.new do |s|
   s.executables = ['rerun']
   s.test_files = s.files.select {|path| path =~ /^spec\/.*_spec.rb/}
 
-  s.extra_rdoc_files = %w[README]
+  s.extra_rdoc_files = %w[README.md]
   #s.add_dependency 'rack',    '>= 0.9.1'
   #s.add_dependency 'launchy', '>= 0.3.3', '< 1.0'
 

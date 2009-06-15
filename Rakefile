@@ -13,7 +13,7 @@ Spec::Rake::SpecTask.new('spec') do |t|
   t.ruby_opts = ['-rubygems'] if defined? Gem
 end
 
-$rubyforge_project = 'XXX'
+$rubyforge_project = 'pivotalrb'
 
 $spec =
   begin
@@ -45,12 +45,13 @@ file package('.gem') => %W[pkg/ #{$spec.name}.gemspec] + $spec.files do |f|
 end
 
 file package('.tar.gz') => %w[pkg/] + $spec.files do |f|
-  sh <<-SH
+  cmd = <<-SH
     git archive \
       --prefix=#{$spec.name}-#{$spec.version}/ \
       --format=tar \
       HEAD | gzip > #{f.name}
   SH
+  sh cmd.gsub(/ +/, ' ')
 end
 
 desc 'Publish gem and tarball to rubyforge'

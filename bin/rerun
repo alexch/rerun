@@ -3,7 +3,6 @@
 require 'rubygems'
 
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
-puts "adding #{libdir}"
 $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
 load 'rerun.gemspec' # defines "$spec" variable
@@ -15,6 +14,9 @@ options = {}
 opts = OptionParser.new("", 24, '  ') { |opts|
   opts.banner = "Usage: rerun cmd"
 
+  opts.separator ""
+  opts.separator "Launches an app, and restarts it when the filesystem changes."
+  opts.separator "See http://github.com/alexch/rerun for more info."
   opts.separator ""
   opts.separator "Options:"
 
@@ -37,6 +39,11 @@ opts = OptionParser.new("", 24, '  ') { |opts|
 #if config =~ /\.ru$/ && File.read(config)[/^#\\(.*)/]
 #  opts.parse! $1.split(/\s+/)
 #end
+
+if ARGV.empty?
+  puts opts
+  exit
+end
 
 require 'rerun'
 cmd = ARGV.join(" ")
