@@ -28,8 +28,10 @@ module Rerun
       File.expand_path(".").gsub(/^.*\//, '').capitalize
     end
 
-    def growl(title, body)
-      `#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" &`
+    def growl(title, body, background = true)
+      s = "#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\""
+      s += " &" if background
+      `#{s}`
     end
     
   end

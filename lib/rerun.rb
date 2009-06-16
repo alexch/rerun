@@ -26,23 +26,22 @@ module Rerun
           "To infinity... and beyond!",
           "Charge!",
           ]
-        notify "Launching", taglines[rand(taglines.size)]
+        notify "Launched", taglines[rand(taglines.size)]
         @already_running = true
       else
         taglines = [
           "Here we go again!",
           "Once more unto the breach, dear friends, once more!", 
         ]
-        notify "Restarting", taglines[rand(taglines.size)]
+        notify "Restarted", taglines[rand(taglines.size)]
       end
 
       @pid = Kernel.fork do
-        Signal.trap("HUP") { exit }
+        # Signal.trap("INT") { exit }
         exec(@run_command)
       end
 
-      puts "pid = #{@pid}"
-      Signal.trap("HUP") { stop; exit }
+      Signal.trap("INT") { stop; exit }
 
       # Process.detach(@pid)
 
@@ -64,8 +63,6 @@ module Rerun
         # watcher_class = FSWatcher
       
         watcher = watcher_class.new do
-          puts "@restarting='#{@restarting}'"
-          
           restart unless @restarting
         end
         watcher.add_directory(".", "**/*.rb")
@@ -94,7 +91,7 @@ module Rerun
 
     def stop
       if @pid && (@pid != 0)
-        notify "Stopping", "All good things must come to an end." unless @restarting
+        notify "Stopped", "All good things must come to an end." unless @restarting
         signal("KILL") && Process.wait(@pid)
       end
     rescue => e
@@ -115,8 +112,7 @@ module Rerun
     def notify(title, body)
       growl title, body if has_growl?
       puts
-      puts "#{Time.now.strftime("%T")} - #{app_name} #{title}: #{body}"
-      puts
+      puts "#{Time.now.strftime("%T")} - #{app_name} #{title}"
     end
     
   end
