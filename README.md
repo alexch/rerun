@@ -18,12 +18,13 @@ to growl in addition to the console.
 
         sudo gem install rerun
 
-or...
+If you want to use the latest version, grab it off Github:
 
         gem sources -a http://gems.github.com/
         sudo gem install alexch-rerun
 
-(The github way isn't working yet for some reason. Maybe I have to wait for cron to run or something.)
+I'll bump the version on Github for release candidates, and deploy to
+Rubyforge only when it's had some time to bake.
 
 # Usage: 
 
@@ -35,10 +36,9 @@ app.rb:
         rerun app.rb
         
 Or if you're running a Rack app that's configured in config.ru
-but you want to override its port:
+but you want it on port 4000 and in debug mode:
 
-        rerun "thin start --port=4000 -R config.ru"
-        
+        rerun "thin start --debug --port=4000 -R config.ru"        
 
 # Options:
 
@@ -80,12 +80,14 @@ YMMV!
 
 # Why did you write this?
 
-I've been using [Sinatra](http://sinatrarb.com) and loving it. In
-order to simplify their system, the Rat Pack just took out
-auto-reloading. I approve of this: a web application framework should
-be focused on serving requests, not on munging Ruby ObjectSpace. But
-I still wanted automatic reloading during development. Shotgun wasn't
-working for me (see above) so I spliced Rerun together out of .
+I've been using [Sinatra](http://sinatrarb.com) and loving it. In order
+to simplify their system, the Rat Pack just removed auto-reloading from
+Sinatra proper. I approve of this: a web application framework should be
+focused on serving requests, not on munging Ruby ObjectSpace for
+dev-time convenience. But I still wanted automatic reloading during
+development. Shotgun wasn't working for me (see above) so I spliced
+Rerun together out of code from Rspactor, FileSystemWatcher, and Shotgun
+-- with a heavy amount of refactoring and rewriting.
 
 # Credits
 

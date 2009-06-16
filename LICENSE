@@ -1,4 +1,4 @@
-rerun
+Rerun
 Copyright (c) 2009 Alex Chaffee <alex@stinky.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,9 +21,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 rerun partially based on code from Rspactor
-[insert license]
+Copyright (c) 2009 Mislav Marohnić
+License as above (MIT open source).
 
 rerun partially based on code from FileSystemWatcher
 http://paulhorman.com/filesystemwatcher/
-[insert license]
+No license provided; assumed public domain.
+
+rerun partially based on code from Shotgun
+Copyright (c) 2009 Ryan Tomayko <tomayko.com/about>
+License as above (MIT open source).
 
