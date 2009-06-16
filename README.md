@@ -46,6 +46,7 @@ Only --version and --help so far.
 
 # To Do:
 
+* If the cmd is, or starts with, a ".rb" file, then run it with ruby
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Windows and Linux.
@@ -55,6 +56,8 @@ Only --version and --help so far.
 Restartomatic: <http://github.com/adammck/restartomatic>
 
 Shotgun: <http://github.com/rtomayko/shotgun>
+
+Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
 
 # Why would I use this instead of Shotgun?
 
