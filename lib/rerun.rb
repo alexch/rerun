@@ -37,13 +37,20 @@ module Rerun
       end
 
       @pid = Kernel.fork do
-        # Signal.trap("INT") { exit }
-        exec(@run_command)
+        begin
+          # Signal.trap("INT") { exit }
+          exec(@run_command)
+        rescue => e
+          puts e
+          exit
+        end
       end
+      Process.detach(@pid) # so if the child exits, it dies
 
-      Signal.trap("INT") { stop; exit }
-
-      # Process.detach(@pid)
+      Signal.trap("INT") do  # INT = control-C
+         stop # first stop the child
+         exit
+       end
 
       begin
         sleep 2
