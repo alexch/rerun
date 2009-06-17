@@ -59,6 +59,8 @@ Shotgun: <http://github.com/rtomayko/shotgun>
 
 Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
 
+and the Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
+
 # Why would I use this instead of Shotgun?
 
 Shotgun does a "fork" after the web framework has loaded but before
