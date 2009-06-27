@@ -5,11 +5,13 @@ require 'osxwatcher'
 
 require 'watcher_spec'
 
-module Rerun
-  describe OSXWatcher do
-    it_should_behave_like "all watchers"
-    def create_watcher(&block)
-      OSXWatcher.new(&block)
+if mac?
+  module Rerun
+    describe OSXWatcher do
+      it_should_behave_like "all watchers"
+      def create_watcher(&block)
+        OSXWatcher.new(&block)
+      end
     end
   end
 end

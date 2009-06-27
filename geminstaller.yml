@@ -1,0 +1,4 @@
+---
+gems:
+- name: rspec
+  version: '>= 1.2.6'

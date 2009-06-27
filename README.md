@@ -5,14 +5,22 @@
 Launches your app, then watches the filesystem. If a relevant file
 changes, then it restarts your app.
 
-Currently only *.rb files are watched, anywhere under the current
-directory (.). This is pretty lame so it will change soon.
+Currently only *.rb files are watched. This is pretty lame so it will
+change soon.
 
 If you're on Mac OS X, it uses the built-in facilities for monitoring
-the filesystem, so CPU use is very light.
+the filesystem, so CPU use is very light. And if you have "growlnotify"
+available on the PATH, it sends notifications to growl in addition to
+the console. Here's how to install
+[growlnotify](http://growl.info/documentation/growlnotify.php):
 
-If you have "growlcmd" available on the PATH, it sends notifications
-to growl in addition to the console.
+>    In your shell, cd to the directory on the Growl disk image
+>    containing growlnotify, and type ./install.sh. That script
+>    will install growlnotify to /usr/local/bin and the manpage
+>    to /usr/local/man.
+
+Rerun does not work on Windows. Sorry, but you can't do much relaunching
+without "fork".
 
 # Installation:
 
@@ -42,14 +50,18 @@ but you want it on port 4000 and in debug mode:
 
 # Options:
 
-Only --version and --help so far.
+--dir directory to watch (default = ".")
+
+Also --version and --help.
 
 # To Do:
 
 * If the cmd is, or starts with, a ".rb" file, then run it with ruby
+* Watch arbitrary file types via globbing
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
-* Test on Windows and Linux.
+* Test on Linux.
+* Test on Mac without Growlnotify.
 
 # Other projects that do similar things
 
@@ -83,6 +95,20 @@ server so this doesn't affect them too much.
 
 YMMV!
 
+# Why would I use this instead of Rack::Reloader?
+
+Rack::Reloader is certifiably beautiful code, and is a very elegant use
+of Rack's middleware architecture. But because it relies on the
+LOADED_FEATURES variable, it only reloads .rb files that were 'require'd,
+not 'load'ed. That leaves out (non-Erector) template files, and also,
+the way I was doing it, sub-actions (see
+[this thread](http://groups.google.com/group/sinatrarb/browse_thread/thread/7329727a9296e96a#
+)).
+
+Rack::Reloader also doesn't reload configuration changes or redo other
+things that happen during app startup. Rerun takes the attitude that if
+you want to restart an app, you should just restart the whole app. You know?
+
 # Why did you write this?
 
 I've been using [Sinatra](http://sinatrarb.com) and loving it. In order
@@ -103,6 +129,7 @@ Based upon and/or inspired by:
 Shotgun: <http://github.com/rtomayko/shotgun>
 
 Rspactor: <http://github.com/mislav/rspactor>
+(In turn based on http://rails.aizatto.com/2007/11/28/taming-the-autotest-beast-with-fsevents/ )
 
 FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
 

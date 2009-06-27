@@ -1,16 +1,6 @@
 require "system"
 require "watcher"
 
-begin
-  require 'osx/foundation'
-  OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
-rescue MissingSourceFile
-  # this is to not fail when running on a non-Mac
-end
-
-# stolen from RSpactor, http://github.com/mislav/rspactor
-# based on http://rails.aizatto.com/2007/11/28/taming-the-autotest-beast-with-fsevents/
-
 #TODO: make it notice deleted files
 require "watcher"
 module Rerun

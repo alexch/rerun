@@ -20,6 +20,10 @@ opts = OptionParser.new("", 24, '  ') { |opts|
   opts.separator ""
   opts.separator "Options:"
 
+  opts.on("-d dir", "--dir dir", "directory to watch") do |dir|
+    options[:dir] = dir
+  end
+
   opts.on_tail("-h", "--help", "--usage", "show this message") do
     puts opts
     exit

@@ -3,7 +3,7 @@ require "watcher"
 require "osxwatcher"
 require "fswatcher"
 
-# todo: make this work in non-Mac and non-Unix environments (also Macs without growlnotify) 
+# todo: make sure this works in non-Mac environments (also Macs without growlnotify)
 module Rerun
   class Runner
 
@@ -18,6 +18,10 @@ module Rerun
       stop
       start
       @restarting = false
+    end
+
+    def dir
+      @options[:dir] || "."
     end
 
     def start
@@ -66,16 +70,18 @@ module Rerun
       end
 
       unless @watcher
-        watcher_class = osx? ? OSXWatcher : FSWatcher
+        watcher_class = mac? ? OSXWatcher : FSWatcher
         # watcher_class = FSWatcher
       
         watcher = watcher_class.new do
           restart unless @restarting
         end
-        watcher.add_directory(".", "**/*.rb")
+        puts "Watching #{dir}"
+        watcher.add_directory(dir, "**/*.rb")
         watcher.sleep_time = 1
         watcher.start
-        
+
+
         @watcher = watcher
       end
 
@@ -117,7 +123,7 @@ module Rerun
     end
 
     def notify(title, body)
-      growl title, body if has_growl?
+      growl title, body
       puts
       puts "#{Time.now.strftime("%T")} - #{app_name} #{title}"
     end
