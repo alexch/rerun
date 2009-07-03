@@ -7,18 +7,26 @@ describe "Rerun functionally" do
     FileUtils.mkdir_p(@dir)
     @file = "#{@dir}/inc.txt"
     @app_file = "#{@dir}/foo.rb"
-    touch_app_file
+    @app_file2 = "#{@dir}/bar.rb"
+    touch @app_file
     launch_inc
+  end
+  
+  after do
+    puts "Killing #{@pid}"
+    Process.kill("KILL", @pid) && Process.wait(@pid)
   end
 
   def launch_inc
-    fork do
+    @pid = fork do
       root = File.dirname(__FILE__) + "/.."
-      exec("#{root}/bin/rerun -d #{@dir} ruby #{root}/inc.rb #{@file}")
+      exec("#{root}/bin/rerun -d '#{@dir}' ruby #{root}/inc.rb #{@file}")
     end
+    sleep 4
   end
 
   def read
+    puts "Reading #{@file}"
     File.open(@file, "r") do |f|
       launched_at = f.gets.to_i
       count = f.gets.to_i
@@ -31,28 +39,36 @@ describe "Rerun functionally" do
     count
   end
 
-  def touch_app_file
-    File.open(@app_file, "w") do |f|
+  def touch(file = @app_file)
+    puts "Touching #{@app_file}"
+    File.open(file, "w") do |f|
       f.puts Time.now
     end
   end
 
   it "counts up" do
-    sleep 1
     x = current_count
-    sleep 0.5
+    sleep 1
     y = current_count
     y.should be > x
   end
 
-  it "restarts when an app file is created" do
-    sleep 2
+  it "restarts when an app file is modified" do
     first_launched_at, count = read
-    touch_app_file
+    touch @app_file
     sleep 4
     second_launched_at, count = read
 
     second_launched_at.should be > first_launched_at
   end
-  
+
+  it "restarts when an app file is created" do
+    first_launched_at, count = read
+    touch @app_file2
+    sleep 4
+    second_launched_at, count = read
+
+    second_launched_at.should be > first_launched_at
+  end
+
 end

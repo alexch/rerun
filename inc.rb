@@ -1,8 +1,9 @@
 launched = Time.now.to_i
+# puts "Launching at #{launched}"
 file = ARGV[0] || "./inc.txt"
 i = 0
 while i < 10
-  puts "Writing #{launched}/#{i}"
+#  puts "Writing #{launched}/#{i}"
   File.open(file, "w") do |f|
     f.puts(launched)
     f.puts(i)

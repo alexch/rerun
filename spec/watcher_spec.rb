@@ -30,7 +30,7 @@ module Rerun
     end
 
     it "watches file changes" do
-      rest = 0.5
+      rest = 1.0
       @log.clear
       File.open(@test_file, "w") do |f|
         f.puts("test")

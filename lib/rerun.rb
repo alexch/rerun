@@ -25,6 +25,10 @@ module Rerun
     end
 
     def start
+      if windows?
+        raise "Sorry, Rerun does not work on Windows."
+      end
+
       if (!@already_running)
         taglines = [
           "To infinity... and beyond!",
@@ -80,8 +84,6 @@ module Rerun
         watcher.add_directory(dir, "**/*.rb")
         watcher.sleep_time = 1
         watcher.start
-
-
         @watcher = watcher
       end
 
