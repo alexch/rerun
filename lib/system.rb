@@ -36,9 +36,20 @@ module Rerun
       File.expand_path(".").gsub(/^.*\//, '').capitalize
     end
 
+    def icon
+      libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
+      $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
+
+      rails_sig_file = File.expand_path(".")+"/config/boot.rb" 
+      puts rails_sig_file
+      return "#{libdir}/../icons/rails_red_sml.png" if File.exists? rails_sig_file
+      return nil
+    end
+
     def growl(title, body, background = true)
       if growl?
-        s = "#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\""
+        icon ? icon_str = "--image \"#{icon}\"" : icon_str = ""
+        s = "#{growlcmd} -H localhost -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
         s += " &" if background
         `#{s}`
       end
