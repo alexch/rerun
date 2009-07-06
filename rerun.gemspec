@@ -3,7 +3,7 @@ $spec = Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 
   s.name = 'rerun'
-  s.version = '0.3.1'
+  s.version = '0.3.2'
   s.date = '2009-06-16'
 
   s.description = "Restarts your app when a file changes"
@@ -18,6 +18,8 @@ $spec = Gem::Specification.new do |s|
     Rakefile
     rerun.gemspec
     bin/rerun
+    icons/rails_grn_sml.png
+    icons/rails_red_sml.png
     lib/rerun.rb
     lib/fswatcher.rb
     lib/osxwatcher.rb
