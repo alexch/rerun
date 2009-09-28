@@ -133,6 +133,10 @@ Rspactor: <http://github.com/mislav/rspactor>
 
 FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
 
+Patches by:
+
+David Billskog <billskog@gmail.com>
+
 # License
 
 Open Source MIT License. See "LICENSE" file.

@@ -14,7 +14,7 @@ if mac?
   begin
     require 'osx/foundation'
     OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
-  rescue
+  rescue LoadError
     $osx_foundation_failed_to_load = true
   end
 end
