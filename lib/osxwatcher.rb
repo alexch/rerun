@@ -1,7 +1,8 @@
 require "system"
 require "watcher"
 
-#TODO: make it notice deleted files
+#TODO: make it notice deleted files natively, rather than passing to 'examine'
+#TODO: use http://github.com/spicycode/fsevent
 require "watcher"
 module Rerun
   class OSXWatcher < Rerun::Watcher
