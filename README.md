@@ -133,6 +133,8 @@ Rspactor: <http://github.com/mislav/rspactor>
 
 FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
 
+Kicker: http://github.com/alloy/kicker/
+
 Patches by:
 
 David Billskog <billskog@gmail.com>
