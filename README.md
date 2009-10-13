@@ -74,7 +74,7 @@ Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8f
 
 and the Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
 
-Kicker: http://github.com/alloy/kicker/
+Kicker: <http://github.com/alloy/kicker/>
 
 # Why would I use this instead of Shotgun?
 
