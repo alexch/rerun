@@ -62,6 +62,7 @@ Also --version and --help.
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
 * Test on Mac without Growlnotify.
+* Merge with Kicker (using it as a library and writing a Rerun recipe)
 
 # Other projects that do similar things
 
@@ -72,6 +73,8 @@ Shotgun: <http://github.com/rtomayko/shotgun>
 Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
 
 and the Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
+
+Kicker: http://github.com/alloy/kicker/
 
 # Why would I use this instead of Shotgun?
 
@@ -132,8 +135,6 @@ Rspactor: <http://github.com/mislav/rspactor>
 (In turn based on http://rails.aizatto.com/2007/11/28/taming-the-autotest-beast-with-fsevents/ )
 
 FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
-
-Kicker: http://github.com/alloy/kicker/
 
 Patches by:
 
