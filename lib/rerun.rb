@@ -5,6 +5,9 @@ require "fswatcher"
 
 # todo: make sure this works in non-Mac environments (also Macs without growlnotify)
 module Rerun
+  
+  DEFAULT_PATTERN = "**/*.{rb,js,css}"
+  
   class Runner
 
     include System
@@ -25,7 +28,7 @@ module Rerun
     end
     
     def pattern
-      @options[:pattern] || "**/*.rb"
+      @options[:pattern] || DEFAULT_PATTERN
     end
 
     def start

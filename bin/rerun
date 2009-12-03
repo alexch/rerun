@@ -7,6 +7,8 @@ $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
 load "#{libdir}/../rerun.gemspec" # defines "$spec" variable, which we read the version from
 
+require 'rerun'
+
 require 'optparse'
 
 options = {}
@@ -24,7 +26,7 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:dir] = dir
   end
 
-  opts.on("-p pattern", "--pattern pattern", "file glob, default = \"**/*.rb\"") do |dir|
+  opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{Rerun::DEFAULT_PATTERN}\"") do |dir|
     options[:dir] = dir
   end
 
@@ -53,7 +55,6 @@ if ARGV.empty?
   exit
 end
 
-require 'rerun'
 cmd = ARGV.join(" ")
 runner = Rerun::Runner.new(cmd, options)
 runner.start

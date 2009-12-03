@@ -41,7 +41,7 @@ Rubyforge only when it's had some time to bake.
 For example, if you're running a Sinatra app whose main file is
 app.rb:
 
-        rerun app.rb
+        rerun "ruby app.rb"
         
 Or if you're running a Rack app that's configured in config.ru
 but you want it on port 4000 and in debug mode:
@@ -51,6 +51,8 @@ but you want it on port 4000 and in debug mode:
 # Options:
 
 --dir directory to watch (default = ".")
+
+--pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. By default it watches .rb, .js, and .css files.
 
 Also --version and --help.
 
