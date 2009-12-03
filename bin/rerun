@@ -24,6 +24,10 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:dir] = dir
   end
 
+  opts.on("-p pattern", "--pattern pattern", "file glob, default = \"**/*.rb\"") do |dir|
+    options[:dir] = dir
+  end
+
   opts.on_tail("-h", "--help", "--usage", "show this message") do
     puts opts
     exit

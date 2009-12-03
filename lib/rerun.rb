@@ -23,6 +23,10 @@ module Rerun
     def dir
       @options[:dir] || "."
     end
+    
+    def pattern
+      @options[:pattern] || "**/*.rb"
+    end
 
     def start
       if windows?
@@ -80,8 +84,8 @@ module Rerun
         watcher = watcher_class.new do
           restart unless @restarting
         end
-        puts "Watching #{dir}"
-        watcher.add_directory(dir, "**/*.rb")
+        puts "Watching #{dir}/#{pattern}"
+        watcher.add_directory(dir, pattern)
         watcher.sleep_time = 1
         watcher.start
         @watcher = watcher
