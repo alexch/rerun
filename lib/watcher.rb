@@ -172,7 +172,7 @@ module Rerun
       end
 
       def files()
-        return Dir[@dir + "/" + @expression]
+        return Dir["#{@dir}/#{@expression}"]
       end
     end
 
