@@ -26,8 +26,8 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:dir] = dir
   end
 
-  opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{Rerun::DEFAULT_PATTERN}\"") do |dir|
-    options[:dir] = dir
+  opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{Rerun::DEFAULT_PATTERN}\"") do |pattern|
+    options[:pattern] = pattern
   end
 
   opts.on_tail("-h", "--help", "--usage", "show this message") do
