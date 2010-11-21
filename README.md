@@ -13,12 +13,9 @@ it uses the built-in facilities for monitoring
 the filesystem, so CPU use is very light. And if you have "growlnotify"
 available on the PATH, it sends notifications to growl in addition to
 the console. Here's how to install
-[growlnotify](http://growl.info/documentation/growlnotify.php):
+[growlnotify](http://growl.info/extras.php#growlnotify):
 
->    In your shell, cd to the directory on the Growl disk image
->    containing growlnotify, and type ./install.sh. That script
->    will install growlnotify to /usr/local/bin and the manpage
->    to /usr/local/man.
+> The Installer package for growlnotify is in the growlnotify folder in the Extras folder on the Growl disk image. Simply open the Installer package and follow the on-screen instructions.
 
 Rerun does not work on Windows. Sorry, but you can't do much relaunching
 without "fork".
