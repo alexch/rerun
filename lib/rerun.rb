@@ -6,7 +6,8 @@ require "fswatcher"
 # todo: make sure this works in non-Mac environments (also Macs without growlnotify)
 module Rerun
   
-  DEFAULT_PATTERN = "**/*.{rb,js,css}"
+  DEFAULT_PATTERN = "**/*.{rb,js,css,erb,ru}"
+  
   
   class Runner
 

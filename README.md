@@ -5,10 +5,11 @@
 Launches your app, then watches the filesystem. If a relevant file
 changes, then it restarts your app.
 
-Currently only *.rb files are watched. This is pretty lame so it will
-change soon.
+By default only *.{rb,js,css,erb,ru} files are watched. Use the
+`--pattern` option if you want to change this.
 
-If you're on Mac OS X, it uses the built-in facilities for monitoring
+If you're on Mac OS X, and using the built-in ruby,
+it uses the built-in facilities for monitoring
 the filesystem, so CPU use is very light. And if you have "growlnotify"
 available on the PATH, it sends notifications to growl in addition to
 the console. Here's how to install
@@ -26,57 +27,53 @@ without "fork".
 
         sudo gem install rerun
 
-If you want to use the latest version, grab it off Github:
-
-        gem sources -a http://gems.github.com/
-        sudo gem install alexch-rerun
-
-I'll bump the version on Github for release candidates, and deploy to
-Rubyforge only when it's had some time to bake.
-
 # Usage: 
 
-        rerun [options] cmd
+        rerun [options] [--] cmd
 
 For example, if you're running a Sinatra app whose main file is
 app.rb:
 
-        rerun "ruby app.rb"
+        rerun ruby app.rb
         
 Or if you're running a Rack app that's configured in config.ru
-but you want it on port 4000 and in debug mode:
+but you want it on port 4000 and in debug mode, and only want to watch
+the `app` subdirectory:
 
-        rerun "thin start --debug --port=4000 -R config.ru"        
+        rerun --dir app -- thin start --debug --port=4000 -R config.ru
+        
+The `--` is to separate rerun options from cmd options. You can also 
+use a quoted string for the command, e.g.
+
+        rerun --dir app "thin start --debug --port=4000 -R config.ru"
 
 # Options:
 
 --dir directory to watch (default = ".")
 
---pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. By default it watches .rb, .js, and .css files.
+--pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. 
+By default it watches .rb, .erb, .js, .css, and .ru files.
 
 Also --version and --help.
 
 # To Do:
 
 * If the cmd is, or starts with, a ".rb" file, then run it with ruby
-* Watch arbitrary file types via globbing
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
 * Test on Mac without Growlnotify.
-* Merge with Kicker (using it as a library and writing a Rerun recipe)
+* Merge with Kicker (using it as a library and writing a Rerun recipe) or Watchr
+* On OS X, use a C library using growl's developer API <http://growl.info/developer/>
 
 # Other projects that do similar things
 
-Restartomatic: <http://github.com/adammck/restartomatic>
-
-Shotgun: <http://github.com/rtomayko/shotgun>
-
-Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
-
-and the Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
-
-Kicker: <http://github.com/alloy/kicker/>
+* Restartomatic: <http://github.com/adammck/restartomatic>
+* Shotgun: <http://github.com/rtomayko/shotgun>
+* Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
+* The Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
+* Kicker: <http://github.com/alloy/kicker/>
+* Watchr: <https://github.com/mynyml/watchr>
 
 # Why would I use this instead of Shotgun?
 
@@ -141,6 +138,7 @@ FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
 Patches by:
 
 David Billskog <billskog@gmail.com>
+Jens B <https://github.com/dpree>
 
 # License
 

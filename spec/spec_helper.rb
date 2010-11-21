@@ -1,8 +1,8 @@
 require "rubygems"
-require "spec"
-require "spec/autorun"
+require "rspec"
+#require "rspec/autorun"
 
-dir = File.dirname(__FILE__)
-$LOAD_PATH.unshift("#{dir}/../lib")
-$LOAD_PATH.unshift("#{dir}") # add specs too
+here = File.expand_path(File.dirname(__FILE__))
+$LOAD_PATH.unshift("#{here}/../lib")
+# $LOAD_PATH.unshift("#{dir}") # add specs too
 

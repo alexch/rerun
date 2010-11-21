@@ -1,9 +1,8 @@
-require "#{File.dirname(__FILE__)}/spec_helper.rb"
-
+here = File.expand_path(File.dirname(__FILE__))
+require "#{here}/spec_helper.rb"
 require 'watcher'
 require 'osxwatcher'
-
-require 'watcher_spec'
+require 'watcher_examples'
 
 if mac?
   module Rerun

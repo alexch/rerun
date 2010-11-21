@@ -1,4 +1,5 @@
-require "#{File.dirname(__FILE__)}/spec_helper.rb"
+here = File.expand_path(File.dirname(__FILE__))
+require "#{here}/spec_helper.rb"
 require 'tmpdir'
 
 describe "Rerun functionally" do
