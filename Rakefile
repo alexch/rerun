@@ -56,9 +56,5 @@ end
 
 desc 'Publish gem and tarball to rubyforge'
 task 'release' => [package('.gem'), package('.tar.gz')] do |t|
-  sh <<-end
-    rubyforge add_release #{$rubyforge_project} #{$spec.name} #{$spec.version} #{package('.gem')} &&
-    rubyforge add_file    #{$rubyforge_project} #{$spec.name} #{$spec.version} #{package('.tar.gz')}
-  end
+  sh "gem push #{package('.gem')}"
 end
-5
