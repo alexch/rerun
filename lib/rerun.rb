@@ -7,14 +7,14 @@ require "fswatcher"
 module Rerun
   
   DEFAULT_PATTERN = "**/*.{rb,js,css,erb,ru}"
-  
-  
+    
   class Runner
 
     include System
 
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
+      @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
     end
     
     def restart

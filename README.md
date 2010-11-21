@@ -36,7 +36,12 @@ app.rb:
 
         rerun ruby app.rb
         
-Or if you're running a Rack app that's configured in config.ru
+If the first part of the command is a `.rb` filename, then `ruby` is
+optional, so the above can also be accomplished like this:
+
+        rerun app.rb
+        
+Or if you're using Thin to run a Rack app that's configured in config.ru
 but you want it on port 4000 and in debug mode, and only want to watch
 the `app` subdirectory:
 
@@ -46,6 +51,11 @@ The `--` is to separate rerun options from cmd options. You can also
 use a quoted string for the command, e.g.
 
         rerun --dir app "thin start --debug --port=4000 -R config.ru"
+        
+Rackup can also be used to launch a Rack server, so let's try that:
+
+        rerun -- rackup --port 4000 config.ru
+
 
 # Options:
 
@@ -58,7 +68,7 @@ Also --version and --help.
 
 # To Do:
 
-* If the cmd is, or starts with, a ".rb" file, then run it with ruby
+* If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
