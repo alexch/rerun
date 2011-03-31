@@ -53,6 +53,15 @@ Rackup can also be used to launch a Rack server, so let's try that:
 
         rerun -- rackup --port 4000 config.ru
 
+Want some [autotest]() action? Try one of these:
+
+        rerun rake test
+        
+        rerun rspec
+        
+        rerun jasmine:ci
+
+(It'll say "Launch Failed" but that's just because the tests didn't launch a server.)
 
 # Options:
 
