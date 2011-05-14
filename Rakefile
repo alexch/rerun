@@ -1,15 +1,15 @@
 require 'rake'
 require 'rake/clean'
 require 'rake/testtask'
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
 task :default => [:spec]
 task :test => :spec
 
 desc "Run all specs"
-Spec::Rake::SpecTask.new('spec') do |t|
+RSpec::Core::RakeTask.new('spec') do |t|
   ENV['ENV'] = "test"
-  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.pattern = 'spec/**/*_spec.rb'
   t.ruby_opts = ['-rubygems'] if defined? Gem
 end
 
