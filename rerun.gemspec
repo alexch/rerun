@@ -21,10 +21,11 @@ $spec = Gem::Specification.new do |s|
     icons/rails_grn_sml.png
     icons/rails_red_sml.png
     lib/rerun.rb
-    lib/fswatcher.rb
-    lib/osxwatcher.rb
-    lib/system.rb
-    lib/watcher.rb
+    lib/rerun/fswatcher.rb
+    lib/rerun/osxwatcher.rb
+    lib/rerun/runner.rb
+    lib/rerun/system.rb
+    lib/rerun/watcher.rb
   ]
   s.executables = ['rerun']
   s.test_files = s.files.select {|path| path =~ /^spec\/.*_spec.rb/}
