@@ -1,9 +1,8 @@
-require "system"
-require "watcher"
+require "rerun/system"
+require "rerun/watcher"
 
 #TODO: make it notice deleted files natively, rather than passing to 'examine'
 #TODO: use http://github.com/spicycode/fsevent
-require "watcher"
 module Rerun
   class OSXWatcher < Rerun::Watcher
     attr_reader :last_check, :valid_extensions

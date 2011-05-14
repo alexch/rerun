@@ -1,26 +1,31 @@
-def mac?
-  RUBY_PLATFORM =~ /darwin/i && !$osx_foundation_failed_to_load
-end
-
-def windows?
-   RUBY_PLATFORM =~ /mswin/i
-end
-
-def linux?
-   RUBY_PLATFORM =~ /linux/i
-end
-
-if mac?
-  begin
-    require 'osx/foundation'
-    OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
-  rescue LoadError
-    $osx_foundation_failed_to_load = true
-  end
-end
-
 module Rerun
   module System
+
+    def mac?
+      # puts "RUBY_PLATFORM=#{RUBY_PLATFORM}"
+      RUBY_PLATFORM =~ /darwin/i
+    end
+
+    def osx_foundation?      
+      mac? and begin
+        if $osx_foundation.nil?
+          require 'osx/foundation'
+          OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
+          $osx_foundation = true
+        end
+        $osx_foundation
+      rescue LoadError
+        $osx_foundation = false
+      end        
+    end
+
+    def windows?
+       RUBY_PLATFORM =~ /mswin/i
+    end
+
+    def linux?
+       RUBY_PLATFORM =~ /linux/i
+    end
 
     # do we have growl or not?
     def growl?
@@ -41,15 +46,14 @@ module Rerun
       $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
       rails_sig_file = File.expand_path(".")+"/config/boot.rb" 
-      puts rails_sig_file
       return "#{libdir}/../icons/rails_red_sml.png" if File.exists? rails_sig_file
       return nil
     end
 
     def growl(title, body, background = true)
       if growl?
-        icon ? icon_str = "--image \"#{icon}\"" : icon_str = ""
-        s = "#{growlcmd} -H localhost -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
+        icon_str = ("--image \"#{icon}\"" if icon)
+        s = "#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
         s += " &" if background
         `#{s}`
       end

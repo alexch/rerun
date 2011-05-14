@@ -1,7 +1,7 @@
 here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
-require 'watcher_examples'
-require 'fswatcher'
+require "#{here}/watcher_examples"
+require 'rerun/fswatcher'
 
 module Rerun
   describe FSWatcher do
