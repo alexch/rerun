@@ -5,13 +5,13 @@
 Launches your app, then watches the filesystem. If a relevant file
 changes, then it restarts your app.
 
-By default only *.{rb,js,css,erb,ru} files are watched. Use the
+By default only *.{rb,js,css,scss,sass,erb,html,haml,ru} files are watched. Use the
 `--pattern` option if you want to change this.
 
 If you're on Mac OS X, and using the built-in ruby,
 it uses the built-in facilities for monitoring
-the filesystem, so CPU use is very light. And if you have "growlnotify"
-available on the PATH, it sends notifications to growl in addition to
+the filesystem, so CPU use is very light. And if you have `growlnotify`
+available on the `PATH`, it sends notifications to growl in addition to
 the console. Here's how to install
 [growlnotify](http://growl.info/extras.php#growlnotify):
 
