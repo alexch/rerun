@@ -6,7 +6,7 @@ require "fswatcher"
 # todo: make sure this works in non-Mac environments (also Macs without growlnotify)
 module Rerun
   
-  DEFAULT_PATTERN = "**/*.{rb,js,css,erb,ru}"
+  DEFAULT_PATTERN = "**/*.{rb,js,css,scss,sass,erb,html,haml,ru}"
     
   class Runner
 
@@ -47,7 +47,7 @@ module Rerun
       else
         taglines = [
           "Here we go again!",
-          "Once more unto the breach, dear friends, once more!", 
+          "Once more unto the breach, dear friends, once more!",
         ]
         notify "Restarted", taglines[rand(taglines.size)]
       end

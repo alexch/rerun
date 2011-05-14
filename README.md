@@ -59,7 +59,7 @@ Rackup can also be used to launch a Rack server, so let's try that:
 --dir directory to watch (default = ".")
 
 --pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. 
-By default it watches .rb, .erb, .js, .css, and .ru files.
+By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
 Also --version and --help.
 
