@@ -18,6 +18,8 @@ $spec = Gem::Specification.new do |s|
     Rakefile
     rerun.gemspec
     bin/rerun
+    icons/rails_grn_sml.png
+    icons/rails_red_sml.png
     lib/rerun.rb
     lib/fswatcher.rb
     lib/osxwatcher.rb
