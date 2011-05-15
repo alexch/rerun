@@ -3,8 +3,8 @@ $spec = Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 
   s.name = 'rerun'
-  s.version = '0.5.5'
-  s.date = '2011-05-14'
+  s.version = '0.6.0'
+  s.date = '2011-05-15'
 
   s.description = "Restarts your app when a file changes"
   s.summary     = "Launches an app, and restarts it whenever the filesystem changes."
