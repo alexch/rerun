@@ -53,6 +53,13 @@ Rackup can also be used to launch a Rack server, so let's try that:
 
         rerun -- rackup --port 4000 config.ru
 
+Want to mimic [autotest](https://github.com/grosser/autotest)? Try
+
+        rerun -x rake
+
+How about regenerating your HTML files after every change to your [Erector](http://erector.rubyforge.org) widgets?
+
+        rerun -x erector --to-html my_site.rb
 
 # Options:
 
@@ -63,7 +70,7 @@ By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
 --clear (or -c) clear the screen before each run
 
---exit (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the process is running.
+--exit (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
 Also --version and --help.
 
