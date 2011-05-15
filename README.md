@@ -61,15 +61,17 @@ Rackup can also be used to launch a Rack server, so let's try that:
 --pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. 
 By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
+--clear (or -c) clear the screen before each run
+
 Also --version and --help.
 
 # To Do:
 
+* Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
-* Test on Mac without Growlnotify.
 * Merge with Kicker (using it as a library and writing a Rerun recipe) or Watchr
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
 

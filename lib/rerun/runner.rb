@@ -22,6 +22,10 @@ module Rerun
     def pattern
       @options[:pattern] || DEFAULT_PATTERN
     end
+    
+    def clear?
+      @options[:clear]
+    end
 
     def start
       if windows?
@@ -42,6 +46,8 @@ module Rerun
         ]
         notify "Restarted", taglines[rand(taglines.size)]
       end
+
+      print "\033[H\033[2J" if clear?
 
       @pid = Kernel.fork do
         begin

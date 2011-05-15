@@ -30,6 +30,10 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:pattern] = pattern
   end
 
+  opts.on("-c", "--clear", "clear screen before each run") do |dir|
+    options[:clear] = true
+  end
+
   opts.on_tail("-h", "--help", "--usage", "show this message") do
     puts opts
     exit

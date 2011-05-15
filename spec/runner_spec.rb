@@ -22,6 +22,10 @@ module Rerun
       runner = Runner.new("foo.rb --param bar baz.txt")
       runner.run_command.should == "ruby foo.rb --param bar baz.txt"
     end
-
+    
+    it "clears the screen" do
+      runner = Runner.new("foo.rb --clear")
+      runner.clear?.should be_true
+    end
   end
 end
