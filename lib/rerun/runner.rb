@@ -100,7 +100,7 @@ module Rerun
         watcher = watcher_class.new do
           restart unless @restarting
         end
-        puts "Watching #{dir}/#{pattern}"
+        say "Watching #{dir}/#{pattern}"
         watcher.add_directory(dir, pattern)
         watcher.sleep_time = 1
         watcher.start
@@ -126,7 +126,7 @@ module Rerun
 
     def stop
       if @pid && (@pid != 0)
-        notify "Stopped", "All good things must come to an end." unless @restarting
+        notify "stopped", "All good things must come to an end." unless @restarting
         signal("KILL") && Process.wait(@pid)
       end
     rescue => e
@@ -147,7 +147,11 @@ module Rerun
     def notify(title, body)
       growl title, body
       puts
-      puts "#{Time.now.strftime("%T")} - #{app_name} #{title}"
+      say "#{app_name} #{title}"
+    end
+    
+    def say msg
+      puts "#{Time.now.strftime("%T")} - #{msg}"
     end
 
   end

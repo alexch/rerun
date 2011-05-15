@@ -24,7 +24,7 @@ module Rerun
     end
     
     it "clears the screen" do
-      runner = Runner.new("foo.rb --clear")
+      runner = Runner.new("foo.rb", {:clear => true})
       runner.clear?.should be_true
     end
   end
