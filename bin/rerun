@@ -30,8 +30,12 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:pattern] = pattern
   end
 
-  opts.on("-c", "--clear", "clear screen before each run") do |dir|
+  opts.on("-c", "--clear", "clear screen before each run") do
     options[:clear] = true
+  end
+
+  opts.on("-x", "--exit", "expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the process is running.") do |dir|
+    options[:exit] = true
   end
 
   opts.on_tail("-h", "--help", "--usage", "show this message") do

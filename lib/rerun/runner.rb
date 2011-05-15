@@ -27,6 +27,10 @@ module Rerun
       @options[:clear]
     end
 
+    def exit?
+      @options[:exit]
+    end
+
     def start
       if windows?
         raise "Sorry, Rerun does not work on Windows."
@@ -37,17 +41,19 @@ module Rerun
           "To infinity... and beyond!",
           "Charge!",
         ]
-        notify "Launched", taglines[rand(taglines.size)]
+        notify "launched", taglines[rand(taglines.size)]
         @already_running = true
       else
         taglines = [
           "Here we go again!",
+          "Keep on trucking.",
           "Once more unto the breach, dear friends, once more!",
+          "The road goes ever on and on, down from the door where it began.",
         ]
-        notify "Restarted", taglines[rand(taglines.size)]
+        notify "restarted", taglines[rand(taglines.size)]
       end
 
-      print "\033[H\033[2J" if clear?
+      print "\033[H\033[2J" if clear?  # see http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
       @pid = Kernel.fork do
         begin
@@ -58,13 +64,13 @@ module Rerun
           exit
         end
       end
-      Process.detach(@pid) # so if the child exits, it dies
+      status_thread = Process.detach(@pid) # so if the child exits, it dies
 
       Signal.trap("INT") do  # INT = control-C
         stop # first stop the child
         exit
       end
-
+ 
       begin
         sleep 2
       rescue Interrupt => e
@@ -73,9 +79,18 @@ module Rerun
         exit
       end
 
-      unless running?
-        notify "Launch Failed", "See console for error output"
-        @already_running = false
+      if exit?
+        status = status_thread.value
+        if status.success?
+          notify "succeeded", ""
+        else
+          notify "failed", "Exit status #{status.exitstatus}" 
+        end
+      else
+        if !running?
+          notify "Launch Failed", "See console for error output"
+          @already_running = false
+        end
       end
 
       unless @watcher

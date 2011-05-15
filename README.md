@@ -63,6 +63,8 @@ By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
 --clear (or -c) clear the screen before each run
 
+--exit (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the process is running.
+
 Also --version and --help.
 
 # To Do:
