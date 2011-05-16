@@ -83,6 +83,9 @@ Also --version and --help.
 * Test on Linux.
 * Merge with Kicker (using it as a library and writing a Rerun recipe) or Watchr
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
+* "Failed" icon
+* Get Rails icon working
+* Figure out an algorithm so "-x" is not needed (if possible)
 
 # Other projects that do similar things
 
@@ -146,17 +149,17 @@ Rerun: Alex Chaffee, <mailto:alex@stinky.com>, <http://github.com/alexch/>
 
 Based upon and/or inspired by:
 
-Shotgun: <http://github.com/rtomayko/shotgun>
+* Shotgun: <http://github.com/rtomayko/shotgun>
+* Rspactor: <http://github.com/mislav/rspactor>
+  * (In turn based on http://rails.aizatto.com/2007/11/28/taming-the-autotest-beast-with-fsevents/ )
+* FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
 
-Rspactor: <http://github.com/mislav/rspactor>
-(In turn based on http://rails.aizatto.com/2007/11/28/taming-the-autotest-beast-with-fsevents/ )
+## Patches by:
 
-FileSystemWatcher: <http://paulhorman.com/filesystemwatcher/>
-
-Patches by:
-
-David Billskog <billskog@gmail.com>
-Jens B <https://github.com/dpree>
+* David Billskog <billskog@gmail.com>
+* Jens B <https://github.com/dpree>
+* Andrés Botero <https://github.com/anbotero>
+* Dreamcat4
 
 # License
 
