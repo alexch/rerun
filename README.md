@@ -5,13 +5,13 @@
 Launches your app, then watches the filesystem. If a relevant file
 changes, then it restarts your app.
 
-By default only *.{rb,js,css,erb,ru} files are watched. Use the
+By default only *.{rb,js,css,scss,sass,erb,html,haml,ru} files are watched. Use the
 `--pattern` option if you want to change this.
 
 If you're on Mac OS X, and using the built-in ruby,
 it uses the built-in facilities for monitoring
-the filesystem, so CPU use is very light. And if you have "growlnotify"
-available on the PATH, it sends notifications to growl in addition to
+the filesystem, so CPU use is very light. And if you have `growlnotify`
+available on the `PATH`, it sends notifications to growl in addition to
 the console. Here's how to install
 [growlnotify](http://growl.info/extras.php#growlnotify):
 
@@ -53,32 +53,38 @@ Rackup can also be used to launch a Rack server, so let's try that:
 
         rerun -- rackup --port 4000 config.ru
 
-Want some [autotest]() action? Try one of these:
+Want to mimic [autotest](https://github.com/grosser/autotest)? Try
 
-        rerun rake test
-        
-        rerun rspec
-        
-        rerun jasmine:ci
+        rerun -x rake
 
-(It'll say "Launch Failed" but that's just because the tests didn't launch a server.)
+or
+
+        rerun -cx rspec
+
+How about regenerating your HTML files after every change to your [Erector](http://erector.rubyforge.org) widgets?
+
+        rerun -x erector --to-html my_site.rb
 
 # Options:
 
 --dir directory to watch (default = ".")
 
 --pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. 
-By default it watches .rb, .erb, .js, .css, and .ru files.
+By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
+
+--clear (or -c) clear the screen before each run
+
+--exit (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
 Also --version and --help.
 
 # To Do:
 
+* Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
-* Test on Mac without Growlnotify.
 * Merge with Kicker (using it as a library and writing a Rerun recipe) or Watchr
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
 

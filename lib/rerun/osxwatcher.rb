@@ -1,20 +1,19 @@
-require "system"
-require "watcher"
+require "rerun/system"
+require "rerun/watcher"
 
 #TODO: make it notice deleted files natively, rather than passing to 'examine'
 #TODO: use http://github.com/spicycode/fsevent
-require "watcher"
 module Rerun
   class OSXWatcher < Rerun::Watcher
     attr_reader :last_check, :valid_extensions
     attr_reader :stream
-    
+
     def start
       prime
       timestamp_checked
 
       dirs = Array(directories.map{|d| d.dir})
-      
+
       mac_callback = lambda do |stream, ctx, num_events, paths, marks, event_ids|
         examine
         # changed_files = extract_changed_files_from_paths(split_paths(paths, num_events))

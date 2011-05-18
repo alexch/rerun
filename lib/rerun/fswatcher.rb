@@ -1,4 +1,4 @@
-require 'watcher'
+require 'rerun/watcher'
 
 module Rerun
   class FSWatcher < Watcher

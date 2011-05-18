@@ -1,8 +1,8 @@
 here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
 require 'tmpdir'
-require 'watcher'
-require 'osxwatcher'
+require 'rerun/watcher'
+require 'rerun/osxwatcher'
 
 module Rerun
   shared_examples_for "all watchers" do

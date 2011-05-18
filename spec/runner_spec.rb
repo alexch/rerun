@@ -7,7 +7,7 @@ module Rerun
     class Runner
       attr_reader :run_command
     end
-    
+
     it "accepts a command" do
       runner = Runner.new("foo")
       runner.run_command.should == "foo"
@@ -23,5 +23,9 @@ module Rerun
       runner.run_command.should == "ruby foo.rb --param bar baz.txt"
     end
 
+    it "clears the screen" do
+      runner = Runner.new("foo.rb", {:clear => true})
+      runner.clear?.should be_true
+    end
   end
 end
