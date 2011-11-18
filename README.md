@@ -99,6 +99,7 @@ Also --version and --help.
 * The Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
 * Kicker: <http://github.com/alloy/kicker/>
 * Watchr: <https://github.com/mynyml/watchr>
+* Guard: <http://github.com/guard/guard>
 
 # Why would I use this instead of Shotgun?
 
