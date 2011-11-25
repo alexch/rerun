@@ -22,7 +22,13 @@ without "fork".
 
 # Installation:
 
-        sudo gem install rerun
+        gem install rerun
+
+"sudo" may be required on older systems.
+
+If you are using RVM you might want to put this in your global gemset so it's available to all your apps. (There really should be a better way to distinguish gems-as-libraries from gems-as-tools.)
+
+        rvm @global do gem install rerun
 
 # Usage: 
 
