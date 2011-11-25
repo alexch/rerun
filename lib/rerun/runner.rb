@@ -1,3 +1,6 @@
+
+require 'timeout'
+
 module Rerun
   class Runner
 
@@ -66,8 +69,13 @@ module Rerun
       end
       status_thread = Process.detach(@pid) # so if the child exits, it dies
 
-      Signal.trap("INT") do  # INT = control-C
-        stop # first stop the child
+      Signal.trap("INT") do # INT = control-C -- allows user to stop the top-level rerun process
+        stop # stop the child process
+        exit
+      end
+      
+      Signal.trap("TERM") do  # TERM is the polite way of terminating a process
+        stop # stop the child process
         exit
       end
 
@@ -126,8 +134,25 @@ module Rerun
 
     def stop
       if @pid && (@pid != 0)
-        notify "stopped", "All good things must come to an end." unless @restarting
-        signal("KILL") && Process.wait(@pid)
+        notify "stopping", "All good things must come to an end." unless @restarting
+        
+        begin
+          timeout(2) do
+            # start with a polite SIGTERM
+            signal("TERM") && Process.wait(@pid)
+          end
+        rescue Timeout::Error
+          begin
+            timeout(2) do
+              # escalate to SIGINT aka control-C since some foolish process may be ignoring SIGTERM
+              signal("INT") && Process.wait(@pid)
+            end
+          rescue Timeout::Error
+            # escalate to SIGKILL aka "kill -9" which cannot be ignored
+            signal("KILL") && Process.wait(@pid)
+          end
+        end
+        
       end
     rescue => e
       false
