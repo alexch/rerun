@@ -78,6 +78,13 @@ By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
 Also --version and --help.
 
+# On-The-Fly Commands
+
+While the app is running, you can make things happen by pressing keys:
+
+* **c** clear the screen
+* **r** restart (as if a file had changed)
+
 # To Do:
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)

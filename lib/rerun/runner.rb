@@ -1,5 +1,5 @@
-
 require 'timeout'
+require 'io/wait'
 
 module Rerun
   class Runner
@@ -56,7 +56,7 @@ module Rerun
         notify "restarted", taglines[rand(taglines.size)]
       end
 
-      print "\033[H\033[2J" if clear?  # see http://ascii-table.com/ansi-escape-sequences-vt-100.php
+      clear_screen if clear?
 
       @pid = Kernel.fork do
         begin
@@ -113,6 +113,22 @@ module Rerun
         watcher.sleep_time = 1
         watcher.start
         @watcher = watcher
+      end
+
+      while true
+        if c = key_pressed
+          case c.downcase
+          when 'c'
+            puts "clearing screen"
+            clear_screen
+          when 'r'
+            restart
+            break
+          else
+            puts "#{c.inspect} pressed -- try 'c' or 'r'"
+          end
+        end
+        sleep 1
       end
 
     end
@@ -177,6 +193,24 @@ module Rerun
 
     def say msg
       puts "#{Time.now.strftime("%T")} - #{msg}"
+    end
+    
+    def key_pressed
+      begin
+        system("stty raw -echo") # turn raw input on
+        c = nil
+        if $stdin.ready?
+          c = $stdin.getc
+        end
+        c.chr if c
+      ensure
+        system "stty -raw echo" # turn raw input off
+      end
+    end
+
+    def clear_screen
+      # see http://ascii-table.com/ansi-escape-sequences-vt-100.php
+      $stdout.print "\033[H\033[2J" 
     end
 
   end
