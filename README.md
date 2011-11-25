@@ -71,6 +71,10 @@ How about regenerating your HTML files after every change to your [Erector](http
 
         rerun -x erector --to-html my_site.rb
 
+Use Heroku? `rerun` is now compatible with `foreman`. Run all your Procfile processes locally and restart them all when necessary.
+
+        rerun foreman start
+
 # Options:
 
 --dir directory to watch (default = ".")
