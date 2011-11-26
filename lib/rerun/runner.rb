@@ -4,11 +4,44 @@ require 'io/wait'
 module Rerun
   class Runner
 
+    def self.keep_running(cmd, options)
+      runner = new(cmd, options)
+      runner.start_keypress_thread
+      runner.start
+      runner.join
+    end
+
     include System
 
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
       @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
+    end
+
+    def start_keypress_thread
+      @keypress_thread = Thread.new do
+        while true
+          if c = key_pressed
+            case c.downcase
+            when 'c'
+              puts "clearing screen"
+              clear_screen
+            when 'r'
+              restart
+              break
+            else
+              puts "#{c.inspect} pressed -- try 'c' or 'r'"
+            end
+          end
+          sleep 1  # todo: use select instead of polling somehow?
+        end
+      end
+      @keypress_thread.run
+    end
+
+    def kill_keypress_thread
+      @keypress_thread.kill if @keypress_thread
+      @keypress_thread = nil
     end
 
     def restart
@@ -73,7 +106,7 @@ module Rerun
         stop # stop the child process
         exit
       end
-      
+
       Signal.trap("TERM") do  # TERM is the polite way of terminating a process
         stop # stop the child process
         exit
@@ -115,22 +148,7 @@ module Rerun
         @watcher = watcher
       end
 
-      while true
-        if c = key_pressed
-          case c.downcase
-          when 'c'
-            puts "clearing screen"
-            clear_screen
-          when 'r'
-            restart
-            break
-          else
-            puts "#{c.inspect} pressed -- try 'c' or 'r'"
-          end
-        end
-        sleep 1
-      end
-
+      start_keypress_thread
     end
 
     def join
@@ -151,7 +169,7 @@ module Rerun
     def stop
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
-        
+
         begin
           timeout(2) do
             # start with a polite SIGTERM
@@ -168,7 +186,7 @@ module Rerun
             signal("KILL") && Process.wait(@pid)
           end
         end
-        
+
       end
     rescue => e
       false
@@ -194,7 +212,7 @@ module Rerun
     def say msg
       puts "#{Time.now.strftime("%T")} - #{msg}"
     end
-    
+
     def key_pressed
       begin
         system("stty raw -echo") # turn raw input on
@@ -210,7 +228,7 @@ module Rerun
 
     def clear_screen
       # see http://ascii-table.com/ansi-escape-sequences-vt-100.php
-      $stdout.print "\033[H\033[2J" 
+      $stdout.print "\033[H\033[2J"
     end
 
   end

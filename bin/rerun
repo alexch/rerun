@@ -64,6 +64,4 @@ if ARGV.empty?
 end
 
 cmd = ARGV.join(" ")
-runner = Rerun::Runner.new(cmd, options)
-runner.start
-runner.join
+runner = Rerun::Runner.keep_running(cmd, options)
