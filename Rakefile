@@ -69,6 +69,6 @@ task 'release' => [:check_git, package('.gem'), package('.tar.gz')] do |t|
   puts "Releasing #{$spec.version}"
   sh "gem push #{package('.gem')}"
   puts "Tagging and pushing"
-  sh "git tag -v#{$spec.version}"
+  sh "git tag v#{$spec.version}"
   sh "git push && git push --tags"
 end
