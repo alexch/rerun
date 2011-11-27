@@ -12,7 +12,7 @@ describe "Rerun functionally" do
     touch @app_file
     launch_inc
   end
-  
+
   after do
     puts "Killing #{@pid}"
     Process.kill("KILL", @pid) && Process.wait(@pid)
@@ -47,6 +47,10 @@ describe "Rerun functionally" do
     end
   end
 
+  def type char
+    # todo: send a character to stdin of the rerun process
+  end
+
   it "counts up" do
     x = current_count
     sleep 1
@@ -72,4 +76,9 @@ describe "Rerun functionally" do
     second_launched_at.should be > first_launched_at
   end
 
+  it "sends its child process a SIGINT when restarting"
+
+  it "dies when sent a control-C (SIGINT)"
+
+  it "accepts a key press"
 end

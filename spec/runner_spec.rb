@@ -8,24 +8,35 @@ module Rerun
       attr_reader :run_command
     end
 
-    it "accepts a command" do
-      runner = Runner.new("foo")
-      runner.run_command.should == "foo"
+    describe "initialization and configuration" do
+      it "accepts a command" do
+        runner = Runner.new("foo")
+        runner.run_command.should == "foo"
+      end
+
+      it "If the command is a .rb file, then run it with ruby" do
+        runner = Runner.new("foo.rb")
+        runner.run_command.should == "ruby foo.rb"
+      end
+
+      it "If the command starts with a .rb file, then run it with ruby" do
+        runner = Runner.new("foo.rb --param bar baz.txt")
+        runner.run_command.should == "ruby foo.rb --param bar baz.txt"
+      end
+
+      it "clears the screen" do
+        runner = Runner.new("foo.rb", {:clear => true})
+        runner.clear?.should be_true
+      end
     end
 
-    it "If the command is a .rb file, then run it with ruby" do
-      runner = Runner.new("foo.rb")
-      runner.run_command.should == "ruby foo.rb"
+    describe "running" do
+      it "sends its child process a SIGINT when restarting"
+
+      it "dies when sent a control-C (SIGINT)"
+
+      it "accepts a key press"
     end
 
-    it "If the command starts with a .rb file, then run it with ruby" do
-      runner = Runner.new("foo.rb --param bar baz.txt")
-      runner.run_command.should == "ruby foo.rb --param bar baz.txt"
-    end
-
-    it "clears the screen" do
-      runner = Runner.new("foo.rb", {:clear => true})
-      runner.clear?.should be_true
-    end
   end
 end

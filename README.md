@@ -2,20 +2,22 @@
 
 <http://github.com/alexch/rerun>
 
-Launches your app, then watches the filesystem. If a relevant file
-changes, then it restarts your app.
+Rerun launches your program, then watches the filesystem. If a relevant file
+changes, then it restarts your program.
 
-By default only *.{rb,js,css,scss,sass,erb,html,haml,ru} files are watched. Use the
-`--pattern` option if you want to change this.
+Rerun works for both long-running processes (e.g. apps) and short-running ones
+(e.g. tests). So it works like shotgun and autotest (and guard and all the
+rest).
 
-If you're on Mac OS X, and using the built-in ruby,
-it uses the built-in facilities for monitoring
-the filesystem, so CPU use is very light. And if you have `growlnotify`
-available on the `PATH`, it sends notifications to growl in addition to
-the console. Here's how to install
-[growlnotify](http://growl.info/extras.php#growlnotify):
+Rerun's advantage is its simple design. Since it uses standard Unix "SIGINT"
+and "SIGKILL" signals, you're sure the restarted app is really acting just
+like it was when you ran it from the command line the first time.
 
-> The Installer package for growlnotify is in the growlnotify folder in the Extras folder on the Growl disk image. Simply open the Installer package and follow the on-screen instructions.
+By default only *.{rb,js,css,scss,sass,erb,html,haml,ru} files are watched.
+Use the `--pattern` option if you want to change this.
+
+If you're on Mac OS X, and using the built-in ruby, it uses the built-in
+facilities for monitoring the filesystem, so CPU use is very light.
 
 Rerun does not work on Windows. Sorry, but you can't do much relaunching
 without "fork".
@@ -30,7 +32,7 @@ If you are using RVM you might want to put this in your global gemset so it's av
 
         rvm @global do gem install rerun
 
-# Usage: 
+# Usage:
 
         rerun [options] [--] cmd
 
@@ -38,23 +40,23 @@ For example, if you're running a Sinatra app whose main file is
 app.rb:
 
         rerun ruby app.rb
-        
+
 If the first part of the command is a `.rb` filename, then `ruby` is
 optional, so the above can also be accomplished like this:
 
         rerun app.rb
-        
+
 Or if you're using Thin to run a Rack app that's configured in config.ru
 but you want it on port 4000 and in debug mode, and only want to watch
 the `app` subdirectory:
 
         rerun --dir app -- thin start --debug --port=4000 -R config.ru
-        
-The `--` is to separate rerun options from cmd options. You can also 
+
+The `--` is to separate rerun options from cmd options. You can also
 use a quoted string for the command, e.g.
 
         rerun --dir app "thin start --debug --port=4000 -R config.ru"
-        
+
 Rackup can also be used to launch a Rack server, so let's try that:
 
         rerun -- rackup --port 4000 config.ru
@@ -71,29 +73,42 @@ How about regenerating your HTML files after every change to your [Erector](http
 
         rerun -x erector --to-html my_site.rb
 
-Use Heroku? `rerun` is now compatible with `foreman`. Run all your Procfile processes locally and restart them all when necessary.
+Use Heroku Cedar? `rerun` is now compatible with `foreman`. Run all your
+Procfile processes locally and restart them all when necessary.
 
         rerun foreman start
 
 # Options:
 
---dir directory to watch (default = ".")
+`--dir` directory to watch (default = ".")
 
---pattern glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details. 
+`--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
 By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
 
---clear (or -c) clear the screen before each run
+`--clear` (or -c) clear the screen before each run
 
---exit (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
+`--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
-Also --version and --help.
+Also --version and --help, naturally.
+
+# Growl Notifications
+
+If you have `growlnotify` available on the `PATH`, it sends notifications to
+growl in addition to the console.
+
+Here's how to install [growlnotify](http://growl.info/extras.php#growlnotify):
+
+> The Installer package for growlnotify is in the growlnotify folder in the Extras folder on the Growl disk image. Simply open the Installer package and follow the on-screen instructions.
+
+**NOTE**: Growl recently moved to the App Store. I upgraded, and it still works for me, but I'd love it if someone can confirm that `growlnotify` is still available in a clean App Store install and works as advertised.
 
 # On-The-Fly Commands
 
-While the app is running, you can make things happen by pressing keys:
+While the app is (re)running, you can make things happen by pressing keys:
 
-* **c** clear the screen
 * **r** restart (as if a file had changed)
+* **c** clear the screen
+* **x** exit (just like control-C)
 
 # To Do:
 
@@ -102,7 +117,7 @@ While the app is running, you can make things happen by pressing keys:
 * Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
-* Merge with Kicker (using it as a library and writing a Rerun recipe) or Watchr
+* Merge with Kicker or Watchr or Guard -- maybe by using it as a library and writing a Rerun recipe
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
 * "Failed" icon
 * Get Rails icon working
@@ -137,6 +152,9 @@ need to. This is fine if you're loading a single file, but my web
 pages all load other files (CSS, JS, media) and that adds up quickly.
 The developers of shotgun are probably using caching or a front web
 server so this doesn't affect them too much.
+
+And hey, does Shotgun reload your Worker processes if you're using Foreman and
+a Procfile? I'm pretty sure it doesn't.
 
 YMMV!
 

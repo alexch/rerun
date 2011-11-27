@@ -6,7 +6,6 @@ module Rerun
 
     def self.keep_running(cmd, options)
       runner = new(cmd, options)
-      runner.start_keypress_thread
       runner.start
       runner.join
     end
@@ -19,22 +18,34 @@ module Rerun
     end
 
     def start_keypress_thread
+      from = caller.first
       @keypress_thread = Thread.new do
+        # puts "starting keypress thread #{Thread.current.object_id} from #{from}"
         while true
           if c = key_pressed
+            puts "\n#{c.inspect} pressed inside rerun"
             case c.downcase
             when 'c'
-              puts "clearing screen"
+              say "clearing screen"
               clear_screen
             when 'r'
+              say "'r' pressed - restarting"
               restart
-              break
+              break  # the break will stop this thread
+            when 'x'
+              die
+              break  # the break will stop this thread, in case the 'die' doesn't
             else
-              puts "#{c.inspect} pressed -- try 'c' or 'r'"
+              puts [["c", "clear screen"],
+               ["r", "restart"],
+               ["x", "stop and exit"]
+              ].map{|key, description| "  #{key} -- #{description}"}.join("\n")
+              puts
             end
           end
           sleep 1  # todo: use select instead of polling somehow?
         end
+        # puts "keypress thread #{Thread.current.object_id} ending"
       end
       @keypress_thread.run
     end
@@ -90,6 +101,7 @@ module Rerun
       end
 
       clear_screen if clear?
+      start_keypress_thread
 
       @pid = Kernel.fork do
         begin
@@ -103,21 +115,18 @@ module Rerun
       status_thread = Process.detach(@pid) # so if the child exits, it dies
 
       Signal.trap("INT") do # INT = control-C -- allows user to stop the top-level rerun process
-        stop # stop the child process
-        exit
+        die
       end
 
       Signal.trap("TERM") do  # TERM is the polite way of terminating a process
-        stop # stop the child process
-        exit
+        die
       end
 
       begin
         sleep 2
       rescue Interrupt => e
-        # in case someone hits control-C immediately
-        stop
-        exit
+        # in case someone hits control-C immediately ("oops!")
+        die
       end
 
       if exit?
@@ -147,8 +156,11 @@ module Rerun
         watcher.start
         @watcher = watcher
       end
+    end
 
-      start_keypress_thread
+    def die
+      stop # stop the child process if it exists
+      exit 0  # todo: status code param
     end
 
     def join
@@ -169,7 +181,6 @@ module Rerun
     def stop
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
-
         begin
           timeout(2) do
             # start with a polite SIGTERM
@@ -186,7 +197,6 @@ module Rerun
             signal("KILL") && Process.wait(@pid)
           end
         end
-
       end
     rescue => e
       false
@@ -213,17 +223,30 @@ module Rerun
       puts "#{Time.now.strftime("%T")} - #{msg}"
     end
 
+    # non-blocking stdin reader.
+    # returns a 1-char string if a key was pressed; otherwise nil
+    #
     def key_pressed
       begin
-        system("stty raw -echo") # turn raw input on
+        # this "raw input" nonsense is because unix likes waiting for linefeeds before sending stdin
+        # "stty -echo" would make it not clutter the console, but be sure (ensure) to "stty echo" before exit
+        system("stty raw") # turn raw input on
         c = nil
         if $stdin.ready?
           c = $stdin.getc
         end
         c.chr if c
       ensure
-        system "stty -raw echo" # turn raw input off
+        system "stty -raw" # turn raw input off
       end
+
+      # note: according to 'man tty' the proper way restore the settings is
+      # tty_state=`stty -g`
+      # ensure
+      #   system 'stty "#{tty_state}'
+      # end
+      # but this way seems fine and less confusing
+
     end
 
     def clear_screen
