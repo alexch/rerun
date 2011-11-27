@@ -28,6 +28,16 @@ def package(ext='')
   "pkg/#{$spec.name}-#{$spec.version}" + ext
 end
 
+desc 'Exit if git is dirty'
+task :check_git do
+  state = `git status 2> /dev/null | tail -n1`
+  clean = (state =~ /working directory clean/)
+  unless clean
+    warn "can't do that on an unclean git dir"
+    exit 1
+  end
+end
+
 desc 'Build packages'
 task :package => %w[.gem .tar.gz].map { |e| package(e) }
 
@@ -55,6 +65,10 @@ file package('.tar.gz') => %w[pkg/] + $spec.files do |f|
 end
 
 desc 'Publish gem and tarball to rubyforge'
-task 'release' => [package('.gem'), package('.tar.gz')] do |t|
+task 'release' => [:check_git, package('.gem'), package('.tar.gz')] do |t|
+  puts "Releasing #{$spec.version}"
   sh "gem push #{package('.gem')}"
+  puts "Tagging and pushing"
+  sh "git tag -v#{$spec.version}"
+  sh "git push && git push --tags"
 end
