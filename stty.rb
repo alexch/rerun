@@ -8,7 +8,6 @@ def tty
   stty.split(':')
 end
 
-
 def tty_setting name
   tty.grep(/^#{name}/).first.split('=').last
 end
@@ -18,29 +17,42 @@ def oflag
 end
 
 normal = tty
+
 `stty raw`
 raw = tty
+
 `stty -raw`
-post_raw = tty
-assert { post_raw == normal }
+minus_raw = tty
+assert { minus_raw == normal }
+
+`stty raw opost`
+raw_opost = tty
 
 d { raw - normal }
 d { normal - raw }
+d { normal - raw_opost }
 
 puts "== normal"
 # d { tty }
 d{oflag}
 
 def check setting
-  `stty gfmt1:#{setting}`
+  `stty #{setting}`
   puts "testing #{setting}:\nline\nline"
+  print "\r\n"
 end
 
-puts "== raw"
-`stty raw`
-puts "testing\nraw\nmode"
+check "raw"
 
-check "oflag=3"
-check "lflag=200005cb"
-check "iflag=2b02"
+check "-raw"
+
+check "raw opost"
+
+check "-raw"
+
+check "raw gfmt1:oflag=3"
+
+# check "oflag=3"
+# check "lflag=200005cb"
+# check "iflag=2b02"
 `stty -raw`
