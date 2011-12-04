@@ -3,3 +3,5 @@
   * https://github.com/ericgj/groem
   * http://growl.info/documentation/developer/gntp.php
 
+* test stty stuff on other Unixes
+

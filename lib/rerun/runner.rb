@@ -229,8 +229,13 @@ module Rerun
     def key_pressed
       begin
         # this "raw input" nonsense is because unix likes waiting for linefeeds before sending stdin
-        # "stty -echo" would make it not clutter the console, but be sure (ensure) to "stty echo" before exit
         system("stty raw") # turn raw input on
+
+        # restore proper output newline handling -- see stty.rb and "man stty" and /usr/include/sys/termios.h
+        # looks like "raw" flips off the OPOST bit 0x00000001 /* enable following output processing */
+        # which disables #define ONLCR		0x00000002	/* map NL to CR-NL (ala CRMOD) */
+        system("stty gfmt1:oflag=3")
+
         c = nil
         if $stdin.ready?
           c = $stdin.getc
