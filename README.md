@@ -96,11 +96,7 @@ Also --version and --help, naturally.
 If you have `growlnotify` available on the `PATH`, it sends notifications to
 growl in addition to the console.
 
-Here's how to install [growlnotify](http://growl.info/extras.php#growlnotify):
-
-> The Installer package for growlnotify is in the growlnotify folder in the Extras folder on the Growl disk image. Simply open the Installer package and follow the on-screen instructions.
-
-**NOTE**: Growl recently moved to the App Store. I upgraded, and it still works for me, but I'd love it if someone can confirm that `growlnotify` is still available in a clean App Store install and works as advertised.
+Download [growlnotify here](http://growl.info/downloads.php#generaldownloads) now that Growl has moved to the App Store.
 
 # On-The-Fly Commands
 
@@ -122,6 +118,7 @@ While the app is (re)running, you can make things happen by pressing keys:
 * "Failed" icon
 * Get Rails icon working
 * Figure out an algorithm so "-x" is not needed (if possible)
+* Use growl's AppleScript or SDK instead of relying on growlnotify
 
 # Other projects that do similar things
 
