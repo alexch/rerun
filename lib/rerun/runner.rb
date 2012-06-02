@@ -172,6 +172,7 @@ module Rerun
     end
 
     def signal(signal)
+      say "Sending #{signal}"
       Process.kill(signal, @pid)
       true
     rescue
@@ -182,7 +183,7 @@ module Rerun
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
         begin
-          timeout(2) do
+          timeout(4) do  # todo: escalation timeout setting
             # start with a polite SIGTERM
             signal("TERM") && Process.wait(@pid)
           end
