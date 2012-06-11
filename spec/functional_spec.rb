@@ -14,7 +14,7 @@ describe "Rerun functionally" do
   end
 
   after do
-    puts "Killing #{@pid}"
+    # puts "Killing #{@pid}"
     Process.kill("KILL", @pid) && Process.wait(@pid)
   end
 
@@ -27,7 +27,7 @@ describe "Rerun functionally" do
   end
 
   def read
-    puts "Reading #{@file}"
+    # puts "Reading #{@file}"
     File.open(@file, "r") do |f|
       launched_at = f.gets.to_i
       count = f.gets.to_i
@@ -41,7 +41,7 @@ describe "Rerun functionally" do
   end
 
   def touch(file = @app_file)
-    puts "Touching #{@app_file}"
+    # puts "Touching #{@app_file}"
     File.open(file, "w") do |f|
       f.puts Time.now
     end

@@ -23,19 +23,19 @@ module Rerun
         # puts "starting keypress thread #{Thread.current.object_id} from #{from}"
         while true
           if c = key_pressed
-            puts "\n#{c.inspect} pressed inside rerun"
             case c.downcase
             when 'c'
-              say "clearing screen"
+              say "Clearing screen"
               clear_screen
             when 'r'
-              say "'r' pressed - restarting"
+              say "Restarting"
               restart
               break  # the break will stop this thread
             when 'x', 'q'
               die
               break  # the break will stop this thread, in case the 'die' doesn't
             else
+              puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
                ["r", "restart"],
                ["x or q", "stop and exit"]
@@ -172,7 +172,7 @@ module Rerun
     end
 
     def signal(signal)
-      say "Sending #{signal}"
+      say "Sending #{signal} to #{@pid}" unless signal == 0
       Process.kill(signal, @pid)
       true
     rescue
@@ -221,7 +221,7 @@ module Rerun
     end
 
     def say msg
-      puts "#{Time.now.strftime("%T")} - #{msg}"
+      puts "#{Time.now.strftime("%T")} [rerun] #{msg}"
     end
 
     # non-blocking stdin reader.
