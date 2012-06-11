@@ -102,9 +102,9 @@ Download [growlnotify here](http://growl.info/downloads.php#generaldownloads) no
 
 While the app is (re)running, you can make things happen by pressing keys:
 
-* **r** restart (as if a file had changed)
-* **c** clear the screen
-* **x** exit (just like control-C)
+* **r** -- restart (as if a file had changed)
+* **c** -- clear the screen
+* **x** or **q** -- exit (just like control-C)
 
 # To Do:
 

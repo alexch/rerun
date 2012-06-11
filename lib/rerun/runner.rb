@@ -32,13 +32,13 @@ module Rerun
               say "'r' pressed - restarting"
               restart
               break  # the break will stop this thread
-            when 'x'
+            when 'x', 'q'
               die
               break  # the break will stop this thread, in case the 'die' doesn't
             else
               puts [["c", "clear screen"],
                ["r", "restart"],
-               ["x", "stop and exit"]
+               ["x or q", "stop and exit"]
               ].map{|key, description| "  #{key} -- #{description}"}.join("\n")
               puts
             end
