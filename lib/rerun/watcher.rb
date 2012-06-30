@@ -2,7 +2,7 @@ require 'listen'
 
 Thread.abort_on_exception = true
 
-# This class will watch a directory or a set of directories and alert you of
+# This class will watch a directory and alert you of
 # new files, modified files, deleted files.
 #
 # Author: Paul Horman, http://paulhorman.com/filesystemwatcher/
@@ -14,7 +14,7 @@ module Rerun
     DELETED = 2
 
     attr_accessor :sleep_time, :priority
-    attr_reader :directories
+    attr_reader :directory
 
     def initialize(&client_callback)
       @client_callback = client_callback
@@ -22,7 +22,7 @@ module Rerun
       @sleep_time = 1
       @priority = 0
 
-      @directories = []
+      @directory = nil
       @files = []
 
       @found = nil
@@ -36,28 +36,10 @@ module Rerun
     # @param expression the glob pattern to search under the watched directory
     def add_directory(dir, expression="**/*")
       if FileTest.exists?(dir) && FileTest.readable?(dir) then
-        @directories << Directory.new(dir, expression)
+        @directory = Directory.new(dir, expression)
       else
         raise InvalidDirectoryError, "Dir '#{dir}' either doesnt exist or isnt readable"
       end
-    end
-
-    def remove_directory(dir)
-      @directories.delete(dir)
-    end
-
-    # add a specific file to the watch list
-    # @param file the file to watch
-    def add_file(file)
-      if FileTest.exists?(file) && FileTest.readable?(file) then
-        @files << file
-      else
-        raise InvalidFileError, "File '#{file}' either doesnt exist or isnt readable"
-      end
-    end
-
-    def remove_file(file)
-      @files.delete(file)
     end
 
     def prime
@@ -77,7 +59,7 @@ module Rerun
       @thread = Thread.new do
         # todo: multiple dirs
         # todo: convert each dir's pattern to a regex and get Listen to do the file scan for us
-        @listener = Listen::Listener.new(@directories.first.dir) do |modified, added, removed|
+        @listener = Listen::Listener.new(@directory.dir) do |modified, added, removed|
           #d { modified }
           #d { added }
           #d { removed }
@@ -123,11 +105,7 @@ module Rerun
 
       already_examined = Hash.new()
 
-      @directories.each do |directory|
-        examine_files(directory.files(), already_examined)
-      end
-
-      examine_files(@files, already_examined) if not @files.empty?
+      examine_files(@directory.files, already_examined)
 
       # now diff the found files and the examined files to see if
       # something has been deleted

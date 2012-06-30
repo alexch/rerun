@@ -56,28 +56,28 @@ module Rerun
       @log.should == [[Watcher::DELETED, @test_file]]
     end
 
-    # it "ignores changes to non-matching files" do
-    #   rest = 1.0
-    #
-    #   @log.clear
-    #   File.open(@non_matching_file, "w") do |f|
-    #     f.puts("test")
-    #   end
-    #   sleep(rest)
-    #   @log.should == []
-    #
-    #   @log.clear
-    #   File.open(@non_matching_file, "a") do |f|
-    #     f.puts("more more more")
-    #   end
-    #   sleep(rest)
-    #   @log.should == []
-    #
-    #   @log.clear
-    #   File.delete(@non_matching_file)
-    #   sleep(rest)
-    #   @log.should == []
-    # end
+    it "ignores changes to non-matching files" do
+       rest = 1.0
+
+       @log.clear
+       File.open(@non_matching_file, "w") do |f|
+         f.puts("test")
+       end
+       sleep(rest)
+       @log.should == []
+
+       @log.clear
+       File.open(@non_matching_file, "a") do |f|
+         f.puts("more more more")
+       end
+       sleep(rest)
+       @log.should == []
+
+       @log.clear
+       File.delete(@non_matching_file)
+       sleep(rest)
+       @log.should == []
+    end
   end
 
 end
