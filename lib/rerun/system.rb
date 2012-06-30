@@ -12,6 +12,7 @@ module Rerun
           require 'osx/foundation'
           OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
           $osx_foundation = true
+          puts "Using OSX Watcher"
         end
         $osx_foundation
       rescue LoadError

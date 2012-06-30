@@ -3,7 +3,7 @@ $spec = Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 
   s.name = 'rerun'
-  s.version = '0.6.6'
+  s.version = '0.7.0.pre1'
 
   s.description = "Restarts your app when a file changes"
   s.summary     = "Launches an app, and restarts it whenever the filesystem changes."
@@ -18,18 +18,14 @@ $spec = Gem::Specification.new do |s|
     rerun.gemspec
     bin/rerun
     icons/rails_grn_sml.png
-    icons/rails_red_sml.png
-    lib/rerun.rb
-    lib/rerun/fswatcher.rb
-    lib/rerun/osxwatcher.rb
-    lib/rerun/runner.rb
-    lib/rerun/system.rb
-    lib/rerun/watcher.rb
-  ]
+    icons/rails_red_sml.png] +
+      Dir['lib/**/*.rb']
   s.executables = ['rerun']
   s.test_files = s.files.select {|path| path =~ /^spec\/.*_spec.rb/}
 
   s.extra_rdoc_files = %w[README.md]
+
+  s.add_dependency 'listen'
   #s.add_dependency 'rack',    '>= 0.9.1'
   #s.add_dependency 'launchy', '>= 0.3.3', '< 1.0'
 

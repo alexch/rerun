@@ -198,6 +198,11 @@ Based upon and/or inspired by:
 * Andrés Botero <https://github.com/anbotero>
 * Dreamcat4
 
+# Version History
+
+* v0.7.0
+  * uses Listen gem
+
 # License
 
 Open Source MIT License. See "LICENSE" file.

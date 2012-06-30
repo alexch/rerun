@@ -2,10 +2,14 @@ here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
 require 'tmpdir'
 require 'rerun/watcher'
-require 'rerun/osxwatcher'
 
 module Rerun
-  shared_examples_for "all watchers" do
+  describe Watcher do
+
+      def create_watcher(&block)
+        Watcher.new(&block)
+      end
+
     before do
       @dir = Dir.tmpdir + "/#{Time.now.to_i}"
       FileUtils.mkdir_p(@dir)
@@ -17,7 +21,7 @@ module Rerun
       @watcher.add_directory(@dir, "*.txt")
       @watcher.sleep_time = 0.1
       @watcher.start
-      
+
       @test_file = "#{@dir}/test.txt"
       @non_matching_file = "#{@dir}/test.exe"
       sleep(1) # let it spin up
@@ -54,26 +58,26 @@ module Rerun
 
     # it "ignores changes to non-matching files" do
     #   rest = 1.0
-    #   
+    #
     #   @log.clear
     #   File.open(@non_matching_file, "w") do |f|
     #     f.puts("test")
     #   end
     #   sleep(rest)
     #   @log.should == []
-    # 
+    #
     #   @log.clear
     #   File.open(@non_matching_file, "a") do |f|
     #     f.puts("more more more")
     #   end
     #   sleep(rest)
     #   @log.should == []
-    # 
+    #
     #   @log.clear
     #   File.delete(@non_matching_file)
     #   sleep(rest)
     #   @log.should == []
     # end
   end
-  
+
 end

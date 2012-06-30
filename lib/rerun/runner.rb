@@ -144,8 +144,8 @@ module Rerun
       end
 
       unless @watcher
-        watcher_class = osx_foundation? ? OSXWatcher : FSWatcher
-        # watcher_class = FSWatcher
+        #watcher_class = osx_foundation? ? OSXWatcher : FSWatcher
+        watcher_class = Watcher
 
         watcher = watcher_class.new do
           restart unless @restarting

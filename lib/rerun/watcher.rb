@@ -1,3 +1,8 @@
+require 'listen'
+
+require "wrong"
+include Wrong::D
+
 
 Thread.abort_on_exception = true
 
@@ -74,15 +79,24 @@ module Rerun
       prime
 
       @thread = Thread.new do
-        while true do
+        # todo: multiple dirs
+        # todo: convert each dir's pattern to a regex and get Listen to do the file scan for us
+        @listener = Listen::Listener.new(@directories.first.dir) do |modified, added, removed|
+          #d { modified }
+          #d { added }
+          #d { removed }
           examine
           sleep(@sleep_time)
         end
+        @listener.start
       end
 
       @thread.priority = @priority
 
       at_exit { stop } #?
+
+      sleep 1 until @listener.instance_variable_get(:@adapter)
+      puts "Using adapter #{@listener.instance_variable_get(:@adapter)}"
 
     end
 
@@ -110,6 +124,7 @@ module Rerun
     private
 
     def examine
+
       already_examined = Hash.new()
 
       @directories.each do |directory|
@@ -123,6 +138,7 @@ module Rerun
       all_found_files = @found.keys()
       all_examined_files = already_examined.keys()
       intersection = all_found_files - all_examined_files
+
       intersection.each do |file_name|
         @client_callback.call(DELETED, file_name)
         @found.delete(file_name)
@@ -171,7 +187,7 @@ module Rerun
         @dir.chop! if @dir =~ %r{/$}
       end
 
-      def files()
+      def files
         return Dir["#{@dir}/#{@expression}"]
       end
     end
