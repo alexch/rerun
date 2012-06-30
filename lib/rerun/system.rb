@@ -2,22 +2,7 @@ module Rerun
   module System
 
     def mac?
-      # puts "RUBY_PLATFORM=#{RUBY_PLATFORM}"
       RUBY_PLATFORM =~ /darwin/i
-    end
-
-    def osx_foundation?
-      mac? and begin
-        if $osx_foundation.nil?
-          require 'osx/foundation'
-          OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
-          $osx_foundation = true
-          puts "Using OSX Watcher"
-        end
-        $osx_foundation
-      rescue LoadError
-        $osx_foundation = false
-      end
     end
 
     def windows?

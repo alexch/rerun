@@ -1,9 +1,5 @@
 require 'listen'
 
-require "wrong"
-include Wrong::D
-
-
 Thread.abort_on_exception = true
 
 # This class will watch a directory or a set of directories and alert you of

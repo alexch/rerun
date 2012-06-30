@@ -105,10 +105,9 @@ module Rerun
 
       @pid = Kernel.fork do
         begin
-          # Signal.trap("INT") { exit }
           exec(@run_command)
         rescue => e
-          puts e
+          puts "#{e.class}: #{e.message}"
           exit
         end
       end
@@ -144,10 +143,8 @@ module Rerun
       end
 
       unless @watcher
-        #watcher_class = osx_foundation? ? OSXWatcher : FSWatcher
-        watcher_class = Watcher
 
-        watcher = watcher_class.new do
+        watcher = Watcher.new do
           restart unless @restarting
         end
         say "Watching #{dir}/#{pattern}"
