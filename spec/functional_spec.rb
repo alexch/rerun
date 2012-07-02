@@ -14,8 +14,9 @@ describe "the rerun command" do
   end
 
   after do
-    # puts "Killing #{@pid}"
-    Process.kill("KILL", @pid) && Process.wait(@pid) rescue Errno::ESRCH
+    timeout(4) {
+      Process.kill("KILL", @pid) && Process.wait(@pid) rescue Errno::ESRCH
+    }
   end
 
   def launch_inc
