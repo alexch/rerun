@@ -56,6 +56,8 @@ module Rerun
 
       @thread.priority = @priority
 
+      sleep 0.1 until @listener
+
       at_exit { stop } # try really hard to clean up after ourselves
     end
 
@@ -68,21 +70,18 @@ module Rerun
 
     # kill the file watcher thread
     def stop
+      @thread.wakeup rescue ThreadError
       begin
-        @thread.wakeup
-      rescue ThreadError => e
-        # ignore
+        @listener.stop
+      rescue Exception => e
+        puts "#{e.class}: #{e.message} stopping listener"
       end
-      begin
-        @thread.kill
-      rescue ThreadError => e
-        # ignore
-      end
+      @thread.kill rescue ThreadError
     end
 
     # wait for the file watcher to finish
     def join
-      @thread.join() if @thread
+      @thread.join if @thread
     rescue Interrupt => e
       # don't care
     end

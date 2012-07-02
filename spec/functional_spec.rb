@@ -15,7 +15,7 @@ describe "the rerun command" do
 
   after do
     timeout(4) {
-      Process.kill("KILL", @pid) && Process.wait(@pid) rescue Errno::ESRCH
+      Process.kill("INT", @pid) && Process.wait(@pid) rescue Errno::ESRCH
     }
   end
 
@@ -24,7 +24,7 @@ describe "the rerun command" do
       root = File.dirname(__FILE__) + "/.."
       exec("#{root}/bin/rerun -d '#{@dir}' ruby #{root}/inc.rb #{@file}")
     end
-    sleep 0.5 until File.exist?(@file)
+    timeout(10) { sleep 0.5 until File.exist?(@file) }
     sleep 2  # let inc get going
   end
 
