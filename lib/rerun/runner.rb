@@ -144,12 +144,10 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new do
+        watcher = Watcher.new(:directory => dir, :pattern => pattern) do
           restart unless @restarting
         end
         say "Watching #{dir}/#{pattern}"
-        watcher.add_directory(dir, pattern)
-        watcher.sleep_time = 1
         watcher.start
         @watcher = watcher
       end

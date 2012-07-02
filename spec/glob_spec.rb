@@ -26,7 +26,7 @@ module Rerun
         "\\*" => "\\*",
         "\\\\" => "\\\\",
 
-        #"**/*.txt" => "([^/]*/)*.*\\.txt"
+        "**/*.txt" => "([^/]+/)*.*\\.txt",
 
     }.each_pair do |glob_string, regexp_string|
       specify glob_string do
@@ -39,6 +39,36 @@ module Rerun
     describe "#to_regexp" do
       it "makes a regexp" do
         Glob.new("foo*").to_regexp.should == /foo.*/
+      end
+    end
+
+    describe "#smoosh" do
+
+      def check_smoosh string, array
+        glob = Glob.new("")
+        glob.smoosh(string.split('')).should == array
+      end
+
+      it "ignores non-stars" do
+        check_smoosh "", []
+        check_smoosh "abc", ["a", "b", "c"]
+      end
+
+      it "passes solitary stars" do
+        check_smoosh "*", ["*"]
+        check_smoosh "a*b", ["a", "*", "b"]
+      end
+
+      it "smooshes two stars in a row into a single '**' string" do
+        check_smoosh "**", ["**"]
+        check_smoosh "a**b", ["a", "**", "b"]
+        check_smoosh "**b", ["**", "b"]
+        check_smoosh "a**", ["a", "**"]
+      end
+
+      it "treats **/ like **" do
+        check_smoosh "**/", ["**"]
+        check_smoosh "a**/b", ["a", "**", "b"]
       end
     end
 

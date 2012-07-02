@@ -13,38 +13,40 @@ module Rerun
     MODIFIED = 1
     DELETED = 2
 
-    attr_accessor :sleep_time, :priority
-    attr_reader :directory
+    attr_reader :directory, :pattern, :priority
 
-    def initialize(&client_callback)
+    # Create a file system watcher. Start it by calling #start.
+    #
+    # @param options[:directory] the directory to watch (default ".")
+    # @param options[:pattern] the glob pattern to search under the watched directory (default "**/*")
+    # @param options[:priority] the priority of the watcher thread (default 0)
+    #
+    def initialize(options = {}, &client_callback)
       @client_callback = client_callback
 
-      @sleep_time = 1
-      @priority = 0
+      options = {
+          :directory => ".",
+          :pattern => "**/*",
+          :priority => 0,
+      }.merge(options)
 
-      @directory = nil
-      @files = []
+      @pattern = options[:pattern]
+      @directory = options[:directory]
+      if FileTest.exists?(directory) && FileTest.readable?(directory) then
+        @directory = Directory.new(directory, @pattern)
+      else
+        raise InvalidDirectoryError, "Dir '#{directory}' either doesnt exist or isnt readable"
+      end
+      @priority = options[:priority]
 
       @found = nil
       @first_time = true
       @thread = nil
-
-    end
-
-    # add a directory to be watched
-    # @param dir the directory to watch
-    # @param expression the glob pattern to search under the watched directory
-    def add_directory(dir, expression="**/*")
-      if FileTest.exists?(dir) && FileTest.readable?(dir) then
-        @directory = Directory.new(dir, expression)
-      else
-        raise InvalidDirectoryError, "Dir '#{dir}' either doesnt exist or isnt readable"
-      end
     end
 
     def prime
       @first_time = true
-      @found = Hash.new()
+      @found = {}
       examine
       @first_time = false
     end
@@ -58,13 +60,15 @@ module Rerun
 
       @thread = Thread.new do
         # todo: multiple dirs
+
         # todo: convert each dir's pattern to a regex and get Listen to do the file scan for us
-        @listener = Listen::Listener.new(@directory.dir) do |modified, added, removed|
+        regexp = Glob.new(@pattern).to_regexp
+        puts "regexp is #{regexp.inspect}"
+        @listener = Listen::Listener.new(@directory.dir, :filter => regexp) do |modified, added, removed|
           #d { modified }
           #d { added }
           #d { removed }
           examine
-          sleep(@sleep_time)
         end
         @listener.start
       end

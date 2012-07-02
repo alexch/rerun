@@ -6,20 +6,14 @@ require 'rerun/watcher'
 module Rerun
   describe Watcher do
 
-      def create_watcher(&block)
-        Watcher.new(&block)
-      end
-
     before do
       @dir = Dir.tmpdir + "/#{Time.now.to_i}"
       FileUtils.mkdir_p(@dir)
 
       @log = []
-      @watcher = create_watcher do |status, file|
+      @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt") do |status, file|
         @log << [status, file]
       end
-      @watcher.add_directory(@dir, "*.txt")
-      @watcher.sleep_time = 0.1
       @watcher.start
 
       @test_file = "#{@dir}/test.txt"

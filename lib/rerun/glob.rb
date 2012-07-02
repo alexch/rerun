@@ -12,6 +12,9 @@ module Rerun
 
     def to_regexp_string
       chars = @glob_string.split('')
+
+      chars = smoosh(chars)
+
       curlies = 0;
       escaping = false;
       chars.map do |char|
@@ -20,6 +23,8 @@ module Rerun
           char
         else
           case char
+            when '**'
+              "([^/]+/)*"
             when '*'
               ".*"
             when "?"
@@ -57,6 +62,21 @@ module Rerun
 
     def to_regexp
       Regexp.new(to_regexp_string)
+    end
+
+    def smoosh chars
+      out = []
+      until chars.empty?
+        char = chars.shift
+        if char == "*" and chars.first == "*"
+          chars.shift
+          chars.shift if chars.first == "/"
+          out.push("**")
+        else
+          out.push(char)
+        end
+      end
+      out
     end
   end
 end

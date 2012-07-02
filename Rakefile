@@ -10,7 +10,7 @@ desc "Run all specs"
 RSpec::Core::RakeTask.new('spec') do |t|
   ENV['ENV'] = "test"
   t.pattern = 'spec/**/*_spec.rb'
-  t.ruby_opts = ['-rubygems'] if defined? Gem
+  t.rspec_opts = ['--color']
 end
 
 $rubyforge_project = 'pivotalrb'

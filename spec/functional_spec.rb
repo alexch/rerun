@@ -2,7 +2,7 @@ here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
 require 'tmpdir'
 
-describe "Rerun functionally" do
+describe "the rerun command" do
   before do
     @dir = Dir.tmpdir + "/#{Time.now.to_i}"
     FileUtils.mkdir_p(@dir)
@@ -15,7 +15,7 @@ describe "Rerun functionally" do
 
   after do
     # puts "Killing #{@pid}"
-    Process.kill("KILL", @pid) && Process.wait(@pid)
+    Process.kill("KILL", @pid) && Process.wait(@pid) rescue Errno::ESRCH
   end
 
   def launch_inc
@@ -23,7 +23,8 @@ describe "Rerun functionally" do
       root = File.dirname(__FILE__) + "/.."
       exec("#{root}/bin/rerun -d '#{@dir}' ruby #{root}/inc.rb #{@file}")
     end
-    sleep 4
+    sleep 0.5 until File.exist?(@file)
+    sleep 2  # let inc get going
   end
 
   def read
@@ -51,14 +52,14 @@ describe "Rerun functionally" do
     # todo: send a character to stdin of the rerun process
   end
 
-  it "counts up" do
+  it "increments a test file once per second" do
     x = current_count
     sleep 1
     y = current_count
     y.should be > x
   end
 
-  it "restarts when an app file is modified" do
+  it "restarts its target when an app file is modified" do
     first_launched_at, count = read
     touch @app_file
     sleep 4
@@ -67,7 +68,7 @@ describe "Rerun functionally" do
     second_launched_at.should be > first_launched_at
   end
 
-  it "restarts when an app file is created" do
+  it "restarts its target when an app file is created" do
     first_launched_at, count = read
     touch @app_file2
     sleep 4
@@ -76,9 +77,14 @@ describe "Rerun functionally" do
     second_launched_at.should be > first_launched_at
   end
 
-  it "sends its child process a SIGINT when restarting"
+  #it "sends its child process a SIGINT to restart"
 
-  it "dies when sent a control-C (SIGINT)"
+  it "dies when sent a control-C (SIGINT)" do
+    Process.kill("INT", @pid)
+    timeout(6) {
+      Process.wait(@pid) rescue Errno::ESRCH
+    }
+  end
 
-  it "accepts a key press"
+  #it "accepts a key press"
 end
