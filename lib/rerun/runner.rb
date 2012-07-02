@@ -18,9 +18,7 @@ module Rerun
     end
 
     def start_keypress_thread
-      from = caller.first
       @keypress_thread = Thread.new do
-        # puts "starting keypress thread #{Thread.current.object_id} from #{from}"
         while true
           if c = key_pressed
             case c.downcase
@@ -30,10 +28,17 @@ module Rerun
             when 'r'
               say "Restarting"
               restart
-              break  # the break will stop this thread
             when 'x', 'q'
               die
               break  # the break will stop this thread, in case the 'die' doesn't
+            when 't'
+              puts
+              puts "#{Thread.list.size} threads:"
+              Thread.list.each do |t|
+                puts "#{t.object_id}\tstatus: #{t.status}"
+                puts "\t" + t.backtrace[0..5].join("\n\t")
+                puts
+              end
             else
               puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
@@ -45,12 +50,11 @@ module Rerun
           end
           sleep 1  # todo: use select instead of polling somehow?
         end
-        # puts "keypress thread #{Thread.current.object_id} ending"
       end
       @keypress_thread.run
     end
 
-    def kill_keypress_thread
+    def stop_keypress_thread
       @keypress_thread.kill if @keypress_thread
       @keypress_thread = nil
     end
@@ -101,7 +105,7 @@ module Rerun
       end
 
       clear_screen if clear?
-      start_keypress_thread
+      start_keypress_thread unless @keypress_thread
 
       @pid = Kernel.fork do
         begin
@@ -144,7 +148,15 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new(:directory => dir, :pattern => pattern) do
+        watcher = Watcher.new(:directory => dir, :pattern => pattern) do |changes|
+
+          message = [:modified, :added, :removed].map do |change|
+            count = changes[change].size
+            if count and count > 0
+              "#{count} #{change}"
+            end
+          end.compact.join(", ")
+          say "Change detected: #{message}"
           restart unless @restarting
         end
         watcher.start
@@ -154,6 +166,7 @@ module Rerun
     end
 
     def die
+      #stop_keypress_thread   # don't do this since we're probably *in* the keypress thread
       stop # stop the child process if it exists
       exit 0  # todo: status code param
     end
