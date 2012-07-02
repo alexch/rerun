@@ -147,9 +147,9 @@ module Rerun
         watcher = Watcher.new(:directory => dir, :pattern => pattern) do
           restart unless @restarting
         end
-        say "Watching #{dir}/#{pattern}"
         watcher.start
         @watcher = watcher
+        say "Watching #{dir}/#{pattern} using #{watcher.adapter.class.name.split('::').last} adapter"
       end
     end
 
@@ -167,13 +167,14 @@ module Rerun
     end
 
     def signal(signal)
-      say "Sending #{signal} to #{@pid}" unless signal == 0
+      say "Sending signal #{signal} to #{@pid}" unless signal == 0
       Process.kill(signal, @pid)
       true
     rescue
       false
     end
 
+    # todo: test escalation
     def stop
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting

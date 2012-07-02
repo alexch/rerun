@@ -61,9 +61,7 @@ module Rerun
       @thread = Thread.new do
         # todo: multiple dirs
 
-        # todo: convert each dir's pattern to a regex and get Listen to do the file scan for us
         regexp = Glob.new(@pattern).to_regexp
-        puts "regexp is #{regexp.inspect}"
         @listener = Listen::Listener.new(@directory.dir, :filter => regexp) do |modified, added, removed|
           #d { modified }
           #d { added }
@@ -75,11 +73,14 @@ module Rerun
 
       @thread.priority = @priority
 
-      at_exit { stop } #?
+      at_exit { stop } # try really hard to clean up after ourselves
+    end
 
-      sleep 1 until @listener.instance_variable_get(:@adapter)
-      puts "Using adapter #{@listener.instance_variable_get(:@adapter)}"
-
+    def adapter
+      timeout(4) do
+        sleep 1 until adapter = @listener.instance_variable_get(:@adapter)
+        adapter
+      end
     end
 
     # kill the filewatcher thread
