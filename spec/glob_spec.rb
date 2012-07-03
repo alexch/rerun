@@ -30,7 +30,7 @@ module Rerun
 
     }.each_pair do |glob_string, regexp_string|
       specify glob_string do
-        Glob.new(glob_string).to_regexp_string.should == regexp_string
+        Glob.new(glob_string).to_regexp_string.should == Glob::NO_LEADING_DOT + regexp_string
       end
     end
 
@@ -38,7 +38,7 @@ module Rerun
 
     describe "#to_regexp" do
       it "makes a regexp" do
-        Glob.new("foo*").to_regexp.should == /foo.*/
+        Glob.new("foo*").to_regexp.should == /#{Glob::NO_LEADING_DOT}foo.*/
       end
     end
 

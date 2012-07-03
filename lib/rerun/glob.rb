@@ -1,10 +1,11 @@
 # based on http://cpan.uwinnipeg.ca/htdocs/Text-Glob/Text/Glob.pm.html#glob_to_regex_string-
 
 # todo: release as separate gem
+# todo: make NO_LEADING_DOT optional
 #
 module Rerun
   class Glob
-    NO_LEADING_DOT = '(?=[^\.])'   # todo
+    NO_LEADING_DOT = '(?=[^\.])'
 
     def initialize glob_string
       @glob_string = glob_string
@@ -17,7 +18,7 @@ module Rerun
 
       curlies = 0;
       escaping = false;
-      chars.map do |char|
+      regexp_string = chars.map do |char|
         if escaping
           escaping = false
           char
@@ -58,6 +59,7 @@ module Rerun
           end
         end
       end.join
+      NO_LEADING_DOT + regexp_string
     end
 
     def to_regexp
