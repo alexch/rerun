@@ -5,8 +5,8 @@ $spec = Gem::Specification.new do |s|
   s.name = 'rerun'
   s.version = '0.7.0.pre5'
 
-  s.description = "Restarts your app when a file changes"
-  s.summary     = "Launches an app, and restarts it whenever the filesystem changes."
+  s.description = "Restarts your app when a file changes. A no-frills, command-line alternative to Guard, Shotgun, Autotest, etc."
+  s.summary     = "Launches an app, and restarts it whenever the filesystem changes. A no-frills, command-line alternative to Guard, Shotgun, Autotest, etc."
 
   s.authors = ["Alex Chaffee"]
   s.email = "alex@stinky.com"
@@ -31,6 +31,4 @@ $spec = Gem::Specification.new do |s|
 
   s.homepage = "http://github.com/alexch/rerun/"
   s.require_paths = %w[lib]
-  s.rubyforge_project = 'pivotalrb'
-  s.rubygems_version = '1.1.1'
 end

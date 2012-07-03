@@ -9,14 +9,14 @@ Rerun works for both long-running processes (e.g. apps) and short-running ones
 (e.g. tests). So it works like shotgun and autotest (and guard and all the
 rest).
 
-Rerun's advantage is its simple design. Since it uses standard Unix "SIGINT"
-and "SIGKILL" signals, you're sure the restarted app is really acting just
+Rerun's advantage is its simple design. Since it uses `exec` and the standard Unix `SIGINT`
+and `SIGKILL` signals, you're sure the restarted app is really acting just
 like it was when you ran it from the command line the first time.
 
-By default only *.{rb,js,css,scss,sass,erb,html,haml,ru} files are watched.
+By default only `*.{rb,js,css,scss,sass,erb,html,haml,ru}` files are watched.
 Use the `--pattern` option if you want to change this.
 
-If you're on Mac OS X, and using the built-in ruby, it uses the built-in
+As of version 0.7.0, we use the Listen gem, which tries to use your OS's built-in
 facilities for monitoring the filesystem, so CPU use is very light.
 
 Rerun does not work on Windows. Sorry, but you can't do much relaunching
@@ -69,7 +69,24 @@ or
 
         rerun -cx rspec
 
-How about regenerating your HTML files after every change to your [Erector](http://erector.rubyforge.org) widgets?
+And if you're using [Spork](https://github.com/sporkrb/spork) with Rails, you
+need to [restart your spork server](https://github.com/sporkrb/spork/issues/201)
+whenever certain Rails environment files change, so why not put this in your Rakefile...
+
+    desc "run spork (via rerun)"
+    task :spork do
+      sh "bundle check || bundle install"
+      sh "bundle exec rerun --pattern '{Gemfile,Gemfile.lock,spec/spec_helper.rb,.rspec,spec/factories/**,config/environment.rb,config/environments/test.rb,lib/**/*.rb}' -- spork"
+    end
+
+and start using `rake spork` to launch your spork server?
+
+(If you're using Guard instead of rerun, check out
+[guard-spork](https://github.com/guard/guard-spork)
+for a similar solution.)
+
+How about regenerating your HTML files after every change to your
+[Erector](http://erector.rubyforge.org) widgets?
 
         rerun -x erector --to-html my_site.rb
 
@@ -96,7 +113,8 @@ Also --version and --help, naturally.
 If you have `growlnotify` available on the `PATH`, it sends notifications to
 growl in addition to the console.
 
-Download [growlnotify here](http://growl.info/downloads.php#generaldownloads) now that Growl has moved to the App Store.
+Download [growlnotify here](http://growl.info/downloads.php#generaldownloads)
+now that Growl has moved to the App Store.
 
 # On-The-Fly Commands
 
@@ -110,15 +128,18 @@ While the app is (re)running, you can make things happen by pressing keys:
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
-* Allow arbitrary sets of directories and file types, possibly with "include" and "exclude" sets
+* Allow multiple sets of directories and patterns
+* --exclude pattern
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
-* Merge with Kicker or Watchr or Guard -- maybe by using it as a library and writing a Rerun recipe
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
+* Use growl's AppleScript or SDK instead of relying on growlnotify
 * "Failed" icon
 * Get Rails icon working
 * Figure out an algorithm so "-x" is not needed (if possible)
-* Use growl's AppleScript or SDK instead of relying on growlnotify
+* Make sure to exclude files beginning with a dot, unless the pattern explicitly says to include them
+* Specify (or deduce) port to listen for to determine success of a web server launch
+* Make sure to pass through quoted options correctly to target process [bug]
 
 # Other projects that do similar things
 
@@ -129,6 +150,7 @@ While the app is (re)running, you can make things happen by pressing keys:
 * Kicker: <http://github.com/alloy/kicker/>
 * Watchr: <https://github.com/mynyml/watchr>
 * Guard: <http://github.com/guard/guard>
+* Autotest: <https://github.com/grosser/autotest>
 
 # Why would I use this instead of Shotgun?
 
@@ -145,10 +167,10 @@ does it much less frequently. And once it's running it behaves more
 normally and consistently with your production app.
 
 Also, Shotgun reloads the app on every request, even if it doesn't
-need to. This is fine if you're loading a single file, but my web
-pages all load other files (CSS, JS, media) and that adds up quickly.
-The developers of shotgun are probably using caching or a front web
-server so this doesn't affect them too much.
+need to. This is fine if you're loading a single file, but if your web
+pages all load other files (CSS, JS, media) then that adds up quickly.
+(I can only assume that the developers of shotgun are using caching or a
+front web server so this isn't a pain point for them.)
 
 And hey, does Shotgun reload your Worker processes if you're using Foreman and
 a Procfile? I'm pretty sure it doesn't.
@@ -161,13 +183,19 @@ Rack::Reloader is certifiably beautiful code, and is a very elegant use
 of Rack's middleware architecture. But because it relies on the
 LOADED_FEATURES variable, it only reloads .rb files that were 'require'd,
 not 'load'ed. That leaves out (non-Erector) template files, and also,
-the way I was doing it, sub-actions (see
+at least the way I was doing it, sub-actions (see
 [this thread](http://groups.google.com/group/sinatrarb/browse_thread/thread/7329727a9296e96a#
 )).
 
 Rack::Reloader also doesn't reload configuration changes or redo other
 things that happen during app startup. Rerun takes the attitude that if
 you want to restart an app, you should just restart the whole app. You know?
+
+# Why would I use this instead of Guard?
+
+Guard is very powerful but requires some up-front configuration.
+Rerun is meant as a no-frills command-line alternative requiring no knowledge
+of Ruby nor config file syntax.
 
 # Why did you write this?
 
@@ -201,7 +229,7 @@ Based upon and/or inspired by:
 # Version History
 
 * v0.7.0
-  * uses Listen gem
+  * uses Listen gem (which uses rb-fsevent for lightweight filesystem snooping)
 
 # License
 
