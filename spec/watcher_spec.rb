@@ -8,7 +8,7 @@ module Rerun
   describe Watcher do
 
     before do
-      @dir = Dir.tmpdir + "/#{Time.now.to_i}"
+      @dir = Dir.tmpdir + "/#{Time.now.to_i}-#{(rand*100000).to_i}"
       FileUtils.mkdir_p(@dir)
 
       @log = nil
@@ -26,7 +26,7 @@ module Rerun
       sleep(1) # let it spin up
     end
 
-    let(:rest) { 0.5 }
+    let(:rest) { 1.0 }
 
     after do
       begin
