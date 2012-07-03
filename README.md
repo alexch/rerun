@@ -76,12 +76,12 @@ whenever certain Rails environment files change, so why not put this in your Rak
     desc "run spork (via rerun)"
     task :spork do
       sh "bundle check || bundle install"
-      sh "bundle exec rerun --pattern '{Gemfile,Gemfile.lock,spec/spec_helper.rb,.rspec,spec/factories/**,config/environment.rb,config/environments/test.rb,lib/**/*.rb}' -- spork"
+      sh "bundle exec rerun --pattern '{Gemfile,Gemfile.lock,spec/spec_helper.rb,.rspec,spec/factories/**,config/environment.rb,config/environments/test.rb,config/initializers/*.rb,lib/**/*.rb}' -- spork"
     end
 
 and start using `rake spork` to launch your spork server?
 
-(If you're using Guard instead of rerun, check out
+(If you're using Guard instead of Rerun, check out
 [guard-spork](https://github.com/guard/guard-spork)
 for a similar solution.)
 

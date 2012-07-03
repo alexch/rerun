@@ -4,6 +4,7 @@ require 'tmpdir'
 require 'rerun/watcher'
 
 module Rerun
+
   describe Watcher do
 
     before do
@@ -22,11 +23,10 @@ module Rerun
         @log = hash
       end
       @watcher.start
-
-      @test_file = "#{@dir}/test.txt"
-      @non_matching_file = "#{@dir}/test.exe"
       sleep(1) # let it spin up
     end
+
+    let(:rest) { 0.5 }
 
     after do
       begin
@@ -35,43 +35,64 @@ module Rerun
       end
     end
 
-    it "watches file changes" do
-      rest = 1.0
-      File.open(@test_file, "w") do |f|
+    def create test_file
+      File.open(test_file, "w") do |f|
         f.puts("test")
       end
       sleep(rest)
-      @log[:added].should == [@test_file]
+    end
 
-      File.open(@test_file, "a") do |f|
+    def modify test_file
+      File.open(test_file, "a") do |f|
         f.puts("more more more")
       end
       sleep(rest)
-      @log[:modified].should == [@test_file]
+    end
 
-      File.delete(@test_file)
+    def remove test_file
+      File.delete(test_file)
       sleep(rest)
-      @log[:removed].should == [@test_file]
+    end
+
+    it "watches file changes" do
+      test_file = "#{@dir}/test.txt"
+
+      create test_file
+      @log[:added].should == [test_file]
+
+      modify test_file
+      @log[:modified].should == [test_file]
+
+      remove test_file
+      @log[:removed].should == [test_file]
     end
 
     it "ignores changes to non-matching files" do
-       rest = 1.0
 
-       File.open(@non_matching_file, "w") do |f|
-         f.puts("test")
-       end
-       sleep(rest)
-       @log.should be_nil
+      non_matching_file = "#{@dir}/test.exe"
 
-       File.open(@non_matching_file, "a") do |f|
-         f.puts("more more more")
-       end
-       sleep(rest)
-       @log.should be_nil
+      create non_matching_file
+      @log.should be_nil
 
-       File.delete(@non_matching_file)
-       sleep(rest)
-       @log.should be_nil
+      modify non_matching_file
+      @log.should be_nil
+
+      remove non_matching_file
+      @log.should be_nil
+    end
+
+    pending "ignores changes to dot-files" do
+      dot_file = "#{@dir}/.ignoreme.txt"
+
+      create dot_file
+      @log.should be_nil
+
+      modify dot_file
+      @log.should be_nil
+
+      remove dot_file
+      @log.should be_nil
+
     end
   end
 
