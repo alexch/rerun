@@ -31,14 +31,6 @@ module Rerun
             when 'x', 'q'
               die
               break  # the break will stop this thread, in case the 'die' doesn't
-            when 't'
-              puts
-              puts "#{Thread.list.size} threads:"
-              Thread.list.each do |t|
-                puts "#{t.object_id}\tstatus: #{t.status}"
-                puts "\t" + t.backtrace[0..5].join("\n\t")
-                puts
-              end
             else
               puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
