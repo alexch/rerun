@@ -100,7 +100,8 @@ Procfile processes locally and restart them all when necessary.
 `--dir` directory to watch (default = ".")
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
-By default it watches these files: `rb,js,css,scss,sass,erb,html,haml,ru`.
+By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
+It also ignores directories named `.rbx .bundle .git .svn log tmp vendor` and files named `.DS_Store`.
 
 `--clear` (or -c) clear the screen before each run
 

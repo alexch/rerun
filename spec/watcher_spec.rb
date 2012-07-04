@@ -35,11 +35,11 @@ module Rerun
       end
     end
 
-    def create test_file
+    def create test_file, sleep = true
       File.open(test_file, "w") do |f|
         f.puts("test")
       end
-      sleep(rest)
+      sleep(rest) if sleep
     end
 
     def modify test_file
@@ -68,7 +68,6 @@ module Rerun
     end
 
     it "ignores changes to non-matching files" do
-
       non_matching_file = "#{@dir}/test.exe"
 
       create non_matching_file
@@ -93,6 +92,21 @@ module Rerun
       remove dot_file
       @log.should be_nil
 
+    end
+
+    ignored_directories = %w(.rbx .bundle .git .svn log tmp vendor)
+    it "ignores directories named #{ignored_directories}" do
+      ignored_directories.each do |ignored_dir|
+        FileUtils.mkdir "#{@dir}/#{ignored_dir}"
+        create [@dir, ignored_dir, "foo.txt"].join('/'), false
+      end
+      sleep(rest)
+      @log.should be_nil
+    end
+
+    it "ignores files named `.DS_Store`." do
+      create "#{@dir}/.DS_Store"
+      @log.should be_nil
     end
   end
 

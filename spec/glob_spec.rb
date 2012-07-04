@@ -5,7 +5,15 @@ require "rerun/glob"
 
 module Rerun
   describe Glob do
-    {
+
+    describe "#to_regexp" do
+      it "makes a regexp" do
+        Glob.new("foo*").to_regexp.should == /#{Glob::START_OF_FILENAME}foo.*#{Glob::END_OF_STRING}/
+      end
+    end
+
+    describe "#to_regexp_string" do
+      {
         "x" => "x",
 
         "*" => ".*",
@@ -28,19 +36,57 @@ module Rerun
 
         "**/*.txt" => "([^/]+/)*.*\\.txt",
 
-    }.each_pair do |glob_string, regexp_string|
-      specify glob_string do
-        Glob.new(glob_string).to_regexp_string.should == regexp_string
+      }.each_pair do |glob_string, regexp_string|
+        specify glob_string do
+          Glob.new(glob_string).to_regexp_string.should ==
+              Glob::START_OF_FILENAME + regexp_string + Glob::END_OF_STRING
+        end
+      end
+    end
+
+    describe "specifically" do
+      {
+        "*.txt" => {
+          :hits=> [
+              "foo.txt",
+              "foo/bar.txt",
+              "/foo/bar.txt",
+              "bar.baz.txt",
+              "/foo/bar.baz.txt",
+          ],
+          :misses => [
+              "foo.txt.html",
+              "tmp/foo.txt.html",
+              "/tmp/foo.txt.html",
+              #"tmp/.foo.txt",
+          ]
+        },
+        "tmp/foo.*" => {
+          :hits => [
+            "tmp/foo.txt",
+          ],
+          :misses => [
+            "stmp/foo.txt",
+            "tmp/foofoo.txt",
+          ]
+        }
+      }.each_pair do |glob, paths|
+        paths[:hits].each do |path|
+          specify "#{glob} matches #{path}" do
+            Glob.new(glob).to_regexp.should =~ path
+          end
+        end
+        paths[:misses].each do |path|
+          specify "#{glob} doesn't match #{path}" do
+            Glob.new(glob).to_regexp.should_not =~ path
+          end
+        end
       end
     end
 
     it "excludes files beginning with dots"
 
-    describe "#to_regexp" do
-      it "makes a regexp" do
-        Glob.new("foo*").to_regexp.should == /foo.*/
-      end
-    end
+    describe ""
 
     describe "#smoosh" do
 

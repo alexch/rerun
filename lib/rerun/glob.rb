@@ -5,6 +5,8 @@
 module Rerun
   class Glob
     NO_LEADING_DOT = '(?=[^\.])'   # todo
+    START_OF_FILENAME = '(\A|\/)'  # beginning of string or a slash
+    END_OF_STRING = '\z'
 
     def initialize glob_string
       @glob_string = glob_string
@@ -17,7 +19,7 @@ module Rerun
 
       curlies = 0;
       escaping = false;
-      chars.map do |char|
+      string = chars.map do |char|
         if escaping
           escaping = false
           char
@@ -58,6 +60,7 @@ module Rerun
           end
         end
       end.join
+      START_OF_FILENAME + string + END_OF_STRING
     end
 
     def to_regexp
