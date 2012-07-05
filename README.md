@@ -48,6 +48,11 @@ optional, so the above can also be accomplished like this:
 
         rerun app.rb
 
+Rails doesn't automatically notice all config file changes, so you can force it
+to restart when you change a config file like this:
+
+        rerun --dir config rails s
+
 Or if you're using Thin to run a Rack app that's configured in config.ru
 but you want it on port 4000 and in debug mode, and only want to watch
 the `app` subdirectory:
@@ -146,6 +151,7 @@ While the app is (re)running, you can make things happen by pressing keys:
 * Make it work on Windows, like Guard now does. See
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
+* Optionally do "bundle install" before and "bundle exec" during launch
 
 # Other projects that do similar things
 
