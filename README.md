@@ -129,6 +129,7 @@ While the app is (re)running, you can make things happen by pressing keys:
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
+* Exclude files beginning with a dot, unless the pattern explicitly says to include them
 * Allow multiple sets of directories and patterns
 * --exclude pattern
 * ".rerun" file to specify options per project or in $HOME.
@@ -138,9 +139,11 @@ While the app is (re)running, you can make things happen by pressing keys:
 * "Failed" icon
 * Get Rails icon working
 * Figure out an algorithm so "-x" is not needed (if possible)
-* Make sure to exclude files beginning with a dot, unless the pattern explicitly says to include them
 * Specify (or deduce) port to listen for to determine success of a web server launch
 * Make sure to pass through quoted options correctly to target process [bug]
+* Make it work on Windows, like Guard now does. See
+  * https://github.com/guard/guard/issues/59
+  * https://github.com/guard/guard/issues/27
 
 # Other projects that do similar things
 
