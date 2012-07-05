@@ -6,18 +6,19 @@ Rerun launches your program, then watches the filesystem. If a relevant file
 changes, then it restarts your program.
 
 Rerun works for both long-running processes (e.g. apps) and short-running ones
-(e.g. tests). So it works like shotgun and autotest (and guard and all the
-rest).
+(e.g. tests). It's basically a no-frills command-line alternative to Guard,
+Shotgun, Autotest, etc. that doesn't require config files and works on any
+command, not just Ruby programs.
 
-Rerun's advantage is its simple design. Since it uses `exec` and the standard Unix `SIGINT`
-and `SIGKILL` signals, you're sure the restarted app is really acting just
-like it was when you ran it from the command line the first time.
+Rerun's advantage is its simple design. Since it uses `exec` and the standard
+Unix `SIGINT` and `SIGKILL` signals, you're sure the restarted app is really
+acting just like it was when you ran it from the command line the first time.
 
 By default only `*.{rb,js,css,scss,sass,erb,html,haml,ru}` files are watched.
 Use the `--pattern` option if you want to change this.
 
-As of version 0.7.0, we use the Listen gem, which tries to use your OS's built-in
-facilities for monitoring the filesystem, so CPU use is very light.
+As of version 0.7.0, we use the Listen gem, which tries to use your OS's
+built-in facilities for monitoring the filesystem, so CPU use is very light.
 
 Rerun does not work on Windows. Sorry, but you can't do much relaunching
 without "fork".
@@ -26,9 +27,11 @@ without "fork".
 
         gem install rerun
 
-"sudo" may be required on older systems.
+("sudo" may be required on older systems, but try it without sudo first.)
 
-If you are using RVM you might want to put this in your global gemset so it's available to all your apps. (There really should be a better way to distinguish gems-as-libraries from gems-as-tools.)
+If you are using RVM you might want to put this in your global gemset so it's
+available to all your apps. (There really should be a better way to distinguish
+gems-as-libraries from gems-as-tools.)
 
         rvm @global do gem install rerun
 
@@ -36,8 +39,7 @@ If you are using RVM you might want to put this in your global gemset so it's av
 
         rerun [options] [--] cmd
 
-For example, if you're running a Sinatra app whose main file is
-app.rb:
+For example, if you're running a Sinatra app whose main file is `app.rb`:
 
         rerun ruby app.rb
 
@@ -71,12 +73,12 @@ or
 
 And if you're using [Spork](https://github.com/sporkrb/spork) with Rails, you
 need to [restart your spork server](https://github.com/sporkrb/spork/issues/201)
-whenever certain Rails environment files change, so why not put this in your Rakefile...
+whenever certain Rails environment files change, so why not put this in your
+Rakefile...
 
     desc "run spork (via rerun)"
     task :spork do
-      sh "bundle check || bundle install"
-      sh "bundle exec rerun --pattern '{Gemfile,Gemfile.lock,spec/spec_helper.rb,.rspec,spec/factories/**,config/environment.rb,config/environments/test.rb,config/initializers/*.rb,lib/**/*.rb}' -- spork"
+      sh "rerun --pattern '{Gemfile,Gemfile.lock,spec/spec_helper.rb,.rspec,spec/factories/**,config/environment.rb,config/environments/test.rb,config/initializers/*.rb,lib/**/*.rb}' -- spork"
     end
 
 and start using `rake spork` to launch your spork server?
@@ -214,7 +216,7 @@ Rerun together out of code from Rspactor, FileSystemWatcher, and Shotgun
 
 # Credits
 
-Rerun: Alex Chaffee, <mailto:alex@stinky.com>, <http://github.com/alexch/>
+Rerun: [Alex Chaffee](http://alexchaffee.com), <mailto:alex@stinky.com>, <http://github.com/alexch/>
 
 Based upon and/or inspired by:
 

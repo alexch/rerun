@@ -8,13 +8,12 @@ $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 load "#{libdir}/../rerun.gemspec" # defines "$spec" variable, which we read the version from
 
 require 'rerun'
-
 require 'optparse'
 
 options = {}
 
 opts = OptionParser.new("", 24, '  ') { |opts|
-  opts.banner = "Usage: rerun cmd"
+  opts.banner = "Usage: rerun [options] [--] cmd"
 
   opts.separator ""
   opts.separator "Launches an app, and restarts it when the filesystem changes."
