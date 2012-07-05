@@ -19,7 +19,9 @@ module Rerun
     end
 
     def growlcmd
-      `which growlnotify`.chomp
+      growlnotify = `which growlnotify`.chomp
+      # todo: check version of growlnotify and warn if it's too old
+      growlnotify
     end
 
     def app_name
@@ -28,12 +30,10 @@ module Rerun
     end
 
     def icon
-      libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
-      $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
-
+      here = File.expand_path(File.dirname(__FILE__))
+      icondir = File.expand_path("#{here}/../../icons")
       rails_sig_file = File.expand_path(".")+"/config/boot.rb"
-      return "#{libdir}/../icons/rails_red_sml.png" if File.exists? rails_sig_file
-      return nil
+      "#{icondir}/rails_red_sml.png" if File.exists? rails_sig_file
     end
 
     def growl(title, body, background = true)

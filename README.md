@@ -152,7 +152,6 @@ While the app is (re)running, you can make things happen by pressing keys:
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
 * Optionally do "bundle install" before and "bundle exec" during launch
-
 # Other projects that do similar things
 
 * Restartomatic: <http://github.com/adammck/restartomatic>
