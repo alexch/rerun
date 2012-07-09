@@ -132,6 +132,18 @@ While the app is (re)running, you can make things happen by pressing keys:
 * **c** -- clear the screen
 * **x** or **q** -- exit (just like control-C)
 
+# Signals
+
+The current algorithm for killing the process is:
+
+* send [SIGTERM](http://en.wikipedia.org/wiki/SIGTERM)
+* if that doesn't work after 4 seconds, send SIGINT (aka control-C)
+* if that doesn't work after 2 more seconds, send SIGKILL (aka kill -9)
+
+This seems like the most gentle and unixy way of doing things, but it does
+mean that if your program ignores SIGTERM, it takes an extra 4 to 6 seconds to
+restart.
+
 # To Do:
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
@@ -152,6 +164,8 @@ While the app is (re)running, you can make things happen by pressing keys:
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
 * Optionally do "bundle install" before and "bundle exec" during launch
+* Option to specify signal(s) to try before SIGKILL (kill -9)
+
 # Other projects that do similar things
 
 * Restartomatic: <http://github.com/adammck/restartomatic>
