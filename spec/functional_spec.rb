@@ -53,9 +53,9 @@ describe "the rerun command" do
     # todo: send a character to stdin of the rerun process
   end
 
-  it "increments a test file once per second" do
+  it "increments a test file once per two seconds" do
     x = current_count
-    sleep 1
+    sleep 2
     y = current_count
     y.should be > x
   end
