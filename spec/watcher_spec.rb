@@ -4,7 +4,7 @@ require 'tmpdir'
 require 'rerun/watcher'
 
 module Rerun
-
+  COOL_OFF_TIME = 2
   describe Watcher do
 
     before do
@@ -23,7 +23,7 @@ module Rerun
         @log = hash
       end
       @watcher.start
-      sleep(1) # let it spin up
+      sleep(COOL_OFF_TIME) # let it spin up
     end
 
     let(:rest) { 1.0 }
