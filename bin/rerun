@@ -22,7 +22,7 @@ opts = OptionParser.new("", 24, '  ') { |opts|
   opts.separator "Options:"
 
   opts.on("-d dir", "--dir dir", "directory to watch") do |dir|
-    options[:dir] = dir
+    options[:dir] = dir.split(",")
   end
 
   opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{Rerun::DEFAULT_PATTERN}\"") do |pattern|
