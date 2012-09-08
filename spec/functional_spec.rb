@@ -89,3 +89,79 @@ describe "the rerun command" do
 
   #it "accepts a key press"
 end
+
+describe "the rerun command, taking multiple directories" do
+  before do
+    @testdir = File.join(Dir.tmpdir, "#{Time.now.to_i}")
+    @dir1 = File.join(@testdir, "test1")
+    @dir2 = File.join(@testdir, "test2")
+    FileUtils.mkdir_p(@dir1)
+    FileUtils.mkdir_p(@dir2)
+    @file = File.join(@testdir, "inc.txt")
+
+    @dir1_app_file = "#{@dir1}/foo.rb"
+    @dir1_app_file2 = "#{@dir1}/bar.rb"
+    touch @dir1_app_file
+
+    @dir2_app_file = "#{@dir2}/foo.rb"
+    @dir2_app_file2 = "#{@dir2}/bar.rb"
+    touch @dir2_app_file
+
+    launch_inc
+  end
+
+  after do
+    timeout(4) {
+      Process.kill("INT", @pid) && Process.wait(@pid) rescue Errno::ESRCH
+    }
+  end
+
+  def launch_inc
+    @pid = fork do
+      root = File.join(File.dirname(__FILE__), "..")
+      exec("#{root}/bin/rerun -d '#{@dir1},#{@dir2}' 'ruby #{root}/inc.rb #{@file}' ")
+    end
+    timeout(10) { sleep 0.25 until File.exist?(@file) }
+    sleep 1  # let inc get going
+  end
+
+  def read(file)
+    File.open(file, "r") do |f|
+      launched_at = f.gets.to_i
+      count = f.gets.to_i
+      [launched_at, count]
+    end
+  end
+
+  def current_count(file)
+    launched_at, count = read(file)
+    count
+  end
+
+  def touch(file)
+    # puts "Touching #{@app_file}"
+    File.open(file, "w") do |f|
+      f.puts Time.now
+    end
+  end
+
+  def type char
+    # todo: send a character to stdin of the rerun process
+  end
+
+  it "should watch multiple dirs" do
+    x = current_count(@file)
+    touch(@dir1_app_file)
+    sleep 1
+    y = current_count(@file)
+    y.should be > x
+    sleep 1
+    x = current_count(@file)
+    touch(@dir2_app_file)
+    sleep 1
+    y = current_count(@file)
+    y.should be > x
+  end
+
+end
+
