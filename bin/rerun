@@ -37,6 +37,10 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:exit] = true
   end
 
+  opts.on("-b", "--passive", "disable on-the-fly commands, allowing the process to be backgrounded") do
+    options[:passive] = true
+  end
+
   opts.on_tail("-h", "--help", "--usage", "show this message") do
     puts opts
     exit

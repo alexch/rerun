@@ -114,6 +114,8 @@ It also ignores directories named `.rbx .bundle .git .svn log tmp vendor` and fi
 
 `--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
+`--passive` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
+
 Also --version and --help, naturally.
 
 # Growl Notifications
