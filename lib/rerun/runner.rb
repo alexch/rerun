@@ -181,12 +181,13 @@ module Rerun
 
     # todo: test escalation
     def stop
+      default_signal = @options[:signal] || "TERM"
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
         begin
           timeout(4) do  # todo: escalation timeout setting
             # start with a polite SIGTERM
-            signal("TERM") && Process.wait(@pid)
+            signal(default_signal) && Process.wait(@pid)
           end
         rescue Timeout::Error
           begin
