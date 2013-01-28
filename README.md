@@ -118,6 +118,8 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
+`--passive` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
+
 Also --version and --help, naturally.
 
 # Growl Notifications
