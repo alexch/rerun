@@ -110,6 +110,10 @@ Procfile processes locally and restart them all when necessary.
 By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
 It also ignores directories named `.rbx .bundle .git .svn log tmp vendor` and files named `.DS_Store`.
 
+`--signal` (or -s) use specified signal (instead of the default SIGTERM) to terminate the previous process.
+This may be useful for forcing the respective process to terminate as quickly as possible.
+(`--signal KILL` is the equivalent of `kill -9`)
+
 `--clear` (or -c) clear the screen before each run
 
 `--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
