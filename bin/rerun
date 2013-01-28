@@ -29,7 +29,7 @@ opts = OptionParser.new("", 24, '  ') { |opts|
     options[:pattern] = pattern
   end
 
-  opts.on("-s", "--signal", "terminate process using a signal other than SIGTERM") do |signal|
+  opts.on("-s", "--signal signal", "terminate process using a signal other than SIGTERM") do |signal|
     options[:signal] = signal
   end
 
