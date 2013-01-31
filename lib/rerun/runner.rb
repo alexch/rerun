@@ -18,7 +18,7 @@ module Rerun
     end
 
     def start_keypress_thread
-      return if @options[:passive]
+      return if @options[:background]
 
       @keypress_thread = Thread.new do
         while true

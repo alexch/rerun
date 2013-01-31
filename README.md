@@ -118,7 +118,7 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
 
-`--passive` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
+`--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
 Also --version and --help, naturally.
 
@@ -256,8 +256,14 @@ Based upon and/or inspired by:
 * Jens B <https://github.com/dpree>
 * Andrés Botero <https://github.com/anbotero>
 * Dreamcat4
+* <https://github.com/FND>
 
 # Version History
+
+* v0.8.0
+  * --background option (thanks FND!)
+  * --signal option (thanks FND!)
+
 
 * v0.7.0
   * uses Listen gem (which uses rb-fsevent for lightweight filesystem snooping)
