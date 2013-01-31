@@ -61,11 +61,11 @@ module Rerun
     end
 
     def dir
-      @options[:dir] || "."
+      @options[:dir]
     end
 
     def pattern
-      @options[:pattern] || DEFAULT_PATTERN
+      @options[:pattern]
     end
 
     def clear?
