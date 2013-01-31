@@ -264,6 +264,8 @@ Based upon and/or inspired by:
   * --background option (thanks FND!)
   * --signal option (thanks FND!)
 
+* v0.7.1
+  * bugfix: make rails icon work again
 
 * v0.7.0
   * uses Listen gem (which uses rb-fsevent for lightweight filesystem snooping)
