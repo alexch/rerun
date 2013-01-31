@@ -14,7 +14,7 @@ module Rerun
     end
 
     # do we have growl or not?
-    def growl?
+    def growl_available?
       mac? && (growlcmd != "")
     end
 
@@ -37,7 +37,7 @@ module Rerun
     end
 
     def growl(title, body, background = true)
-      if growl?
+      if growl_available?
         icon_str = ("--image \"#{icon}\"" if icon)
         s = "#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
         s += " &" if background

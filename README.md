@@ -120,12 +120,15 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
+`--no-growl` don't use growl
+
 Also --version and --help, naturally.
 
 # Growl Notifications
 
 If you have `growlnotify` available on the `PATH`, it sends notifications to
-growl in addition to the console.
+growl in addition to the console. If you have growl but don't want rerun to use it,
+set the `--no-growl` option.
 
 Download [growlnotify here](http://growl.info/downloads.php#generaldownloads)
 now that Growl has moved to the App Store.
@@ -261,8 +264,9 @@ Based upon and/or inspired by:
 # Version History
 
 * v0.8.0
-  * --background option (thanks FND!)
+  * --background option (thanks FND!) to disable the keyboard listener
   * --signal option (thanks FND!)
+  * --no-growl option
 
 * v0.7.1
   * bugfix: make rails icon work again

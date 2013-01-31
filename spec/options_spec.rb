@@ -12,6 +12,7 @@ module Rerun
       assert { defaults[:dir] == "." }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
       assert { defaults[:signal] == "TERM" }
+      assert { defaults[:growl] == true }
 
       assert { defaults[:clear].nil? }
       assert { defaults[:exit].nil? }
@@ -19,7 +20,6 @@ module Rerun
     end
 
     ["--help", "-h", "--usage", "--version", "-v"].each do |arg|
-
       describe "when passed #{arg}" do
         it "returns nil" do
           capturing do
@@ -27,6 +27,11 @@ module Rerun
           end
         end
       end
+    end
+
+    it "accepts --no-growl" do
+      options = Options.parse ["--no-growl", "foo"]
+      assert { options[:growl] == false }
     end
   end
 end

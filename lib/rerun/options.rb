@@ -11,7 +11,9 @@ module Rerun
         :dir => ".",
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
+        :growl => true,
     }
+
     def self.parse args = ARGV
       options = DEFAULTS.dup
       opts = OptionParser.new("", 24, '  ') do |opts|
@@ -46,6 +48,10 @@ module Rerun
 
         opts.on("-b", "--background", "disable on-the-fly commands, allowing the process to be backgrounded") do
           options[:background] = true
+        end
+
+        opts.on("--no-growl", "don't use growl") do
+          options[:growl] = false
         end
 
         opts.on_tail("-h", "--help", "--usage", "show this message") do
