@@ -9,7 +9,7 @@ module Rerun
       defaults = Options.parse ["foo"]
       assert { defaults[:cmd] = "foo" }
 
-      assert { defaults[:dir] == "." }
+      assert { defaults[:dir] == ["."] }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
       assert { defaults[:signal] == "TERM" }
       assert { defaults[:growl] == true }
@@ -32,6 +32,11 @@ module Rerun
     it "accepts --no-growl" do
       options = Options.parse ["--no-growl", "foo"]
       assert { options[:growl] == false }
+    end
+
+    it "splits directories" do
+      options = Options.parse ["--dir", "a,b", "foo"]
+      assert { options[:dir] == ["a", "b"] }
     end
   end
 end

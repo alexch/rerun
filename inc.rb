@@ -1,9 +1,20 @@
+def say msg
+  puts "#{Time.now.strftime("%T")} #{$$} #{msg}"
+end
+
+STDOUT.sync = true
+
+Signal.trap("TERM") do
+  say "caught TERM"
+  exit
+end
+
 launched = Time.now.to_i
-# puts "Launching at #{launched}"
+say "launching"
 file = ARGV[0] || "./inc.txt"
 i = 0
 while i < 10
-#  puts "Writing #{launched}/#{i}"
+  say "writing #{launched}/#{i}"
   File.open(file, "w") do |f|
     f.puts(launched)
     f.puts(i)

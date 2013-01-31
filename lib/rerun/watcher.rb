@@ -30,13 +30,21 @@ module Rerun
       }.merge(options)
 
       @pattern = options[:pattern]
-      @directory = options[:directory]
-      @directory.chomp!("/")
-      unless FileTest.exists?(@directory) && FileTest.readable?(@directory)
-        raise InvalidDirectoryError, "Directory '#{@directory}' either doesnt exist or isnt readable"
-      end
+      @directories = options[:directory]
+      @directories = sanitize_dirs(@directories)
       @priority = options[:priority]
       @thread = nil
+    end
+
+    def sanitize_dirs(dirs)
+      dirs = [*dirs]
+      dirs.map do |d|
+        d.chomp!("/")
+        unless FileTest.exists?(d) && FileTest.readable?(d) && FileTest.directory?(d)
+          raise InvalidDirectoryError, "Directory '#{d}' either doesnt exist or isnt readable"
+        end
+        d
+      end
     end
 
     def start
@@ -45,10 +53,10 @@ module Rerun
       end
 
       @thread = Thread.new do
-        # todo: multiple dirs
-
         regexp = Glob.new(@pattern).to_regexp
-        @listener = Listen::Listener.new(@directory, :filter => regexp) do |modified, added, removed|
+        dirs = @directories
+        params = dirs << { :filter => regexp }
+        @listener = Listen::MultiListener.new(*params) do |modified, added, removed|
           @client_callback.call(:modified => modified, :added => added, :removed => removed)
         end
         @listener.start

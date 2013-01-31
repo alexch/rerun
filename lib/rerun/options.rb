@@ -8,7 +8,7 @@ module Rerun
     DEFAULT_PATTERN = "**/*.{rb,js,css,scss,sass,erb,html,haml,ru}"
 
     DEFAULTS = {
-        :dir => ".",
+        :dir => ["."],
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
@@ -27,7 +27,7 @@ module Rerun
         opts.separator "Options:"
 
         opts.on("-d dir", "--dir dir", "directory to watch, default = \"#{DEFAULTS[:dir]}\"") do |dir|
-          options[:dir] = dir
+          options[:dir] = dir.split(",")
         end
 
         opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{DEFAULTS[:pattern]}\"") do |pattern|

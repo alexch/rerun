@@ -64,6 +64,10 @@ module Rerun
       @options[:dir]
     end
 
+    def dirs
+      @options[:dir] || "."
+    end
+
     def pattern
       @options[:pattern]
     end
@@ -142,7 +146,7 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new(:directory => dir, :pattern => pattern) do |changes|
+        watcher = Watcher.new(:directory => dirs, :pattern => pattern) do |changes|
 
           message = [:modified, :added, :removed].map do |change|
             count = changes[change].size

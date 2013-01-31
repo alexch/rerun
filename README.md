@@ -158,7 +158,6 @@ restart.
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Exclude files beginning with a dot, unless the pattern explicitly says to include them
-* Allow multiple sets of directories and patterns
 * --exclude pattern
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
@@ -260,6 +259,7 @@ Based upon and/or inspired by:
 * Andrés Botero <https://github.com/anbotero>
 * Dreamcat4
 * <https://github.com/FND>
+* Barry Sia <https://github.com/bsia>
 
 # Version History
 
@@ -267,6 +267,7 @@ Based upon and/or inspired by:
   * --background option (thanks FND!) to disable the keyboard listener
   * --signal option (thanks FND!)
   * --no-growl option
+  * --dir supports multiple directories (thanks Barry!)
 
 * v0.7.1
   * bugfix: make rails icon work again
