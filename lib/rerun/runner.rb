@@ -18,6 +18,8 @@ module Rerun
     end
 
     def start_keypress_thread
+      return if @options[:passive]
+
       @keypress_thread = Thread.new do
         while true
           if c = key_pressed
