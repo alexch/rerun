@@ -8,19 +8,24 @@ describe "the rerun command" do
 
     @dir = Dir.tmpdir + "/#{Time.now.to_i}"
     FileUtils.mkdir_p(@dir)
-    @file = "#{@dir}/inc.txt"
+    @inc_output_file = "#{@dir}/inc.txt"
 
     @dir1 = File.join(@dir, "dir1")
     FileUtils.mkdir_p(@dir1)
-    @app_file = File.join(@dir1, "foo.rb")
 
-    @app_file2 = File.join(@dir1, "bar.rb")
+    # one file that exists in dir1
+    @watched_file1 = File.join(@dir1, "foo.rb")
+    touch @watched_file1
+
+    # one file that doesn't yet exist in dir1
+    @watched_file2 = File.join(@dir1, "bar.rb")
 
     @dir2 = File.join(@dir, "dir2")
     FileUtils.mkdir_p(@dir2)
-    @app_file3 = File.join(@dir2, "baz.rb")
 
-    touch @app_file
+    # one file that exists in dir2
+    @watched_file3 = File.join(@dir2, "baz.rb")
+
     launch_inc
   end
 
@@ -33,14 +38,14 @@ describe "the rerun command" do
   def launch_inc
     @pid = fork do
       root = File.dirname(__FILE__) + "/.."
-      exec("#{root}/bin/rerun -d '#{@dir1},#{@dir2}' ruby #{root}/inc.rb #{@file}")
+      exec("#{root}/bin/rerun -d '#{@dir1},#{@dir2}' ruby #{root}/inc.rb #{@inc_output_file}")
     end
-    timeout(10) { sleep 0.5 until File.exist?(@file) }
-    sleep 4  # let inc get going
+    timeout(10) { sleep 0.5 until File.exist?(@inc_output_file) }
+    sleep 4  # let rerun's watcher get going
   end
 
   def read
-    File.open(@file, "r") do |f|
+    File.open(@inc_output_file, "r") do |f|
       launched_at = f.gets.to_i
       count = f.gets.to_i
       [launched_at, count]
@@ -52,8 +57,8 @@ describe "the rerun command" do
     count
   end
 
-  def touch(file = @app_file)
-    puts "#{Time.now.strftime("%T")} touching #{@app_file}"
+  def touch(file = @watched_file1)
+    puts "#{Time.now.strftime("%T")} touching #{file}"
     File.open(file, "w") do |f|
       f.puts Time.now
     end
@@ -72,7 +77,7 @@ describe "the rerun command" do
 
   it "restarts its target when an app file is modified" do
     first_launched_at, count = read
-    touch @app_file
+    touch @watched_file1
     sleep 4
     second_launched_at, count = read
 
@@ -81,7 +86,7 @@ describe "the rerun command" do
 
   it "restarts its target when an app file is created" do
     first_launched_at, count = read
-    touch @app_file2
+    touch @watched_file2
     sleep 4
     second_launched_at, count = read
 
@@ -90,7 +95,7 @@ describe "the rerun command" do
 
   it "restarts its target when an app file is created in the second dir" do
     first_launched_at, count = read
-    touch @app_file3
+    touch @watched_file3
     sleep 4
     second_launched_at, count = read
 

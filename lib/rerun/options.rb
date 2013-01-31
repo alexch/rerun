@@ -26,7 +26,7 @@ module Rerun
         opts.separator ""
         opts.separator "Options:"
 
-        opts.on("-d dir", "--dir dir", "directory to watch, default = \"#{DEFAULTS[:dir]}\"") do |dir|
+        opts.on("-d dir", "--dir dir", "directory to watch, default = \"#{DEFAULTS[:dir]}\". Separate multiple paths with ','.") do |dir|
           options[:dir] = dir.split(",")
         end
 

@@ -55,9 +55,9 @@ to restart when you change a config file like this:
 
 Or if you're using Thin to run a Rack app that's configured in config.ru
 but you want it on port 4000 and in debug mode, and only want to watch
-the `app` subdirectory:
+the `app` and `web` subdirectories:
 
-        rerun --dir app -- thin start --debug --port=4000 -R config.ru
+        rerun --dir app,web -- thin start --debug --port=4000 -R config.ru
 
 The `--` is to separate rerun options from cmd options. You can also
 use a quoted string for the command, e.g.
@@ -104,7 +104,7 @@ Procfile processes locally and restart them all when necessary.
 
 # Options:
 
-`--dir` directory to watch (default = ".")
+`--dir` directory (or directories) to watch (default = "."). Separate multiple paths with ','.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
 By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
@@ -164,7 +164,6 @@ restart.
 * On OS X, use a C library using growl's developer API <http://growl.info/developer/>
 * Use growl's AppleScript or SDK instead of relying on growlnotify
 * "Failed" icon
-* Get Rails icon working
 * Figure out an algorithm so "-x" is not needed (if possible)
 * Specify (or deduce) port to listen for to determine success of a web server launch
 * Make sure to pass through quoted options correctly to target process [bug]
@@ -172,7 +171,6 @@ restart.
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
 * Optionally do "bundle install" before and "bundle exec" during launch
-* Option to specify signal(s) to try before SIGKILL (kill -9)
 
 # Other projects that do similar things
 
