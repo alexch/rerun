@@ -39,11 +39,10 @@ The Listen gem looks for certain platform-dependent gems, and will complain if
 they're not available. Unfortunately, Rubygems doesn't understand optional
 dependencies very well, so you may have to install extra gems (and/or put them
 in your Gemfile) to make Rerun work more smoothly on your system.
-(Learn more at <https://github.com/guard/listen#polling-fallback>.)
+(Learn more at <https://github.com/guard/listen#listen-adapters>.)
 For example, on Mac OS X, use
 
         gem install rb-fsevent
-
 
 # Usage:
 
@@ -244,13 +243,15 @@ of Ruby nor config file syntax.
 # Why did you write this?
 
 I've been using [Sinatra](http://sinatrarb.com) and loving it. In order
-to simplify their system, the Rat Pack just removed auto-reloading from
+to simplify their system, the Rat Pack removed auto-reloading from
 Sinatra proper. I approve of this: a web application framework should be
 focused on serving requests, not on munging Ruby ObjectSpace for
 dev-time convenience. But I still wanted automatic reloading during
 development. Shotgun wasn't working for me (see above) so I spliced
 Rerun together out of code from Rspactor, FileSystemWatcher, and Shotgun
--- with a heavy amount of refactoring and rewriting.
+-- with a heavy amount of refactoring and rewriting. In late 2012 I
+migrated the backend to the Listen gem, which was extracted from Guard,
+so it should be more reliable and performant on multiple platforms.
 
 # Credits
 
