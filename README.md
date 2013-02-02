@@ -35,6 +35,16 @@ gems-as-libraries from gems-as-tools.)
 
         rvm @global do gem install rerun
 
+The Listen gem looks for certain platform-dependent gems, and will complain if
+they're not available. Unfortunately, Rubygems doesn't understand optional
+dependencies very well, so you may have to install extra gems (and/or put them
+in your Gemfile) to make Rerun work more smoothly on your system.
+(Learn more at <https://github.com/guard/listen#polling-fallback>.)
+For example, on Mac OS X, use
+
+        gem install rb-fsevent
+
+
 # Usage:
 
         rerun [options] [--] cmd
@@ -141,11 +151,14 @@ While the app is (re)running, you can make things happen by pressing keys:
 * **c** -- clear the screen
 * **x** or **q** -- exit (just like control-C)
 
+If you're backgrounding or using Pry or a debugger, you might not want these
+keys to be trapped, so use the `--background` option.
+
 # Signals
 
 The current algorithm for killing the process is:
 
-* send [SIGTERM](http://en.wikipedia.org/wiki/SIGTERM)
+* send [SIGTERM](http://en.wikipedia.org/wiki/SIGTERM) (or the value of the `--signal` option)
 * if that doesn't work after 4 seconds, send SIGINT (aka control-C)
 * if that doesn't work after 2 more seconds, send SIGKILL (aka kill -9)
 
