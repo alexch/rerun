@@ -1,7 +1,8 @@
 require 'optparse'
 
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
-load "#{libdir}/../rerun.gemspec" # defines "$spec" variable, which we read the version from
+
+$spec = Gem::Specification.load(File.join(libdir, "..", "rerun.gemspec"))
 
 module Rerun
   class Options
