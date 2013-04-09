@@ -53,7 +53,7 @@ module Rerun
       end
 
       @thread = Thread.new do
-        regexp = Glob.new(@pattern).to_regexp
+        regexp = Rerun::Glob.new(@pattern).to_regexp
         dirs = @directories
         params = dirs << { :filter => regexp }
         @listener = Listen::MultiListener.new(*params) do |modified, added, removed|

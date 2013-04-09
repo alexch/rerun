@@ -17,8 +17,8 @@ module Rerun
 
       chars = smoosh(chars)
 
-      curlies = 0;
-      escaping = false;
+      curlies = 0
+      escaping = false
       string = chars.map do |char|
         if escaping
           escaping = false

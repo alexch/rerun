@@ -159,7 +159,7 @@ module Rerun
         end
         watcher.start
         @watcher = watcher
-        say "Watching #{dir}/#{pattern} using #{watcher.adapter.class.name.split('::').last} adapter"
+        say "Watching #{dir.join(', ')} for #{pattern} using #{watcher.adapter.class.name.split('::').last} adapter"
       end
     end
 
