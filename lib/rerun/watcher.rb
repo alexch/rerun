@@ -56,10 +56,10 @@ module Rerun
         regexp = Glob.new(@pattern).to_regexp
         dirs = @directories
         params = dirs << { :filter => regexp }
-        @listener = Listen::MultiListener.new(*params) do |modified, added, removed|
+        @listener = Listen::Listener.new(*params) do |modified, added, removed|
           @client_callback.call(:modified => modified, :added => added, :removed => removed)
         end
-        @listener.start
+        @listener.start!
       end
 
       @thread.priority = @priority
