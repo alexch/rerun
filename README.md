@@ -272,8 +272,12 @@ Based upon and/or inspired by:
 * Dreamcat4
 * <https://github.com/FND>
 * Barry Sia <https://github.com/bsia>
+* Paul Rangel <https://github.com/ismell>
 
 # Version History
+
+* v0.8.1
+  * bugfix release (#30 and #34)
 
 * v0.8.0
   * --background option (thanks FND!) to disable the keyboard listener
