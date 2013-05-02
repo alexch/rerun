@@ -43,7 +43,7 @@ module Rerun
         unless FileTest.exists?(d) && FileTest.readable?(d) && FileTest.directory?(d)
           raise InvalidDirectoryError, "Directory '#{d}' either doesnt exist or isnt readable"
         end
-        d
+        File.expand_path(d)
       end
     end
 
@@ -55,11 +55,11 @@ module Rerun
       @thread = Thread.new do
         regexp = Rerun::Glob.new(@pattern).to_regexp
         dirs = @directories
-        params = dirs << { :filter => regexp }
-        @listener = Listen::MultiListener.new(*params) do |modified, added, removed|
+        params = dirs << { :filter => regexp, :relative_paths => false }
+        @listener = Listen::Listener.new(*params) do |modified, added, removed|
           @client_callback.call(:modified => modified, :added => added, :removed => removed)
         end
-        @listener.start
+        @listener.start!
       end
 
       @thread.priority = @priority
