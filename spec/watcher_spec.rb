@@ -9,17 +9,12 @@ module Rerun
 
     before do
       @dir = Dir.tmpdir + "/#{Time.now.to_i}-#{(rand*100000).to_i}"
+      # fix goofy MacOS /tmp path ambiguity
+      @dir.sub!(/^\/var/, "/private/var")
       FileUtils.mkdir_p(@dir)
 
       @log = nil
       @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt") do |hash|
-        #d { hash }
-
-        # fix goofy MacOS /tmp path ambiguity
-        [hash[:added], hash[:modified], hash[:removed]].compact.flatten.each do |s|
-          s.sub!("/private/var", "/var")
-        end
-
         @log = hash
       end
       @watcher.start
