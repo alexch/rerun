@@ -43,7 +43,7 @@ module Rerun
         unless FileTest.exists?(d) && FileTest.readable?(d) && FileTest.directory?(d)
           raise InvalidDirectoryError, "Directory '#{d}' either doesnt exist or isnt readable"
         end
-        d
+        File.expand_path(d)
       end
     end
 
