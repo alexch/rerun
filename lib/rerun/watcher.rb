@@ -93,5 +93,18 @@ module Rerun
     rescue Interrupt => e
       # don't care
     end
+
+    def pause
+      @listener.pause if @listener
+    end
+
+    def unpause
+      @listener.unpause if @listener
+    end
+
+    def running?
+      @listener && @listener.instance_variable_get(:@adapter)
+    end
+
   end
 end

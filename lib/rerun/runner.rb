@@ -30,6 +30,8 @@ module Rerun
             when 'r'
               say "Restarting"
               restart
+            when 'p'
+              toggle_pause if watcher_running?
             when 'x', 'q'
               die
               break  # the break will stop this thread, in case the 'die' doesn't
@@ -37,6 +39,7 @@ module Rerun
               puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
                ["r", "restart"],
+               ["p", "toggle pause"],
                ["x or q", "stop and exit"]
               ].map{|key, description| "  #{key} -- #{description}"}.join("\n")
               puts
@@ -58,6 +61,26 @@ module Rerun
       stop
       start
       @restarting = false
+    end
+
+    def watcher_running?
+      @watcher && @watcher.running?
+    end
+
+    def toggle_pause
+      unless @pausing
+        say "Pausing.  Press 'p' again to resume."
+        @watcher.pause
+        @pausing = true
+      else
+        say "Resuming"
+        @watcher.unpause
+        @pausing = false
+      end
+    end
+
+    def unpause
+      @watcher.unpause
     end
 
     def dir
