@@ -13,6 +13,7 @@ module Rerun
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
+        :osx_notifications => false
     }
 
     def self.parse args = ARGV
@@ -52,6 +53,11 @@ module Rerun
         end
 
         opts.on("--no-growl", "don't use growl") do
+          options[:growl] = false
+        end
+
+        opts.on("-on", "--osx-notifications", "use OS X Notifications") do
+          options[:osx_notifications] = true
           options[:growl] = false
         end
 
