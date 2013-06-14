@@ -224,6 +224,7 @@ module Rerun
 
     def notify(title, body)
       growl title, body if @options[:growl]
+      osx_notifications title, body if @options[:osx_notifications]
       puts
       say "#{app_name} #{title}"
     end

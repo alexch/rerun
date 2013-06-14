@@ -2,6 +2,7 @@ here = File.expand_path(File.dirname(__FILE__))
 $: << here unless $:.include?(here)
 
 require "listen"  # pull in the Listen gem
+require "terminal-notifier" #pull in the TerminalNotifier
 require "rerun/options"
 require "rerun/system"
 require "rerun/runner"

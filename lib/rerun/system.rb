@@ -45,5 +45,15 @@ module Rerun
       end
     end
 
+    def osx_notifications(title, body)
+      if osx_notifications_available?
+        TerminalNotifier.notify(body, :title => "#{app_name} #{title} - rerun")
+      end
+    end
+
+    def osx_notifications_available?
+      mac? && TerminalNotifier.available?
+    end
+
   end
 end
