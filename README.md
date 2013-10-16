@@ -113,7 +113,7 @@ Procfile processes locally and restart them all when necessary.
 
 # Options:
 
-`--dir` directory (or directories) to watch (default = "."). Separate multiple paths with ','.
+`--dir` directory (or directories) to watch (default = "."). Separate multiple paths with ',' and/or use multiple `-d` options.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
 By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
@@ -275,6 +275,9 @@ Based upon and/or inspired by:
 * Paul Rangel <https://github.com/ismell>
 
 # Version History
+
+* v?
+  * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
 
 * v0.8.2
   * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1
