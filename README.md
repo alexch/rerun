@@ -276,6 +276,9 @@ Based upon and/or inspired by:
 
 # Version History
 
+* v0.8.2
+  * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1
+
 * v0.8.1
   * bugfix release (#30 and #34)
 
