@@ -7,9 +7,9 @@ $spec = Gem::Specification.load(File.join(libdir, "..", "rerun.gemspec"))
 module Rerun
   class Options
     DEFAULT_PATTERN = "**/*.{rb,js,css,scss,sass,erb,html,haml,ru}"
+    DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
-        :dir => ["."],
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
@@ -27,8 +27,9 @@ module Rerun
         opts.separator ""
         opts.separator "Options:"
 
-        opts.on("-d dir", "--dir dir", "directory to watch, default = \"#{DEFAULTS[:dir]}\". Separate multiple paths with ','.") do |dir|
-          options[:dir] = dir.split(",")
+        opts.on("-d dir", "--dir dir", "directory to watch, default = \"#{DEFAULT_DIRS}\".  Specify multiple paths with ',' or separate '-d dir' option pairs.") do |dir|
+          elements = dir.split(",")
+          options[:dir] = (options[:dir] || []) + elements
         end
 
         opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{DEFAULTS[:pattern]}\"") do |pattern|
@@ -72,6 +73,7 @@ module Rerun
       else
         opts.parse! args
         options[:cmd] = args.join(" ")
+        options[:dir] ||= DEFAULT_DIRS
         options
       end
     end
