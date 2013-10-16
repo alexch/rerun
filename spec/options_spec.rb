@@ -38,5 +38,26 @@ module Rerun
       options = Options.parse ["--dir", "a,b", "foo"]
       assert { options[:dir] == ["a", "b"] }
     end
+
+    it "adds directories specified individually with --dir" do
+      options = Options.parse ["--dir", "a", "--dir", "b"]
+      assert { options[:dir] == ["a", "b"] }
+    end
+
+    it "adds directories specified individually with -d" do
+      options = Options.parse ["-d", "a", "-d", "b"]
+      assert { options[:dir] == ["a", "b"] }
+    end
+
+    it "adds directories specified individually using mixed -d and --dir" do
+      options = Options.parse ["-d", "a", "--dir", "b"]
+      assert { options[:dir] == ["a", "b"] }
+    end
+
+    it "adds individual directories and splits comma-separated ones" do
+      options = Options.parse ["--dir", "a", "--dir", "b", "--dir", "foo,other"]
+      assert { options[:dir] == ["a", "b", "foo", "other"] }
+    end
+
   end
 end
