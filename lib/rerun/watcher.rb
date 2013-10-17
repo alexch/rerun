@@ -76,13 +76,6 @@ module Rerun
       files.select{ |i| i[regex] }
     end
 
-    def adapter
-      timeout(4) do
-        sleep 1 until adapter = @listener.instance_variable_get(:@adapter)
-        adapter
-      end
-    end
-
     # kill the file watcher thread
     def stop
       @thread.wakeup rescue ThreadError
