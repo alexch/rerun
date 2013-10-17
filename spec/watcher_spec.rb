@@ -89,7 +89,7 @@ module Rerun
 
     end
 
-    ignored_directories = %w(.rbx .bundle .git .svn log tmp vendor)
+    ignored_directories = %w(.bundle .git .hg .rbx .svn bundle log tmp)
     it "ignores directories named #{ignored_directories}" do
       ignored_directories.each do |ignored_dir|
         FileUtils.mkdir "#{@dir}/#{ignored_dir}"
