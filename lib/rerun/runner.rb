@@ -80,6 +80,10 @@ module Rerun
       @options[:exit]
     end
 
+    def app_name
+      @options[:name]
+    end
+
     def start
       if windows?
         raise "Sorry, Rerun does not work on Windows."

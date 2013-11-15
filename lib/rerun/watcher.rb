@@ -12,6 +12,8 @@ Thread.abort_on_exception = true
 #
 module Rerun
   class Watcher
+    InvalidDirectoryError = Class.new(RuntimeError)
+
     attr_reader :directory, :pattern, :priority
 
     # Create a file system watcher. Start it by calling #start.
