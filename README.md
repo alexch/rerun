@@ -131,6 +131,8 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--no-growl` don't use growl
 
+`--name` set the app name (for display)
+
 Also --version and --help, naturally.
 
 # Growl Notifications
@@ -278,6 +280,7 @@ Based upon and/or inspired by:
 
 * v?
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
+  * --name option
 
 * v0.8.2
   * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1
