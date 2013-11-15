@@ -24,11 +24,6 @@ module Rerun
       growlnotify
     end
 
-    def app_name
-      # todo: make sure this works in non-Mac and non-Unix environments
-      File.expand_path(".").gsub(/^.*\//, '').capitalize
-    end
-
     def icon
       here = File.expand_path(File.dirname(__FILE__))
       icondir = File.expand_path("#{here}/../../icons")

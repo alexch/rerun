@@ -1,4 +1,5 @@
 require 'optparse'
+require 'pathname'
 
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
 
@@ -13,6 +14,7 @@ module Rerun
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
+        :name => Pathname.getwd.basename.to_s.capitalize
     }
 
     def self.parse args = ARGV
@@ -50,6 +52,10 @@ module Rerun
 
         opts.on("-b", "--background", "disable on-the-fly commands, allowing the process to be backgrounded") do
           options[:background] = true
+        end
+
+        opts.on("-n name", "--name name", "name of app used in logs and notifications, default = \"#{DEFAULTS[:name]}\"") do |name|
+          options[:name] = name
         end
 
         opts.on("--no-growl", "don't use growl") do
