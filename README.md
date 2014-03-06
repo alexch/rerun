@@ -278,7 +278,7 @@ Based upon and/or inspired by:
 
 # Version History
 
-* v?
+* v0.9.0
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
   * --name option
   * press 'p' to pause/unpause filesystem watching (Barry is the man!)
