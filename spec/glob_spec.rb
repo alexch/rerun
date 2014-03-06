@@ -10,6 +10,7 @@ module Rerun
       it "makes a regexp" do
         Glob.new("foo*").to_regexp.should == /#{Glob::START_OF_FILENAME}foo.*#{Glob::END_OF_STRING}/
       end
+
     end
 
     describe "#to_regexp_string" do
@@ -83,10 +84,6 @@ module Rerun
         end
       end
     end
-
-    it "excludes files beginning with dots"
-
-    describe ""
 
     describe "#smoosh" do
 

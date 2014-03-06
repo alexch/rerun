@@ -75,7 +75,7 @@ module Rerun
       @log.should be_nil
     end
 
-    pending "ignores changes to dot-files" do
+    it "ignores changes to dot-files" do
       dot_file = "#{@dir}/.ignoreme.txt"
 
       create dot_file
@@ -86,13 +86,12 @@ module Rerun
 
       remove dot_file
       @log.should be_nil
-
     end
 
-    ignored_directories = %w(.bundle .git .hg .rbx .svn bundle log tmp)
+    ignored_directories = Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES
     it "ignores directories named #{ignored_directories}" do
       ignored_directories.each do |ignored_dir|
-        FileUtils.mkdir "#{@dir}/#{ignored_dir}"
+        FileUtils.mkdir_p "#{@dir}/#{ignored_dir}"
         create [@dir, ignored_dir, "foo.txt"].join('/'), false
       end
       sleep(rest)
@@ -101,6 +100,11 @@ module Rerun
 
     it "ignores files named `.DS_Store`." do
       create "#{@dir}/.DS_Store"
+      @log.should be_nil
+    end
+
+    it "ignores files ending with `.tmp`." do
+      create "#{@dir}/foo.tmp"
       @log.should be_nil
     end
 

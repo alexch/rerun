@@ -117,7 +117,7 @@ Procfile processes locally and restart them all when necessary.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
 By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
-It also ignores directories named `.rbx .bundle .git .svn log tmp vendor` and files named `.DS_Store`.
+On top of this, it also ignores dotfiles, `.tmp` files, and some other files and directories (like `.git .hg .rbx .svn bundle log tmp`) -- run `rerun --help` for the full list.
 
 `--signal` (or -s) use specified signal (instead of the default SIGTERM) to terminate the previous process.
 This may be useful for forcing the respective process to terminate as quickly as possible.
@@ -172,7 +172,6 @@ restart.
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
-* Exclude files beginning with a dot, unless the pattern explicitly says to include them
 * --exclude pattern
 * ".rerun" file to specify options per project or in $HOME.
 * Test on Linux.
@@ -284,6 +283,7 @@ Based upon and/or inspired by:
   * --name option
   * press 'p' to pause/unpause filesystem watching (Barry is the man!)
   * works with Listen 2 (note: needs 2.3 or higher)
+  * ignore all dotfiles, and add actual list of ignored dirs and files
 
 * v0.8.2
   * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1

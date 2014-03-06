@@ -71,6 +71,10 @@ module Rerun
           puts $spec.version
           return
         end
+
+        opts.on_tail ""
+        opts.on_tail "On top of --pattern, we ignore any changes to files and dirs starting with a dot, ending with [#{Listen::Silencer::DEFAULT_IGNORED_EXTENSIONS.join(',')}], or named [#{Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES.join(',')}]."
+
       end
 
       if args.empty?
