@@ -10,7 +10,5 @@ require "rerun/glob"
 
 module Rerun
 
-  DEFAULT_PATTERN = "**/*.{rb,js,css,scss,sass,erb,html,haml,ru}"
-
 end
 

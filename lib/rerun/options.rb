@@ -7,7 +7,7 @@ $spec = Gem::Specification.load(File.join(libdir, "..", "rerun.gemspec"))
 
 module Rerun
   class Options
-    DEFAULT_PATTERN = "**/*.{rb,js,css,scss,sass,erb,html,haml,ru}"
+    DEFAULT_PATTERN = "**/*.{rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml}"
     DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
