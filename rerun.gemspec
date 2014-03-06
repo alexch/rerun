@@ -29,4 +29,6 @@ $spec = Gem::Specification.new do |s|
 
   s.homepage = "http://github.com/alexch/rerun/"
   s.require_paths = %w[lib]
+
+  s.license = 'MIT'
 end
