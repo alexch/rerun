@@ -151,6 +151,7 @@ While the app is (re)running, you can make things happen by pressing keys:
 * **r** -- restart (as if a file had changed)
 * **c** -- clear the screen
 * **x** or **q** -- exit (just like control-C)
+* **p** -- pause/unpause filesystem watching
 
 If you're backgrounding or using Pry or a debugger, you might not want these
 keys to be trapped, so use the `--background` option.
@@ -281,6 +282,7 @@ Based upon and/or inspired by:
 * v?
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
   * --name option
+  * press 'p' to pause/unpause filesystem watching (Barry is the man!)
 
 * v0.8.2
   * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1
