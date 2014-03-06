@@ -283,6 +283,9 @@ Based upon and/or inspired by:
 
 # Version History
 
+* v?
+  * add '.coffee' to default pattern (thanks @xylinq)
+
 * v0.9.0
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
   * --name option
