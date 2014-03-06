@@ -103,6 +103,23 @@ module Rerun
       create "#{@dir}/.DS_Store"
       @log.should be_nil
     end
+
+    it "disables watcher when paused" do
+      @watcher.pause
+      create "#{@dir}/pause_test.txt"
+      @log.should be_nil
+    end
+
+    it "pauses and resumes watcher" do
+      @watcher.pause
+      create "#{@dir}/pause_test.txt"
+      @log.should be_nil
+      @watcher.unpause
+      test_file = "#{@dir}/pause_test2.txt"
+      create test_file
+      @log[:added].should == [test_file]
+    end
+
   end
 
 end
