@@ -220,13 +220,13 @@ module Rerun
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
         begin
-          timeout(4) do  # todo: escalation timeout setting
+          timeout(5) do  # todo: escalation timeout setting
             # start with a polite SIGTERM
             signal(default_signal) && Process.wait(@pid)
           end
         rescue Timeout::Error
           begin
-            timeout(2) do
+            timeout(5) do
               # escalate to SIGINT aka control-C since some foolish process may be ignoring SIGTERM
               signal("INT") && Process.wait(@pid)
             end
