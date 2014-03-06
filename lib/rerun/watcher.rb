@@ -56,12 +56,12 @@ module Rerun
 
       @thread = Thread.new do
         regexp = Rerun::Glob.new(@pattern).to_regexp
-        dirs = @directories
-        params = dirs << { :filter => regexp, :relative_paths => false }
-        @listener = Listen::Listener.new(*params) do |modified, added, removed|
-          @client_callback.call(:modified => modified, :added => added, :removed => removed)
+        @listener = Listen.to(*@directories, only: regexp) do |modified, added, removed|
+          if((modified.size + added.size + removed.size) > 0)
+            @client_callback.call(:modified => modified, :added => added, :removed => removed)
+          end
         end
-        @listener.start!
+        @listener.start
       end
 
       @thread.priority = @priority
@@ -72,10 +72,10 @@ module Rerun
     end
 
     def adapter
-      timeout(4) do
-        sleep 1 until adapter = @listener.instance_variable_get(:@adapter)
+      @listener.registry[:adapter] || (timeout(4) do
+        sleep 1 until adapter = @listener.registry[:adapter]
         adapter
-      end
+      end)
     end
 
     # kill the file watcher thread

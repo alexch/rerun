@@ -8,6 +8,8 @@ module Rerun
       runner = new(cmd, options)
       runner.start
       runner.join
+      # apparently runner doesn't keep running anymore (as of Listen 2) so we have to sleep forever :-(
+      sleep 10000 while true  # :-(
     end
 
     include System

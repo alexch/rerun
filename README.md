@@ -283,6 +283,7 @@ Based upon and/or inspired by:
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
   * --name option
   * press 'p' to pause/unpause filesystem watching (Barry is the man!)
+  * works with Listen 2 (note: needs 2.3 or higher)
 
 * v0.8.2
   * bugfix, forcing Rerun to use Listen v1.0.3 while we work out the troubles we're having with Listen 1.3 and 2.1
