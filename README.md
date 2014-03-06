@@ -14,7 +14,7 @@ Rerun's advantage is its simple design. Since it uses `exec` and the standard
 Unix `SIGINT` and `SIGKILL` signals, you're sure the restarted app is really
 acting just like it was when you ran it from the command line the first time.
 
-By default only `*.{rb,js,css,coffee,scss,sass,erb,html,haml,ru}` files are watched.
+By default only `*.{rb,js,css,coffee,scss,sass,erb,html,haml,ru,slim,md}` files are watched.
 Use the `--pattern` option if you want to change this.
 
 As of version 0.7.0, we use the Listen gem, which tries to use your OS's
@@ -116,7 +116,7 @@ Procfile processes locally and restart them all when necessary.
 `--dir` directory (or directories) to watch (default = "."). Separate multiple paths with ',' and/or use multiple `-d` options.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
-By default it watches files ending in: `rb,js,css,coffee,scss,sass,erb,html,haml,ru`.
+By default it watches files ending in: `rb,js,css,coffee,scss,sass,erb,html,haml,ru,slim,md`.
 On top of this, it also ignores dotfiles, `.tmp` files, and some other files and directories (like `.git` and `log`).
 Run `rerun --help` to see the actual list.
 
@@ -284,7 +284,7 @@ Based upon and/or inspired by:
 # Version History
 
 * v?
-  * add '.coffee' to default pattern (thanks @xylinq)
+  * add '.coffee,.slim,.md' to default pattern (thanks @xylinq)
 
 * v0.9.0
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
