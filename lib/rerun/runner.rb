@@ -58,8 +58,17 @@ module Rerun
 
     def restart
       @restarting = true
-      stop
-      start
+
+      default_signal = @options[:restart_signal]
+      if (default_signal)
+        if @pid && (@pid != 0)
+          notify "restarting", "We will be with you shortly."
+          signal(default_signal)
+        end
+      else
+        stop
+        start
+      end
       @restarting = false
     end
 
@@ -186,7 +195,7 @@ module Rerun
         end
         watcher.start
         @watcher = watcher
-        say "Watching #{dir.join(', ')} for #{pattern} using #{watcher.adapter.class.name.split('::').last} adapter"
+        say "Watching #{dir.join(', ')} for #{pattern}."
       end
     end
 

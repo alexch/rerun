@@ -56,12 +56,15 @@ module Rerun
 
       @thread = Thread.new do
         regexp = Rerun::Glob.new(@pattern).to_regexp
-        dirs = @directories
-        params = dirs << { :filter => regexp, :relative_paths => false }
-        @listener = Listen::Listener.new(*params) do |modified, added, removed|
-          @client_callback.call(:modified => modified, :added => added, :removed => removed)
+        @listener = Listen.to(*@directories) do |modified, added, removed|
+          modified = filter modified, regexp
+          added = filter added, regexp
+          removed = filter removed, regexp
+          if((modified.size + added.size + removed.size) > 0)
+            @client_callback.call(:modified => modified, :added => added, :removed => removed)
+          end
         end
-        @listener.start!
+        @listener.start
       end
 
       @thread.priority = @priority
@@ -71,11 +74,8 @@ module Rerun
       at_exit { stop } # try really hard to clean up after ourselves
     end
 
-    def adapter
-      timeout(4) do
-        sleep 1 until adapter = @listener.instance_variable_get(:@adapter)
-        adapter
-      end
+    def filter(files, regex)
+      files.select{ |i| i[regex] }
     end
 
     # kill the file watcher thread

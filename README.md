@@ -117,7 +117,7 @@ Procfile processes locally and restart them all when necessary.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
 By default it watches files ending in: `rb,js,css,scss,sass,erb,html,haml,ru`.
-It also ignores directories named `.rbx .bundle .git .svn log tmp vendor` and files named `.DS_Store`.
+It also ignores directories named `.rbx .bundle bundle .git .svn log tmp .hg` and files named `.DS_Store`.
 
 `--signal` (or -s) use specified signal (instead of the default SIGTERM) to terminate the previous process.
 This may be useful for forcing the respective process to terminate as quickly as possible.
@@ -130,6 +130,8 @@ This may be useful for forcing the respective process to terminate as quickly as
 `--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
 `--no-growl` don't use growl
+
+`--restart-signal` (or -r) use specified signal (instead of the default to stop and start) to restart the process.
 
 Also --version and --help, naturally.
 

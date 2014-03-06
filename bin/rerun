@@ -10,3 +10,7 @@ require 'optparse'
 options = Rerun::Options.parse
 exit if options.nil?
 runner = Rerun::Runner.keep_running(options[:cmd], options)
+
+while true do
+  sleep 1
+end
