@@ -57,7 +57,7 @@ module Rerun
       @thread = Thread.new do
         regexp = Rerun::Glob.new(@pattern).to_regexp
         dotfiles = /^\.[^.]/  # at beginning of string, a real dot followed by any other character
-        @listener = Listen.to(*@directories, only: regexp, ignore: dotfiles) do |modified, added, removed|
+        @listener = Listen.to(*@directories, only: regexp, ignore: dotfiles, wait_for_delay: 1) do |modified, added, removed|
           if((modified.size + added.size + removed.size) > 0)
             @client_callback.call(:modified => modified, :added => added, :removed => removed)
           end

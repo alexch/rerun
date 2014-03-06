@@ -172,19 +172,23 @@ restart.
 
 * Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
-* --exclude pattern
+* --ignore pattern (currently we're using Listen's default list plus dotfiles)
 * ".rerun" file to specify options per project or in $HOME.
-* Test on Linux.
-* On OS X, use a C library using growl's developer API <http://growl.info/developer/>
-* Use growl's AppleScript or SDK instead of relying on growlnotify
-* "Failed" icon
-* Figure out an algorithm so "-x" is not needed (if possible)
+* Figure out an algorithm so "-x" is not needed (if possible) -- maybe by accepting a "--port" option or reading `config.ru`
 * Specify (or deduce) port to listen for to determine success of a web server launch
 * Make sure to pass through quoted options correctly to target process [bug]
 * Make it work on Windows, like Guard now does. See
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
 * Optionally do "bundle install" before and "bundle exec" during launch
+* On OS X:
+    * use a C library using growl's developer API <http://growl.info/developer/>
+    * Use growl's AppleScript or SDK instead of relying on growlnotify
+    * Use OS X notifications
+    * "Failed" icon for notifications
+* On Linux:
+    * Test on Linux.
+    * Use libnotify or notify-send http://www.linuxjournal.com/content/tech-tip-get-notifications-your-scripts-notify-send
 
 # Other projects that do similar things
 
