@@ -25,7 +25,7 @@ $spec = Gem::Specification.new do |s|
 
   s.extra_rdoc_files = %w[README.md]
 
-  s.add_dependency 'listen', '~> 2.1'
+  s.add_dependency 'listen', '~> 2.7'
 
   s.homepage = "http://github.com/alexch/rerun/"
   s.require_paths = %w[lib]
