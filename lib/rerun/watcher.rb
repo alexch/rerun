@@ -14,6 +14,10 @@ module Rerun
   class Watcher
     InvalidDirectoryError = Class.new(RuntimeError)
 
+    #def self.default_ignore
+    #  Listen::Silencer.new(Listen::Listener.new).send :_default_ignore_patterns
+    #end
+
     attr_reader :directory, :pattern, :priority
 
     # Create a file system watcher. Start it by calling #start.
@@ -35,6 +39,7 @@ module Rerun
       @directories = options[:directory]
       @directories = sanitize_dirs(@directories)
       @priority = options[:priority]
+      @ignore = [options[:ignore]].flatten.compact
       @thread = nil
     end
 
@@ -55,9 +60,7 @@ module Rerun
       end
 
       @thread = Thread.new do
-        regexp = Rerun::Glob.new(@pattern).to_regexp
-        dotfiles = /^\.[^.]/  # at beginning of string, a real dot followed by any other character
-        @listener = Listen.to(*@directories, only: regexp, ignore: dotfiles, wait_for_delay: 1) do |modified, added, removed|
+        @listener = Listen.to(*@directories, only: watching, ignore: ignoring, wait_for_delay: 1) do |modified, added, removed|
           if((modified.size + added.size + removed.size) > 0)
             @client_callback.call(:modified => modified, :added => added, :removed => removed)
           end
@@ -70,6 +73,15 @@ module Rerun
       sleep 0.1 until @listener
 
       at_exit { stop } # try really hard to clean up after ourselves
+    end
+
+    def watching
+      Rerun::Glob.new(@pattern).to_regexp
+    end
+
+    def ignoring
+      dotfiles = /^\.[^.]/ # at beginning of string, a real dot followed by any other character
+      [dotfiles] + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
     end
 
     def adapter

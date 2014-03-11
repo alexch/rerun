@@ -17,6 +17,7 @@ module Rerun
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
       @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
+      p options
     end
 
     def start_keypress_thread
@@ -97,6 +98,10 @@ module Rerun
       @options[:pattern]
     end
 
+    def ignore
+      @options[:ignore]
+    end
+
     def clear?
       @options[:clear]
     end
@@ -175,7 +180,7 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new(:directory => dirs, :pattern => pattern) do |changes|
+        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore) do |changes|
 
           message = [:modified, :added, :removed].map do |change|
             count = changes[change].size
@@ -188,7 +193,9 @@ module Rerun
         end
         watcher.start
         @watcher = watcher
-        say "Watching #{dir.join(', ')} for #{pattern} using #{watcher.adapter.class.name.split('::').last} adapter"
+        say "Watching #{dir.join(', ')} for #{pattern}" +
+                (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
+                " using #{watcher.adapter.class.name.split('::').last} adapter"
       end
     end
 
