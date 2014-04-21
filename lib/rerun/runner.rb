@@ -101,6 +101,10 @@ module Rerun
       @options[:clear]
     end
 
+    def ignore_dotfiles?
+      @options[:ignore_dotfiles]
+    end
+
     def exit?
       @options[:exit]
     end
@@ -175,7 +179,7 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new(:directory => dirs, :pattern => pattern) do |changes|
+        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore_dotfiles => ignore_dotfiles?) do |changes|
 
           message = [:modified, :added, :removed].map do |change|
             count = changes[change].size

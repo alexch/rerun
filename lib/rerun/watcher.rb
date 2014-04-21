@@ -20,6 +20,7 @@ module Rerun
     #
     # @param options[:directory] the directory to watch (default ".")
     # @param options[:pattern] the glob pattern to search under the watched directory (default "**/*")
+    # @param options[:ignore_dotfiles] ignore any changes to files and dirs starting with a dot
     # @param options[:priority] the priority of the watcher thread (default 0)
     #
     def initialize(options = {}, &client_callback)
@@ -34,6 +35,7 @@ module Rerun
       @pattern = options[:pattern]
       @directories = options[:directory]
       @directories = sanitize_dirs(@directories)
+      @ignore_dotfiles = options[:ignore_dotfiles]
       @priority = options[:priority]
       @thread = nil
     end
@@ -56,11 +58,14 @@ module Rerun
 
       @thread = Thread.new do
         regexp = Rerun::Glob.new(@pattern).to_regexp
-        dotfiles = /^\.[^.]/  # at beginning of string, a real dot followed by any other character
-        @listener = Listen.to(*@directories, only: regexp, ignore: dotfiles, wait_for_delay: 1) do |modified, added, removed|
+        @listener = Listen.to(*@directories, only: regexp, wait_for_delay: 1) do |modified, added, removed|
           if((modified.size + added.size + removed.size) > 0)
             @client_callback.call(:modified => modified, :added => added, :removed => removed)
           end
+        end
+        if @ignore_dotfiles
+          dotfiles = /^\.[^.]/  # at beginning of string, a real dot followed by any other character
+          @listener.ignore(dotfiles)
         end
         @listener.start
       end
