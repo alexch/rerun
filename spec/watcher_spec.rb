@@ -14,7 +14,7 @@ module Rerun
       FileUtils.mkdir_p(@dir)
 
       @log = nil
-      @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt") do |hash|
+      @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt", :ignore_dotfiles => true) do |hash|
         @log = hash
       end
       @watcher.start
@@ -75,7 +75,7 @@ module Rerun
       @log.should be_nil
     end
 
-    it "ignores changes to dot-files" do
+    it "ignores changes to dot-files when :ignore_dotfiles is true" do
       dot_file = "#{@dir}/.ignoreme.txt"
 
       create dot_file
@@ -86,6 +86,25 @@ module Rerun
 
       remove dot_file
       @log.should be_nil
+    end
+
+    it "watches changes to dot-files when :ignore_dotfiles is false" do
+      # Create a new watcher with :ignore_dotfiles => false
+      @watcher.stop
+      @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt", :ignore_dotfiles => false) do |hash|
+        @log = hash
+      end
+      @watcher.start
+      dot_file = "#{@dir}/dont.ignoreme.txt"
+
+      create dot_file
+      @log[:added].should == [dot_file]
+
+      modify dot_file
+      @log[:modified].should == [dot_file]
+
+      remove dot_file
+      @log[:removed].should == [dot_file]
     end
 
     ignored_directories = Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES

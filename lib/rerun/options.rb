@@ -38,6 +38,10 @@ module Rerun
           options[:pattern] = pattern
         end
 
+        opts.on("-i", "--ignore-dotfiles", "ignore any changes to files and dirs starting with a dot") do
+          options[:ignore_dotfiles] = true
+        end
+
         opts.on("-s", "--signal signal", "terminate process using this signal, default = \"#{DEFAULTS[:signal]}\"") do |signal|
           options[:signal] = signal
         end

@@ -11,6 +11,7 @@ module Rerun
 
       assert { defaults[:dir] == ["."] }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
+      assert { defaults[:ignore_dotfiles].nil? }
       assert { defaults[:signal] == "TERM" }
       assert { defaults[:growl] == true }
       assert { defaults[:name] == 'Rerun' }
