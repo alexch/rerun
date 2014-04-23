@@ -65,5 +65,15 @@ module Rerun
       assert { options[:name] == "scheduler" }
     end
 
+    it "accepts --ignore" do
+      options = Options.parse ["--ignore", "log/*"]
+      assert { options[:ignore] == ["log/*"] }
+    end
+
+    it "accepts --ignore multiple times" do
+      options = Options.parse ["--ignore", "log/*", "--ignore", "*.tmp"]
+      assert { options[:ignore] == ["log/*", "*.tmp"] }
+    end
+
   end
 end
