@@ -17,7 +17,6 @@ module Rerun
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
       @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
-      p options
     end
 
     def start_keypress_thread
