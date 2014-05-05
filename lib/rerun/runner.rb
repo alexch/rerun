@@ -98,7 +98,7 @@ module Rerun
     end
 
     def ignore
-      @options[:ignore]
+      @options[:ignore] || []
     end
 
     def clear?
