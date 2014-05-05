@@ -35,7 +35,7 @@ module Rerun
       start_watcher
     end
 
-    let(:rest) { 1.0 }
+    let(:rest) { 2 }
 
     after do
       stop_watcher

@@ -80,6 +80,7 @@ module Rerun
     end
 
     def ignoring
+      # todo: --no-ignore-dotfiles
       dotfiles = /^\.[^.]/ # at beginning of string, a real dot followed by any other character
       [dotfiles] + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
     end

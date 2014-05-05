@@ -176,7 +176,6 @@ restart.
 # To Do:
 
 ## Must have for v1.0
-* fix "undefined method `silenced?' for nil:NilClass" with Listen 2.7.3
 * ".rerun" file to specify options per project or in $HOME.
 * Make sure to pass through quoted options correctly to target process [bug]
 * Optionally do "bundle install" before and "bundle exec" during launch
