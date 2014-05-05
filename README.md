@@ -120,6 +120,10 @@ By default it watches files ending in: `rb,js,css,coffee,scss,sass,erb,html,haml
 On top of this, it also ignores dotfiles, `.tmp` files, and some other files and directories (like `.git` and `log`).
 Run `rerun --help` to see the actual list.
 
+`--ignore pattern` file glob to ignore (can be set many times)
+
+  *On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot.*
+
 `--signal` (or -s) use specified signal (instead of the default SIGTERM) to terminate the previous process.
 This may be useful for forcing the respective process to terminate as quickly as possible.
 (`--signal KILL` is the equivalent of `kill -9`)
@@ -134,7 +138,7 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--name` set the app name (for display)
 
-Also --version and --help, naturally.
+Also `--version` and `--help`, naturally.
 
 # Growl Notifications
 
@@ -171,17 +175,21 @@ restart.
 
 # To Do:
 
-* Cooldown (so if a dozen files appear in a burst, say from 'git pull', it only restarts once)
-* If the last element of the command is a `.ru` file and there's no other command then use `rackup`
-* --ignore pattern (currently we're using Listen's default list plus dotfiles)
+## Must have for v1.0
 * ".rerun" file to specify options per project or in $HOME.
+* Make sure to pass through quoted options correctly to target process [bug]
+* Optionally do "bundle install" before and "bundle exec" during launch
+
+## Nice to have
+* Smarter --signal option (specifying signal to try and a timeout to wait, repeated)
+* If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Figure out an algorithm so "-x" is not needed (if possible) -- maybe by accepting a "--port" option or reading `config.ru`
 * Specify (or deduce) port to listen for to determine success of a web server launch
-* Make sure to pass through quoted options correctly to target process [bug]
+
+## Wacky Ideas
 * Make it work on Windows, like Guard now does. See
   * https://github.com/guard/guard/issues/59
   * https://github.com/guard/guard/issues/27
-* Optionally do "bundle install" before and "bundle exec" during launch
 * On OS X:
     * use a C library using growl's developer API <http://growl.info/developer/>
     * Use growl's AppleScript or SDK instead of relying on growlnotify
@@ -283,14 +291,16 @@ Based upon and/or inspired by:
 
 # Version History
 
-* v?
+* v0.10.0   4 May 2014
   * add '.coffee,.slim,.md' to default pattern (thanks @xylinq)
+  * --ignore option
 
-* v0.9.0
+* v0.9.0    6 March 2014
   * --dir (or -d) can be specified more than once, for multiple directories (thanks again Barry!)
   * --name option
   * press 'p' to pause/unpause filesystem watching (Barry is the man!)
   * works with Listen 2 (note: needs 2.3 or higher)
+  * cooldown works, thanks to patches to underlying Listen gem
   * ignore all dotfiles, and add actual list of ignored dirs and files
 
 * v0.8.2
