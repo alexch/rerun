@@ -41,7 +41,7 @@ module Rerun
           options[:pattern] = pattern
         end
 
-        opts.on("-i pattern", "--ignore pattern", "file glob to ignore (can be set many times)") do |pattern|
+        opts.on("-i pattern", "--ignore pattern", "file glob to ignore (can be set many times). To ignore a directory, you must append '/*' e.g. --ignore 'coverage/*'") do |pattern|
           options[:ignore] += [pattern]
         end
 
