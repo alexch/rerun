@@ -48,7 +48,9 @@ describe "the rerun command" do
     File.open(@inc_output_file, "r") do |f|
       launched_at = f.gets.to_i
       count = f.gets.to_i
-      [launched_at, count]
+      result = [launched_at, count]
+      puts "reading #{@inc_output_file}: #{result.join("\t")}"
+      result
     end
   end
 
@@ -69,6 +71,7 @@ describe "the rerun command" do
   end
 
   it "increments a test file at least once per second" do
+    sleep 1
     x = current_count
     sleep 1
     y = current_count

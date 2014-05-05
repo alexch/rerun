@@ -4,8 +4,27 @@ require 'tmpdir'
 require 'rerun/watcher'
 
 module Rerun
-  COOL_OFF_TIME = 2
   describe Watcher do
+
+    COOL_OFF_TIME = 2
+
+    def start_watcher options = {}
+      options = {:directory => @dir, :pattern => "*.txt"}.merge(options)
+      @log = nil
+      @watcher = Watcher.new(options) do |hash|
+        @log = hash
+      end
+      @watcher.start
+      sleep(COOL_OFF_TIME) # let it spin up
+    end
+
+    def stop_watcher
+      begin
+        @watcher.stop
+      rescue ThreadError => e
+      end
+    end
+
 
     before do
       @dir = Dir.tmpdir + "/#{Time.now.to_i}-#{(rand*100000).to_i}"
@@ -13,21 +32,13 @@ module Rerun
       @dir.sub!(/^\/var/, "/private/var")
       FileUtils.mkdir_p(@dir)
 
-      @log = nil
-      @watcher = Watcher.new(:directory => @dir, :pattern => "*.txt") do |hash|
-        @log = hash
-      end
-      @watcher.start
-      sleep(COOL_OFF_TIME) # let it spin up
+      start_watcher
     end
 
     let(:rest) { 1.0 }
 
     after do
-      begin
-        @watcher.stop
-      rescue ThreadError => e
-      end
+      stop_watcher
     end
 
     def create test_file, sleep = true
@@ -105,6 +116,13 @@ module Rerun
 
     it "ignores files ending with `.tmp`." do
       create "#{@dir}/foo.tmp"
+      @log.should be_nil
+    end
+
+    it "optionally ignores globs" do
+      stop_watcher
+      start_watcher ignore: "foo*"
+      create "#{@dir}/foo.txt"
       @log.should be_nil
     end
 

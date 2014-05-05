@@ -1,5 +1,6 @@
 require 'optparse'
 require 'pathname'
+require 'rerun/watcher'
 
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
 
@@ -14,7 +15,8 @@ module Rerun
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
-        :name => Pathname.getwd.basename.to_s.capitalize
+        :name => Pathname.getwd.basename.to_s.capitalize,
+        :ignore => []
     }
 
     def self.parse args = ARGV
@@ -34,11 +36,16 @@ module Rerun
           options[:dir] = (options[:dir] || []) + elements
         end
 
-        opts.on("-p pattern", "--pattern pattern", "file glob, default = \"#{DEFAULTS[:pattern]}\"") do |pattern|
+        # todo: rename to "--watch"
+        opts.on("-p pattern", "--pattern pattern", "file glob to watch, default = \"#{DEFAULTS[:pattern]}\"") do |pattern|
           options[:pattern] = pattern
         end
 
-        opts.on("-s", "--signal signal", "terminate process using this signal, default = \"#{DEFAULTS[:signal]}\"") do |signal|
+        opts.on("-i pattern", "--ignore pattern", "file glob to ignore (can be set many times)") do |pattern|
+          options[:ignore] += [pattern]
+        end
+
+        opts.on("-s signal", "--signal signal", "terminate process using this signal, default = \"#{DEFAULTS[:signal]}\"") do |signal|
           options[:signal] = signal
         end
 
@@ -73,7 +80,7 @@ module Rerun
         end
 
         opts.on_tail ""
-        opts.on_tail "On top of --pattern, we ignore any changes to files and dirs starting with a dot, ending with [#{Listen::Silencer::DEFAULT_IGNORED_EXTENSIONS.join(',')}], or named [#{Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES.join(',')}]."
+        opts.on_tail "On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot."
 
       end
 
