@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
+require 'shellwords'
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
 $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
 require 'rerun'
 require 'optparse'
 
-options = Rerun::Options.parse
+options_file = File.join(Dir.pwd, '.rerun')
+args = File.exist?(options_file) ? File.read(options_file).shellsplit : ARGV
+options = Rerun::Options.parse(args)
 exit if options.nil?
 runner = Rerun::Runner.keep_running(options[:cmd], options)
