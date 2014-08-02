@@ -181,12 +181,8 @@ module Rerun
 
         watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore) do |changes|
 
-          message = [:modified, :added, :removed].map do |change|
-            count = changes[change].size
-            if count and count > 0
-              "#{count} #{change}"
-            end
-          end.compact.join(", ")
+          message = change_message(changes)
+
           say "Change detected: #{message}"
           restart unless @restarting
         end
@@ -196,6 +192,25 @@ module Rerun
                 (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
                 " using #{watcher.adapter.class.name.split('::').last} adapter"
       end
+    end
+
+    def change_message(changes)
+      message = [:modified, :added, :removed].map do |change|
+        count = changes[change] ? changes[change].size : 0
+        if count > 0
+          "#{count} #{change}"
+        end
+      end.compact.join(", ")
+
+      changed_files = changes.values.flatten
+      if changed_files.count > 0
+        message += ": "
+        message += changes.values.flatten[0..3].map { |path| path.split('/').last }.join(', ')
+        if changed_files.count > 3
+          message += ", ..."
+        end
+      end
+      message
     end
 
     def die

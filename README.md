@@ -292,6 +292,9 @@ Based upon and/or inspired by:
 
 # Version History
 
+* ?
+  * better 'changed' message
+
 * v0.10.0   4 May 2014
   * add '.coffee,.slim,.md' to default pattern (thanks @xylinq)
   * --ignore option
