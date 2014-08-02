@@ -73,3 +73,10 @@ task 'release' => [:check_git, package('.gem'), package('.tar.gz')] do |t|
   sh "git tag v#{$spec.version}"
   sh "git push && git push --tags"
 end
+
+desc 'download github issues and pull requests'
+task 'github' do
+  %w(issues pulls).each do |type|
+    sh "curl -o #{type}.json https://api.github.com/repos/alexch/rerun/#{type}"
+  end
+end
