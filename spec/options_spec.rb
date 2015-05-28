@@ -13,6 +13,7 @@ module Rerun
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
       assert { defaults[:signal] == "TERM" }
       assert { defaults[:growl] == true }
+      assert { defaults[:quiet] == false }
       assert { defaults[:name] == 'Rerun' }
 
       assert { defaults[:clear].nil? }
@@ -33,6 +34,11 @@ module Rerun
     it "accepts --no-growl" do
       options = Options.parse ["--no-growl", "foo"]
       assert { options[:growl] == false }
+    end
+
+    it "accepts --quiet" do
+      options = Options.parse ["--quiet", "foo"]
+      assert { options[:quiet] == true }
     end
 
     it "splits directories" do

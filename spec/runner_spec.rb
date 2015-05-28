@@ -28,6 +28,11 @@ module Rerun
         runner = Runner.new("foo.rb", {:clear => true})
         runner.clear?.should be_true
       end
+
+      it "is quiet" do
+        runner = Runner.new("foo.rb", {:quiet => true})
+        runner.quiet?.should == true
+      end
     end
 
     describe "running" do

@@ -15,6 +15,7 @@ module Rerun
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :growl => true,
+        :quiet => false,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => []
     }
@@ -67,6 +68,10 @@ module Rerun
 
         opts.on("--no-growl", "don't use growl") do
           options[:growl] = false
+        end
+
+        opts.on("-q", "--quiet", "don't output any logs") do
+          options[:quiet] = true
         end
 
         opts.on_tail("-h", "--help", "--usage", "show this message") do
