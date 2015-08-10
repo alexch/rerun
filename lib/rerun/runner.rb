@@ -60,8 +60,12 @@ module Rerun
 
     def restart
       @restarting = true
-      stop
-      start
+      if hup?
+        signal('HUP')
+      else
+        stop
+        start
+      end
       @restarting = false
     end
 
@@ -111,6 +115,10 @@ module Rerun
 
     def app_name
       @options[:name]
+    end
+
+    def hup?
+      @options[:hup]
     end
 
     def start

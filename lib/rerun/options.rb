@@ -14,6 +14,7 @@ module Rerun
     DEFAULTS = {
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
+        :hup => false,
         :growl => true,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => []
@@ -47,6 +48,10 @@ module Rerun
 
         opts.on("-s signal", "--signal signal", "terminate process using this signal, default = \"#{DEFAULTS[:signal]}\"") do |signal|
           options[:signal] = signal
+        end
+
+        opts.on('-h', '--hup', "sends SIGHUP and lets process restart by itself (implies --signal HUP)") do
+          options[:hup] = true
         end
 
         opts.on("-c", "--clear", "clear screen before each run") do
