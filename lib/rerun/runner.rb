@@ -189,8 +189,7 @@ module Rerun
         watcher.start
         @watcher = watcher
         say "Watching #{dir.join(', ')} for #{pattern}" +
-                (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
-                " using #{watcher.adapter.class.name.split('::').last} adapter"
+                (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})")
       end
     end
 

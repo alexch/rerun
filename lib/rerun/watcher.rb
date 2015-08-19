@@ -85,13 +85,6 @@ module Rerun
       [dotfiles] + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
     end
 
-    def adapter
-      @listener.registry[:adapter] || (timeout(4) do
-        sleep 1 until adapter = @listener.registry[:adapter]
-        adapter
-      end)
-    end
-
     # kill the file watcher thread
     def stop
       @thread.wakeup rescue ThreadError
@@ -115,11 +108,11 @@ module Rerun
     end
 
     def unpause
-      @listener.unpause if @listener
+      @listener.start if @listener
     end
 
     def running?
-      @listener && @listener.instance_variable_get(:@adapter)
+      @listener && @listener.processing?
     end
 
   end
