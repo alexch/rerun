@@ -14,6 +14,7 @@ module Rerun
       assert { defaults[:signal] == "TERM" }
       assert { defaults[:growl] == true }
       assert { defaults[:name] == 'Rerun' }
+      assert { defaults[:force_polling] == false }
 
       assert { defaults[:clear].nil? }
       assert { defaults[:exit].nil? }
@@ -63,6 +64,11 @@ module Rerun
     it "accepts --name for a custom application name" do
       options = Options.parse ["--name", "scheduler"]
       assert { options[:name] == "scheduler" }
+    end
+
+    it "accepts --force-polling to force listener polling" do
+      options = Options.parse ["--force-polling"]
+      assert { options[:force_polling] == true }
     end
 
     it "accepts --ignore" do

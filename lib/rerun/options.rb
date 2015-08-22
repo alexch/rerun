@@ -16,6 +16,7 @@ module Rerun
         :signal => "TERM",
         :growl => true,
         :name => Pathname.getwd.basename.to_s.capitalize,
+        :force_polling => false,
         :ignore => []
     }
 
@@ -63,6 +64,10 @@ module Rerun
 
         opts.on("-n name", "--name name", "name of app used in logs and notifications, default = \"#{DEFAULTS[:name]}\"") do |name|
           options[:name] = name
+        end
+
+        opts.on("--force-polling", "use force polling") do
+          options[:force_polling] = true
         end
 
         opts.on("--no-growl", "don't use growl") do
