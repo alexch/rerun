@@ -186,6 +186,7 @@ restart.
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Figure out an algorithm so "-x" is not needed (if possible) -- maybe by accepting a "--port" option or reading `config.ru`
 * Specify (or deduce) port to listen for to determine success of a web server launch
+* see also [todo.md](todo.md)
 
 ## Wacky Ideas
 * Make it work on Windows, like Guard now does. See
