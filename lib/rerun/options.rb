@@ -69,6 +69,11 @@ module Rerun
           options[:growl] = false
         end
 
+        opts.on("--force-polling", "force listen gem to use polling adapter") do
+          options[:force_polling] = true
+        end
+
+
         opts.on_tail("-h", "--help", "--usage", "show this message") do
           puts opts
           return
