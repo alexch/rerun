@@ -309,6 +309,7 @@ Based upon and/or inspired by:
 * Barry Sia <https://github.com/bsia>
 * Paul Rangel <https://github.com/ismell>
 * James Edward Gray II <https://github.com/JEG2>
+* Raul E Rangel <https://github.com/ismell> and Antonio Terceiro <https://github.com/terceiro>
 
 # Version History
 
