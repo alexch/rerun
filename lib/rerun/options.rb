@@ -49,6 +49,10 @@ module Rerun
           options[:signal] = signal
         end
 
+        opts.on("-r", "--restart-signal signal", "restart process using this signal, default is to stop and start") do |signal|
+          options[:restart_signal] = signal
+        end
+
         opts.on("-c", "--clear", "clear screen before each run") do
           options[:clear] = true
         end
