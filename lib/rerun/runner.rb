@@ -61,17 +61,21 @@ module Rerun
     def restart
       @restarting = true
 
-      default_signal = @options[:restart_signal]
-      if (default_signal)
-        if @pid && (@pid != 0)
-          notify "restarting", "We will be with you shortly."
-          signal(default_signal)
-        end
+      restart_signal = @options[:restart_signal]
+      if restart_signal
+        restart_with_signal(restart_signal)
       else
         stop
         start
       end
       @restarting = false
+    end
+
+    def restart_with_signal(restart_signal)
+      if @pid && (@pid != 0)
+        notify "restarting", "We will be with you shortly."
+        signal(restart_signal)
+      end
     end
 
     def watcher_running?

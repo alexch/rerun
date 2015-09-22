@@ -36,6 +36,10 @@ module Rerun
       it "dies when sent a control-C (SIGINT)"
 
       it "accepts a key press"
+
+      it "restarts with HUP"
+
+      it "restarts with a different signal"
     end
 
     describe 'change_message' do

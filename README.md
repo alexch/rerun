@@ -125,9 +125,12 @@ Run `rerun --help` to see the actual list.
 
   *On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot.*
 
-`--signal` (or -s) use specified signal (instead of the default SIGTERM) to terminate the previous process.
+`--signal` (or `-s`) use specified signal (instead of the default SIGTERM) to terminate the previous process.
 This may be useful for forcing the respective process to terminate as quickly as possible.
 (`--signal KILL` is the equivalent of `kill -9`)
+
+`--restart-signal` (or `-r`) restart process using this signal, instead of stop and restart
+(e.g. `-r HUP` will send a HUP and expect the process to cleanly restart itself)
 
 `--clear` (or -c) clear the screen before each run
 
