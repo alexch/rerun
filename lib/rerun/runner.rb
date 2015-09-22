@@ -60,22 +60,13 @@ module Rerun
 
     def restart
       @restarting = true
-
-      restart_signal = @options[:restart_signal]
-      if restart_signal
-        restart_with_signal(restart_signal)
+      if @options[:restart]
+        restart_with_signal(options[:signal])
       else
         stop
         start
       end
       @restarting = false
-    end
-
-    def restart_with_signal(restart_signal)
-      if @pid && (@pid != 0)
-        notify "restarting", "We will be with you shortly."
-        signal(restart_signal)
-      end
     end
 
     def watcher_running?
@@ -88,7 +79,7 @@ module Rerun
         @watcher.pause
         @pausing = true
       else
-        say "Resuming"
+        say "Resuming."
         @watcher.unpause
         @pausing = false
       end
@@ -126,19 +117,19 @@ module Rerun
       @options[:name]
     end
 
+    def restart_with_signal(restart_signal)
+      if @pid && (@pid != 0)
+        notify "restarting", "We will be with you shortly."
+        signal(restart_signal)
+      end
+    end
+
     def start
       if windows?
         raise "Sorry, Rerun does not work on Windows."
       end
 
-      if (!@already_running)
-        taglines = [
-          "To infinity... and beyond!",
-          "Charge!",
-        ]
-        notify "launched", taglines[rand(taglines.size)]
-        @already_running = true
-      else
+      if @already_running
         taglines = [
           "Here we go again!",
           "Keep on trucking.",
@@ -146,6 +137,13 @@ module Rerun
           "The road goes ever on and on, down from the door where it began.",
         ]
         notify "restarted", taglines[rand(taglines.size)]
+      else
+        taglines = [
+          "To infinity... and beyond!",
+          "Charge!",
+        ]
+        notify "launched", taglines[rand(taglines.size)]
+        @already_running = true
       end
 
       clear_screen if clear?

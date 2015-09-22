@@ -16,11 +16,17 @@ module Rerun
         :signal => "TERM",
         :growl => true,
         :name => Pathname.getwd.basename.to_s.capitalize,
-        :ignore => []
+        :ignore => [],
+        :dir => DEFAULT_DIRS
     }
 
     def self.parse args = ARGV
-      options = DEFAULTS.dup
+
+      default_options = DEFAULTS.dup
+      options = {
+          ignore: []
+      }
+
       opts = OptionParser.new("", 24, '  ') do |opts|
         opts.banner = "Usage: rerun [options] [--] cmd"
 
@@ -49,8 +55,9 @@ module Rerun
           options[:signal] = signal
         end
 
-        opts.on("-r", "--restart-signal signal", "restart process using this signal, default is to stop and start") do |signal|
-          options[:restart_signal] = signal
+        opts.on("-r", "--restart", "expect process to restart itself (uses the HUP signal unless overridden using --signal)") do |signal|
+          options[:restart] = true
+          default_options[:signal] = "HUP"
         end
 
         opts.on("-c", "--clear", "clear screen before each run") do
@@ -93,8 +100,10 @@ module Rerun
         nil
       else
         opts.parse! args
-        options[:cmd] = args.join(" ")
-        options[:dir] ||= DEFAULT_DIRS
+        default_options[:cmd] = args.join(" ")
+
+        options = default_options.merge(options)
+
         options
       end
     end

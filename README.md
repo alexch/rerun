@@ -129,8 +129,8 @@ Run `rerun --help` to see the actual list.
 This may be useful for forcing the respective process to terminate as quickly as possible.
 (`--signal KILL` is the equivalent of `kill -9`)
 
-`--restart-signal` (or `-r`) restart process using this signal, instead of stop and restart
-(e.g. `-r HUP` will send a HUP and expect the process to cleanly restart itself)
+`--restart` (or `-r`) expect process to restart itself, using signal HUP by default
+(e.g. `-r -s INT` will send a INT and then resume watching for changes)
 
 `--clear` (or -c) clear the screen before each run
 

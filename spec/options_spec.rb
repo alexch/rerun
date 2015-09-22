@@ -75,5 +75,17 @@ module Rerun
       assert { options[:ignore] == ["log/*", "*.tmp"] }
     end
 
+    it "accepts --restart which allows the process to restart itself, defaulting to HUP" do
+      options = Options.parse ["--restart"]
+      assert { options[:restart] }
+      assert { options[:signal] == "HUP" }
+    end
+
+    it "allows user to override HUP signal when --restart is specified" do
+      options = Options.parse %w[--restart --signal INT]
+      assert { options[:restart] }
+      assert { options[:signal] == "INT" }
+    end
+
   end
 end
