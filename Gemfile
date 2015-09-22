@@ -13,6 +13,6 @@ group :development do
 end
 
 group :test do
-  gem 'rspec'
+  gem 'rspec', ">=3.0"
   gem 'wrong', ">=0.6.2"
 end

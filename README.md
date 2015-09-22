@@ -305,6 +305,7 @@ Based upon and/or inspired by:
 * <https://github.com/FND>
 * Barry Sia <https://github.com/bsia>
 * Paul Rangel <https://github.com/ismell>
+* James Edward Gray II <https://github.com/JEG2>
 
 # Version History
 

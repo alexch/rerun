@@ -99,9 +99,11 @@ module Rerun
       @log.should be_nil
     end
 
+    # TODO: unify with Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES
     ignored_directories = %w[
       .git .svn .hg .rbx .bundle bundle vendor/bundle log tmp vendor/ruby
     ]
+
     it "ignores directories named #{ignored_directories}" do
       ignored_directories.each do |ignored_dir|
         FileUtils.mkdir_p "#{@dir}/#{ignored_dir}"
