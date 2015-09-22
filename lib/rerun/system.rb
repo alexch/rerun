@@ -13,31 +13,13 @@ module Rerun
        RUBY_PLATFORM =~ /linux/i
     end
 
-    # do we have growl or not?
-    def growl_available?
-      mac? && (growlcmd != "")
-    end
-
-    def growlcmd
-      growlnotify = `which growlnotify`.chomp
-      # todo: check version of growlnotify and warn if it's too old
-      growlnotify
-    end
-
-    def icon
-      here = File.expand_path(File.dirname(__FILE__))
-      icondir = File.expand_path("#{here}/../../icons")
+    def rails?
       rails_sig_file = File.expand_path(".")+"/config/boot.rb"
-      "#{icondir}/rails_red_sml.png" if File.exists? rails_sig_file
+      File.exists? rails_sig_file
     end
 
     def growl(title, body, background = true)
-      if growl_available?
-        icon_str = ("--image \"#{icon}\"" if icon)
-        s = "#{growlcmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
-        s += " &" if background
-        `#{s}`
-      end
+      Notification.new(title: title, body: body, options: @options).send(background)
     end
 
   end
