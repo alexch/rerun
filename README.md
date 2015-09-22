@@ -174,6 +174,21 @@ This seems like the most gentle and unixy way of doing things, but it does
 mean that if your program ignores SIGTERM, it takes an extra 4 to 6 seconds to
 restart.
 
+# Troubleshooting
+If you are using `zsh` as your shell, and you are specifying your `--pattern` as `**/*.rb`, you may face this error
+```
+Errno::EACCES: Permission denied - <filename>
+```
+This is because `**/*.rb` gets expanded into the command by `zsh` instead of passing it through to rerun. The solution is to simply quote ('' or "") the pattern.
+i.e
+```
+rerun -p **/*.rb rake test
+```
+becomes
+```
+rerun -p "**/*.rb" rake test
+```
+
 # To Do:
 
 ## Must have for v1.0
