@@ -1,5 +1,4 @@
 # todo: unit tests
-# todo: deprecate "--growl", use "--notify" or "--notify growl" or "--notify osx" or "--no-notify"
 
 module Rerun
   class Notification
@@ -14,30 +13,28 @@ module Rerun
     end
 
     def command
-      if mac?
-        # todo: strategy object or subclass
+      return unless mac?
 
+      # todo: strategy or subclass
+
+      s = nil
+
+      if options[:notify] == true or options[:notify] == "growl"
         if (cmd = command_named("growlnotify"))
-          puts "growl"
           # todo: check version of growlnotify and warn if it's too old
-
           icon_str = ("--image \"#{icon}\"" if icon)
-
-          "#{cmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
-
-        elsif (cmd = command_named("terminal-notifier"))
-          puts "term"
-
-          icon_str = ("-appIcon \"#{icon}\"" if icon)
-
-          "#{cmd} -title \"#{app_name}\" -message \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
-
+          s = "#{cmd} -n \"#{app_name}\" -m \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
         end
       end
-    end
 
-    def app_name
-      options[:name]
+      if s.nil? and options[:notify] == true or options[:notify] == "osx"
+        if (cmd = command_named("terminal-notifier"))
+          icon_str = ("-appIcon \"#{icon}\"" if icon)
+          s = "#{cmd} -title \"#{app_name}\" -message \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
+        end
+      end
+
+      s
     end
 
     def command_named(name)
@@ -46,7 +43,12 @@ module Rerun
     end
 
     def send(background = true)
+      return unless command
       `#{command}#{" &" if background}`
+    end
+
+    def app_name
+      options[:name]
     end
 
     def icon

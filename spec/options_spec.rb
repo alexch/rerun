@@ -12,7 +12,7 @@ module Rerun
       assert { defaults[:dir] == ["."] }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
       assert { defaults[:signal] == "TERM" }
-      assert { defaults[:growl] == true }
+      assert { defaults[:notify] == true }
       assert { defaults[:name] == 'Rerun' }
 
       assert { defaults[:clear].nil? }
@@ -30,10 +30,6 @@ module Rerun
       end
     end
 
-    it "accepts --no-growl" do
-      options = Options.parse ["--no-growl", "foo"]
-      assert { options[:growl] == false }
-    end
 
     it "splits directories" do
       options = Options.parse ["--dir", "a,b", "foo"]
@@ -85,6 +81,40 @@ module Rerun
       options = Options.parse %w[--restart --signal INT]
       assert { options[:restart] }
       assert { options[:signal] == "INT" }
+    end
+
+    # notifications
+
+    it "rejects --no-growl" do
+      options = nil
+      err = capturing(:stderr) do
+        options = Options.parse %w[--no-growl echo foo]
+      end
+
+      assert { options == nil }
+      assert { err.include? "use --no-notify" }
+    end
+
+    it "defaults to --notify true (meaning 'use what works')" do
+      options = Options.parse %w[echo foo]
+      assert { options[:notify] == true }
+    end
+
+    it "accepts bare --notify" do
+      options = Options.parse %w[--notify -- echo foo]
+      assert { options[:notify] == true }
+    end
+
+    %w[growl osx].each do |notifier|
+      it "accepts --notify #{notifier}" do
+        options = Options.parse ["--notify", notifier, "echo foo"]
+        assert { options[:notify] == notifier }
+      end
+    end
+
+    it "accepts --no-notify" do
+      options = Options.parse %w[--no-notify echo foo]
+      assert { options[:notify] == false }
     end
 
   end

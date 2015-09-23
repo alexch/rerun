@@ -14,7 +14,7 @@ module Rerun
     DEFAULTS = {
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
-        :growl => true,
+        :notify => true,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => [],
         :dir => DEFAULT_DIRS
@@ -76,8 +76,15 @@ module Rerun
           options[:name] = name
         end
 
-        opts.on("--no-growl", "don't use growl") do
+        opts.on("--no-growl", "don't use growl [OBSOLETE]") do
           options[:growl] = false
+          $stderr.puts "--no-growl is obsolete; use --no-notify instead"
+          return
+        end
+
+        opts.on("--[no-]notify [notifier]", "send messages through growl (requires growlnotify) or osx (requires terminal-notifier gem)") do |notifier|
+          notifier = true if notifier.nil?
+          options[:notify] = notifier
         end
 
         opts.on_tail("-h", "--help", "--usage", "show this message") do

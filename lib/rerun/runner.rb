@@ -282,8 +282,9 @@ module Rerun
       @git_head = File.exists?(git_head_file) && File.read(git_head_file)
     end
 
-    def notify(title, body)
-      growl title, body if @options[:growl]
+    def notify(title, body, background = true)
+      Notification.new(title: title, body: body, options: @options).send(background) if @options[:notify]
+
       puts
       say "#{app_name} #{title}"
     end

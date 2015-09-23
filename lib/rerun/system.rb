@@ -18,9 +18,5 @@ module Rerun
       File.exists? rails_sig_file
     end
 
-    def growl(title, body, background = true)
-      Notification.new(title: title, body: body, options: @options).send(background)
-    end
-
   end
 end

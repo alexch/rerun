@@ -138,20 +138,30 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
-`--no-growl` don't use growl
+`--notify NOTIFIER` use `growl` or `osx` for notifications (see below)
+
+`--no-notify` don't use growl (or osx) notifications
 
 `--name` set the app name (for display)
 
 Also `--version` and `--help`, naturally.
 
-# Growl Notifications
+# Notifications
 
 If you have `growlnotify` available on the `PATH`, it sends notifications to
-growl in addition to the console. If you have growl but don't want rerun to use it,
-set the `--no-growl` option.
+growl in addition to the console.
+If you have `terminal-notifier`, it sends notifications to
+the OS X notification center in addition to the console.
+
+If you have both, Rerun will pick one, or you can choose between them using `--notify growl` or `--notify osx` respectively.
+
+If you have a notifier installed but don't want rerun to use it,
+set the `--no-notify` option.
 
 Download [growlnotify here](http://growl.info/downloads.php#generaldownloads)
 now that Growl has moved to the App Store.
+
+Install [terminal-notifier](https://github.com/julienXX/terminal-notifier) using `gem install terminal-notifier`. (You may have to put it in your system gemset and/or use `sudo` too.) Using Homebrew to install terminal-notifier is not recommended.
 
 # On-The-Fly Commands
 
@@ -315,6 +325,9 @@ Based upon and/or inspired by:
 
 * ?
   * better 'changed' message
+  * `--notify osx` option
+  * --restart
+  * use Listen 3 gem
 
 * v0.10.0   4 May 2014
   * add '.coffee,.slim,.md' to default pattern (thanks @xylinq)
