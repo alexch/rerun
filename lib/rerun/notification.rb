@@ -6,7 +6,7 @@ module Rerun
 
     attr_reader :title, :body, :options
 
-    def initialize(title:, body:, options: Options::DEFAULTS.dup)
+    def initialize(title, body, options = Options::DEFAULTS.dup)
       @title = title
       @body = body
       @options = options

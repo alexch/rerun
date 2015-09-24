@@ -283,8 +283,7 @@ module Rerun
     end
 
     def notify(title, body, background = true)
-      Notification.new(title: title, body: body, options: @options).send(background) if @options[:notify]
-
+      Notification.new(title, body, @options).send(background) if @options[:notify]
       puts
       say "#{app_name} #{title}"
     end
