@@ -1,17 +1,15 @@
 here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
-require 'tmpdir'
+require "#{here}/inc_process.rb"
 
 describe "the rerun command" do
   before do
     STDOUT.sync = true
 
-    @dir = Dir.tmpdir + "/#{Time.now.to_i}"
-    FileUtils.mkdir_p(@dir)
-    @inc_output_file = "#{@dir}/inc.txt"
-
-    @dir1 = File.join(@dir, "dir1")
-    FileUtils.mkdir_p(@dir1)
+    @inc = IncProcess.new
+    @dir = @inc.dir
+    @dir1 = @inc.dir1
+    @dir2 = @inc.dir2
 
     # one file that exists in dir1
     @watched_file1 = File.join(@dir1, "foo.rb")
@@ -20,38 +18,19 @@ describe "the rerun command" do
     # one file that doesn't yet exist in dir1
     @watched_file2 = File.join(@dir1, "bar.rb")
 
-    @dir2 = File.join(@dir, "dir2")
-    FileUtils.mkdir_p(@dir2)
-
     # one file that exists in dir2
     @watched_file3 = File.join(@dir2, "baz.rb")
 
-    launch_inc
+    @inc.launch
   end
 
   after do
-    timeout(4) {
-      Process.kill("INT", @pid) && Process.wait(@pid) rescue Errno::ESRCH
-    }
+    @inc.kill
   end
 
-  def launch_inc
-    @pid = fork do
-      root = File.dirname(__FILE__) + "/.."
-      exec("#{root}/bin/rerun -d '#{@dir1},#{@dir2}' ruby #{root}/inc.rb #{@inc_output_file}")
-    end
-    timeout(10) { sleep 0.5 until File.exist?(@inc_output_file) }
-    sleep 4  # let rerun's watcher get going
-  end
 
   def read
-    File.open(@inc_output_file, "r") do |f|
-      launched_at = f.gets.to_i
-      count = f.gets.to_i
-      result = [launched_at, count]
-      puts "reading #{@inc_output_file}: #{result.join("\t")}"
-      result
-    end
+    @inc.read
   end
 
   def current_count
@@ -108,9 +87,9 @@ describe "the rerun command" do
   #it "sends its child process a SIGINT to restart"
 
   it "dies when sent a control-C (SIGINT)" do
-    Process.kill("INT", @pid)
+    Process.kill("INT", @inc.rerun_pid)
     timeout(6) {
-      Process.wait(@pid) rescue Errno::ESRCH
+      Process.wait(@inc.rerun_pid) rescue Errno::ESRCH
     }
   end
 

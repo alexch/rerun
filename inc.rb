@@ -16,13 +16,14 @@ class Inc
 
   def run
     launched = Time.now.to_i
-    say "launching"
+    say "launching in #{File.dirname(@file)}"
     i = 0
     while i < 100
-      say "writing #{launched}/#{i} to #{@file}"
+      say "writing #{launched}/#{i} to #{File.basename(@file)}"
       File.open(@file, "w") do |f|
         f.puts(launched)
         f.puts(i)
+        f.puts($$)
       end
       sleep 0.5
       i+=1
