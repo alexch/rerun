@@ -9,7 +9,7 @@ platform :ruby do
 end
 
 group :development do
-  gem "rake"
+  gem "rake", '>= 0.10'
 end
 
 group :test do
