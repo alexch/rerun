@@ -2,24 +2,22 @@ here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
 require "#{here}/inc_process.rb"
 
+
 describe "the rerun command" do
   before do
     STDOUT.sync = true
 
     @inc = IncProcess.new
-    @dir = @inc.dir
-    @dir1 = @inc.dir1
-    @dir2 = @inc.dir2
 
     # one file that exists in dir1
-    @watched_file1 = File.join(@dir1, "foo.rb")
-    touch @watched_file1
+    @existing_file = File.join(@inc.dir1, "foo.rb")
+    touch @existing_file
 
     # one file that doesn't yet exist in dir1
-    @watched_file2 = File.join(@dir1, "bar.rb")
+    @soon_to_exist_file = File.join(@inc.dir1, "bar.rb")
 
     # one file that exists in dir2
-    @watched_file3 = File.join(@dir2, "baz.rb")
+    @other_existing_file = File.join(@inc.dir2, "baz.rb")
 
     @inc.launch
   end
@@ -28,17 +26,11 @@ describe "the rerun command" do
     @inc.kill
   end
 
-
   def read
     @inc.read
   end
 
-  def current_count
-    launched_at, count = read
-    count
-  end
-
-  def touch(file = @watched_file1)
+  def touch(file = @existing_file)
     puts "#{Time.now.strftime("%T")} touching #{file}"
     File.open(file, "w") do |f|
       f.puts Time.now
@@ -49,37 +41,39 @@ describe "the rerun command" do
     # todo: send a character to stdin of the rerun process
   end
 
-  it "increments a test file at least once per second" do
-    sleep 1
-    x = current_count
-    sleep 1
-    y = current_count
-    y.should be > x
+  describe IncProcess do
+    it "increments a test file at least once per second" do
+      sleep 1
+      x = @inc.current_count
+      sleep 1
+      y = @inc.current_count
+      y.should be > x
+    end
   end
 
   it "restarts its target when an app file is modified" do
-    first_launched_at, count = read
-    touch @watched_file1
+    first_launched_at = read[:launched_at]
+    touch @existing_file
     sleep 4
-    second_launched_at, count = read
+    second_launched_at = read[:launched_at]
 
     second_launched_at.should be > first_launched_at
   end
 
   it "restarts its target when an app file is created" do
-    first_launched_at, count = read
-    touch @watched_file2
+    first_launched_at = read[:launched_at]
+    touch @soon_to_exist_file
     sleep 4
-    second_launched_at, count = read
+    second_launched_at = read[:launched_at]
 
     second_launched_at.should be > first_launched_at
   end
 
   it "restarts its target when an app file is created in the second dir" do
-    first_launched_at, count = read
-    touch @watched_file3
+    first_launched_at = read[:launched_at]
+    touch @other_existing_file
     sleep 4
-    second_launched_at, count = read
+    second_launched_at = read[:launched_at]
 
     second_launched_at.should be > first_launched_at
   end

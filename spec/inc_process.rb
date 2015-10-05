@@ -21,41 +21,50 @@ class IncProcess
 
   end
 
+  # don't call this until you're sure it's running
   def kill
-    timeout(4) {
-      Process.kill("INT", @inc_pid) && Process.wait(@inc_pid) rescue Errno::ESRCH
-      Process.kill("INT", @rerun_pid) && Process.wait(@rerun_pid) rescue Errno::ESRCH
-    }
+    timeout(4) do
+      pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
+      pids.each do |pid|
+        Process.kill("INT", pid) rescue Errno::ESRCH
+      end
+      pids.each do |pid|
+        Process.wait(pid) rescue Errno::ESRCH
+      end
+    end
   end
 
-  def cmd
+  def rerun_cmd
     root = File.dirname(__FILE__) + "/.."
     "#{root}/bin/rerun -d '#{@dir1},#{@dir2}' ruby #{root}/inc.rb #{@inc_output_file}"
   end
 
   def launch
-    @rerun_pid = spawn(cmd)
+    @rerun_pid = spawn(rerun_cmd)
     timeout(10) { sleep 0.5 until File.exist?(@inc_output_file) }
-    sleep 4  # let rerun's watcher get going
+    sleep 3 # let rerun's watcher get going
   end
 
   def read
     File.open(@inc_output_file, "r") do |f|
-      launched_at = f.gets.to_i
-      count = f.gets.to_i
-      @inc_pid = f.gets.to_i
-      result = [launched_at, count, @inc_pid]
-      puts "reading #{@inc_output_file}: #{result.join("\t")}"
+      result = {
+          launched_at: f.gets.to_i,
+          count: f.gets.to_i,
+          inc_pid: f.gets.to_i,
+          inc_parent_pid: f.gets.to_i,
+      }
+      @inc_pid = result[:inc_pid]
+      @inc_parent_pid = result[:inc_parent_pid]
+      puts "reading #{@inc_output_file}: #{result.inspect}"
       result
     end
   end
 
   def current_count
-    launched_at, count = read
-    count
+    read[:count]
   end
 
-  def touch(file = @watched_file1)
+  def touch(file = @existing_file)
     puts "#{Time.now.strftime("%T")} touching #{file}"
     File.open(file, "w") do |f|
       f.puts Time.now

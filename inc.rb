@@ -24,6 +24,7 @@ class Inc
         f.puts(launched)
         f.puts(i)
         f.puts($$)
+        f.puts(Process.ppid)
       end
       sleep 0.5
       i+=1
