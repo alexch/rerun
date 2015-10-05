@@ -23,15 +23,22 @@ class IncProcess
 
   # don't call this until you're sure it's running
   def kill
-    timeout(4) do
+    begin
       pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
-      pids.each do |pid|
-        Process.kill("INT", pid) rescue Errno::ESRCH
+      timeout(5) do
+        pids.each do |pid|
+          Process.kill("INT", pid) rescue Errno::ESRCH
+        end
+        pids.each do |pid|
+          Process.wait(pid)
+        end
       end
+    rescue Timeout::Error
       pids.each do |pid|
-        Process.wait(pid) rescue Errno::ESRCH
+        Process.kill("KILL", pid) rescue Errno::ESRCH
       end
     end
+
   end
 
   def rerun_cmd
