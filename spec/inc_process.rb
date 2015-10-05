@@ -27,14 +27,17 @@ class IncProcess
       pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
       timeout(5) do
         pids.each do |pid|
+          puts "sending INT to #{pid}"
           Process.kill("INT", pid) rescue Errno::ESRCH
         end
         pids.each do |pid|
-          Process.wait(pid)
+          puts "waiting for #{pid}"
+          Process.wait(pid) rescue Errno::ECHILD
         end
       end
     rescue Timeout::Error
       pids.each do |pid|
+        puts "sending INT to #{pid}"
         Process.kill("KILL", pid) rescue Errno::ESRCH
       end
     end
