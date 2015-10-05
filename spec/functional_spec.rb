@@ -81,7 +81,9 @@ describe "the rerun command" do
   #it "sends its child process a SIGINT to restart"
 
   it "dies when sent a control-C (SIGINT)" do
-    Process.kill("INT", @inc.rerun_pid)
+    pid = @inc.rerun_pid
+    puts "test sending INT to #{pid}"
+    Process.kill("INT", pid)
     timeout(6) {
       Process.wait(@inc.rerun_pid) rescue Errno::ESRCH
     }

@@ -53,6 +53,7 @@ class IncProcess
     @rerun_pid = spawn(rerun_cmd)
     timeout(10) { sleep 0.5 until File.exist?(@inc_output_file) }
     sleep 3 # let rerun's watcher get going
+    read
   end
 
   def read
