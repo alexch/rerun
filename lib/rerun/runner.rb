@@ -61,7 +61,7 @@ module Rerun
     def restart
       @restarting = true
       if @options[:restart]
-        restart_with_signal(options[:signal])
+        restart_with_signal(@options[:signal])
       else
         stop
         start
