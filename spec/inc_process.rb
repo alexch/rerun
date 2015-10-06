@@ -5,7 +5,7 @@ class IncProcess
 
   attr_reader :dir, :inc_output_file
   attr_reader :dir1, :dir2
-  attr_reader :rerun_pid
+  attr_reader :rerun_pid, :inc_parent_pid
 
   def initialize
     @dir = Dir.tmpdir + "/#{Time.now.to_i}"
