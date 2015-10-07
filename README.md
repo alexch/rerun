@@ -320,13 +320,14 @@ Based upon and/or inspired by:
 * Paul Rangel <https://github.com/ismell>
 * James Edward Gray II <https://github.com/JEG2>
 * Raul E Rangel <https://github.com/ismell> and Antonio Terceiro <https://github.com/terceiro>
+* Mike Pastore <https://github.com/mwpastore>
 
 # Version History
 
-* ?
+* 0.11.0    7 October 2015
   * better 'changed' message
   * `--notify osx` option
-  * --restart
+  * `--restart` option (with bugfix by Mike Pastore)
   * use Listen 3 gem
   * add `.feature` files to default watchlist (thanks @jmuheim)
 
