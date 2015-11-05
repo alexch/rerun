@@ -17,7 +17,8 @@ module Rerun
         :notify => true,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => [],
-        :dir => DEFAULT_DIRS
+        :dir => DEFAULT_DIRS,
+        :force_polling => false,
     }
 
     def self.parse args = ARGV
@@ -74,6 +75,10 @@ module Rerun
 
         opts.on("-n name", "--name name", "name of app used in logs and notifications, default = \"#{DEFAULTS[:name]}\"") do |name|
           options[:name] = name
+        end
+
+        opts.on("--force-polling", "use polling instead of a native filesystem scan (useful for Vagrant)") do
+          options[:force_polling] = true
         end
 
         opts.on("--no-growl", "don't use growl [OBSOLETE]") do

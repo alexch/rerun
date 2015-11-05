@@ -124,6 +124,10 @@ module Rerun
       end
     end
 
+    def force_polling
+      @options[:force_polling]
+    end
+
     def start
       if windows?
         raise "Sorry, Rerun does not work on Windows."
@@ -190,7 +194,7 @@ module Rerun
 
       unless @watcher
 
-        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore) do |changes|
+        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore, :force_polling => force_polling) do |changes|
 
           message = change_message(changes)
 

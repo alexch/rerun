@@ -144,6 +144,8 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--name` set the app name (for display)
 
+`--force-polling` force polling
+
 Also `--version` and `--help`, naturally.
 
 # Notifications
