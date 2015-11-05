@@ -188,6 +188,17 @@ mean that if your program ignores SIGTERM, it takes an extra 4 to 6 seconds to
 restart.
 
 # Troubleshooting
+
+## Vagrant ##
+
+Rerun will not pick up changes made to shared folders. This means that the common
+method of using Vagrant for an execution environment and using the `/vagrant`
+shared folder for source code will not work.
+
+Instead, use [shotgun](https://rubygems.org/gems/shotgun).
+
+## zsh ##
+
 If you are using `zsh` as your shell, and you are specifying your `--pattern` as `**/*.rb`, you may face this error
 ```
 Errno::EACCES: Permission denied - <filename>
