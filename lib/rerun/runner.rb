@@ -9,7 +9,7 @@ module Rerun
       runner.start
       runner.join
       # apparently runner doesn't keep running anymore (as of Listen 2) so we have to sleep forever :-(
-      sleep 10000 while true  # :-(
+      sleep 10000 while true # :-(
     end
 
     include System
@@ -36,18 +36,18 @@ module Rerun
               toggle_pause if watcher_running?
             when 'x', 'q'
               die
-              break  # the break will stop this thread, in case the 'die' doesn't
+              break # the break will stop this thread, in case the 'die' doesn't
             else
               puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
-               ["r", "restart"],
-               ["p", "toggle pause"],
-               ["x or q", "stop and exit"]
-              ].map{|key, description| "  #{key} -- #{description}"}.join("\n")
+                    ["r", "restart"],
+                    ["p", "toggle pause"],
+                    ["x or q", "stop and exit"]
+                   ].map { |key, description| "  #{key} -- #{description}" }.join("\n")
               puts
             end
           end
-          sleep 1  # todo: use select instead of polling somehow?
+          sleep 1 # todo: use select instead of polling somehow?
         end
       end
       @keypress_thread.run
@@ -167,7 +167,7 @@ module Rerun
         die
       end
 
-      Signal.trap("TERM") do  # TERM is the polite way of terminating a process
+      Signal.trap("TERM") do # TERM is the polite way of terminating a process
         die
       end
 
@@ -204,7 +204,8 @@ module Rerun
         watcher.start
         @watcher = watcher
         say "Watching #{dir.join(', ')} for #{pattern}" +
-                (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})")
+              (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
+              (watcher.adapter.nil? ? "" : " with #{watcher.adapter_name} adapter")
       end
     end
 
@@ -230,7 +231,7 @@ module Rerun
     def die
       #stop_keypress_thread   # don't do this since we're probably *in* the keypress thread
       stop # stop the child process if it exists
-      exit 0  # todo: status code param
+      exit 0 # todo: status code param
     end
 
     def join
@@ -255,7 +256,7 @@ module Rerun
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
         begin
-          timeout(5) do  # todo: escalation timeout setting
+          timeout(5) do # todo: escalation timeout setting
             # start with a polite SIGTERM
             signal(default_signal) && Process.wait(@pid)
           end

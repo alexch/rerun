@@ -25,7 +25,6 @@ module Rerun
       end
     end
 
-
     before do
       @dir = Dir.tmpdir + "/#{Time.now.to_i}-#{(rand*100000).to_i}"
       # fix goofy MacOS /tmp path ambiguity
@@ -145,6 +144,17 @@ module Rerun
       test_file = "#{@dir}/pause_test2.txt"
       create test_file
       @log[:added].should == [test_file]
+    end
+
+    it "can figure out the Listen adapter" do
+      @watcher.adapter.class.should == Listen::Adapter.select
+    end
+
+    it "passes the force-polling option to Listen" do
+      stop_watcher
+      start_watcher force_polling: true
+      @watcher.adapter.class.should == Listen::Adapter::Polling
+      @watcher.adapter_name.should == "Polling"
     end
 
   end

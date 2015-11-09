@@ -116,5 +116,15 @@ module Rerun
       @listener && @listener.processing?
     end
 
+    def adapter
+      @listener &&
+          (backend = @listener.instance_variable_get(:@backend)) &&
+          backend.instance_variable_get(:@adapter)
+    end
+
+    def adapter_name
+      adapter && adapter.class.name.split('::').last
+    end
+
   end
 end

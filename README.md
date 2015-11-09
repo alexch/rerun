@@ -144,7 +144,7 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--name` set the app name (for display)
 
-`--force-polling` force polling
+`--force-polling` use polling instead of a native filesystem scan (useful for Vagrant)
 
 Also `--version` and `--help`, naturally.
 
@@ -189,6 +189,10 @@ This seems like the most gentle and unixy way of doing things, but it does
 mean that if your program ignores SIGTERM, it takes an extra 4 to 6 seconds to
 restart.
 
+# Vagrant and VirtualBox
+
+If running inside a shared directory using Vagrant and VirtualBox, you must pass the `--force-polling` option. You may also have to pass some extra `--ignore` options too; otherwise each scan can take 10 or more seconds on directories with a large number of files or subdirectories underneath it.
+
 # Troubleshooting
 If you are using `zsh` as your shell, and you are specifying your `--pattern` as `**/*.rb`, you may face this error
 ```
@@ -225,10 +229,8 @@ rerun -p "**/*.rb" rake test
 * On OS X:
     * use a C library using growl's developer API <http://growl.info/developer/>
     * Use growl's AppleScript or SDK instead of relying on growlnotify
-    * Use OS X notifications
     * "Failed" icon for notifications
 * On Linux:
-    * Test on Linux.
     * Use libnotify or notify-send http://www.linuxjournal.com/content/tech-tip-get-notifications-your-scripts-notify-send
 
 # Other projects that do similar things
@@ -323,8 +325,12 @@ Based upon and/or inspired by:
 * James Edward Gray II <https://github.com/JEG2>
 * Raul E Rangel <https://github.com/ismell> and Antonio Terceiro <https://github.com/terceiro>
 * Mike Pastore <https://github.com/mwpastore>
+* Andy Duncan <https://github.com/ajduncan>
 
 # Version History
+
+*
+  * `--force-polling` option (thanks ajduncan)
 
 * 0.11.0    7 October 2015
   * better 'changed' message
