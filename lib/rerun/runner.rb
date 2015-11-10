@@ -129,10 +129,6 @@ module Rerun
     end
 
     def start
-      if windows?
-        raise "Sorry, Rerun does not work on Windows."
-      end
-
       if @already_running
         taglines = [
           "Here we go again!",
@@ -153,14 +149,13 @@ module Rerun
       clear_screen if clear?
       start_keypress_thread unless @keypress_thread
 
-      @pid = Kernel.fork do
-        begin
-          exec(@run_command)
-        rescue => e
-          puts "#{e.class}: #{e.message}"
-          exit
-        end
+      begin
+        @pid = run @run_command
+      rescue => e
+        puts "#{e.class}: #{e.message}"
+        exit
       end
+
       status_thread = Process.detach(@pid) # so if the child exits, it dies
 
       Signal.trap("INT") do # INT = control-C -- allows user to stop the top-level rerun process
@@ -207,6 +202,10 @@ module Rerun
               (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
               (watcher.adapter.nil? ? "" : " with #{watcher.adapter_name} adapter")
       end
+    end
+
+    def run command
+      Kernel.spawn command
     end
 
     def change_message(changes)
