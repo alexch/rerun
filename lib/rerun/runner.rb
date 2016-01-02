@@ -13,6 +13,7 @@ module Rerun
     end
 
     include System
+    include ::Timeout
 
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
