@@ -33,6 +33,9 @@ module Rerun
             when 'r'
               say "Restarting"
               restart
+            when 'f'
+              say "Stopping and starting"
+              restart(false)
             when 'p'
               toggle_pause if watcher_running?
             when 'x', 'q'
@@ -42,6 +45,7 @@ module Rerun
               puts "\n#{c.inspect} pressed inside rerun"
               puts [["c", "clear screen"],
                     ["r", "restart"],
+                    ["f", "forced restart (stop and start)"],
                     ["p", "toggle pause"],
                     ["x or q", "stop and exit"]
                    ].map { |key, description| "  #{key} -- #{description}" }.join("\n")
@@ -59,9 +63,9 @@ module Rerun
       @keypress_thread = nil
     end
 
-    def restart
+    def restart(with_signal = true)
       @restarting = true
-      if @options[:restart]
+      if @options[:restart] && with_signal
         restart_with_signal(@options[:signal])
       else
         stop
@@ -252,7 +256,8 @@ module Rerun
 
     # todo: test escalation
     def stop
-      default_signal = @options[:signal] || "TERM"
+      default_signal = (@options[:signal] unless @options[:restart]) || "TERM"
+
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
         begin
