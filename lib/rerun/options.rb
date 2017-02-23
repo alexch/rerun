@@ -87,7 +87,7 @@ module Rerun
           return
         end
 
-        opts.on("--[no-]notify [notifier]", "send messages through growl (requires growlnotify) or osx (requires terminal-notifier gem)") do |notifier|
+        opts.on("--[no-]notify [notifier]", "send messages through a desktop notification application. Supports growl (requires growlnotify), osx (requires terminal-notifier gem), and notify-send on GNU/Linux (notify-send must be installed)") do |notifier|
           notifier = true if notifier.nil?
           options[:notify] = notifier
         end
