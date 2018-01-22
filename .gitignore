@@ -3,3 +3,5 @@ pkg
 Gemfile.lock
 doc
 tmp
+node_modules
+.vagrant
