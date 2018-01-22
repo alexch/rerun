@@ -120,7 +120,7 @@ By default it watches files ending in: `rb,js,coffee,css,scss,sass,erb,html,haml
 On top of this, it also ignores dotfiles, `.tmp` files, and some other files and directories (like `.git` and `log`).
 Run `rerun --help` to see the actual list.
 
-`--ignore pattern` file glob to ignore (can be set many times). To ignore a directory, you must append '/*' e.g.
+`--ignore pattern` file glob to ignore (can be set many times). To ignore a directory, you must append `'/*'` e.g.
   `--ignore 'coverage/*'`.
 
   *On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot.*
