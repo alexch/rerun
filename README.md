@@ -198,6 +198,17 @@ restart.
 If running inside a shared directory using Vagrant and VirtualBox, you must pass the `--force-polling` option. You may also have to pass some extra `--ignore` options too; otherwise each scan can take 10 or more seconds on directories with a large number of files or subdirectories underneath it.
 
 # Troubleshooting
+
+## Vagrant ##
+
+Rerun will not pick up changes made to shared folders. This means that the common
+method of using Vagrant for an execution environment and using the `/vagrant`
+shared folder for source code will not work.
+
+Instead, use [shotgun](https://rubygems.org/gems/shotgun).
+
+## zsh ##
+
 If you are using `zsh` as your shell, and you are specifying your `--pattern` as `**/*.rb`, you may face this error
 ```
 Errno::EACCES: Permission denied - <filename>
