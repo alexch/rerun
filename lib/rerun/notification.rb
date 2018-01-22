@@ -49,7 +49,9 @@ module Rerun
 
     def send(background = true)
       return unless command
-      `#{command}#{" &" if background}`
+      with_clean_env do
+        `#{command}#{" &" if background}`
+      end
     end
 
     def app_name
@@ -65,5 +67,14 @@ module Rerun
       File.expand_path("#{here}/../../icons")
     end
 
+    def with_clean_env
+      if defined?(Bundler)
+        Bundler.with_clean_env do
+          yield
+        end
+      else
+        yield
+      end
+    end
   end
 end
