@@ -138,9 +138,9 @@ This may be useful for forcing the respective process to terminate as quickly as
 
 `--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
-`--notify NOTIFIER` use `growl` or `osx` for notifications (see below)
+`--notify NOTIFIER` use `growl` or `osx` or `notify-send` for notifications (see below)
 
-`--no-notify` don't use growl (or osx) notifications
+`--no-notify` disable notifications
 
 `--name` set the app name (for display)
 
@@ -154,8 +154,10 @@ If you have `growlnotify` available on the `PATH`, it sends notifications to
 growl in addition to the console.
 If you have `terminal-notifier`, it sends notifications to
 the OS X notification center in addition to the console.
+If you have `notify-send`, it sends notifications to Freedesktop-compatible
+desktops in addition to the console.
 
-If you have both, Rerun will pick one, or you can choose between them using `--notify growl` or `--notify osx` respectively.
+If you have more than one available notification program, Rerun will pick one, or you can choose between them using `--notify growl`, `--notify osx`, `--notify notify-send`, etc.
 
 If you have a notifier installed but don't want rerun to use it,
 set the `--no-notify` option.
@@ -164,6 +166,8 @@ Download [growlnotify here](http://growl.info/downloads.php#generaldownloads)
 now that Growl has moved to the App Store.
 
 Install [terminal-notifier](https://github.com/julienXX/terminal-notifier) using `gem install terminal-notifier`. (You may have to put it in your system gemset and/or use `sudo` too.) Using Homebrew to install terminal-notifier is not recommended.
+
+On Debian/Ubuntu, `notify-send` is availble in the `libnotify-bin` package. On other GNU/Linux systems, it might be in a package with a different name.
 
 # On-The-Fly Commands
 
@@ -230,8 +234,6 @@ rerun -p "**/*.rb" rake test
     * use a C library using growl's developer API <http://growl.info/developer/>
     * Use growl's AppleScript or SDK instead of relying on growlnotify
     * "Failed" icon for notifications
-* On Linux:
-    * Use libnotify or notify-send http://www.linuxjournal.com/content/tech-tip-get-notifications-your-scripts-notify-send
 
 # Other projects that do similar things
 

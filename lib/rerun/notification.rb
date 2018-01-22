@@ -13,8 +13,6 @@ module Rerun
     end
 
     def command
-      return unless mac?
-
       # todo: strategy or subclass
 
       s = nil
@@ -31,6 +29,13 @@ module Rerun
         if (cmd = command_named("terminal-notifier"))
           icon_str = ("-appIcon \"#{icon}\"" if icon)
           s = "#{cmd} -title \"#{app_name}\" -message \"#{body}\" \"#{app_name} #{title}\" #{icon_str}"
+        end
+      end
+
+      if s.nil? and options[:notify] == true or options[:notify] == "notify-send"
+        if (cmd = command_named('notify-send'))
+          icon_str = "--icon #{icon}" if icon
+          s = "#{cmd} -t 500 --hint=int:transient:1 #{icon_str} \"#{app_name}: #{title}\" \"#{body}\""
         end
       end
 
