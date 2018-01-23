@@ -20,8 +20,13 @@ Use the `--pattern` option if you want to change this.
 As of version 0.7.0, we use the Listen gem, which tries to use your OS's
 built-in facilities for monitoring the filesystem, so CPU use is very light.
 
-Rerun does not work on Windows. Sorry, but you can't do much relaunching
-without "fork".
+**UPDATE**: Now Rerun *does* work on Windows. Caveats:
+  * not well-tested
+  * unit tests don't run (need to learn more about Win32 signals)
+  * after running, it may continue to slurp up some of your console input, so run it in a separate window
+  * to avoid this persistent `INFO` error message, use`--no-notify`
+    * `INFO: Could not find files for the given pattern(s)`
+  * you may need to install the `wdm` gem manually: `gem install wdm`
 
 # Installation:
 
@@ -40,9 +45,18 @@ they're not available. Unfortunately, Rubygems doesn't understand optional
 dependencies very well, so you may have to install extra gems (and/or put them
 in your Gemfile) to make Rerun work more smoothly on your system.
 (Learn more at <https://github.com/guard/listen#listen-adapters>.)
-For example, on Mac OS X, use
+
+On Mac OS X, use
 
         gem install rb-fsevent
+
+On Windows, use
+
+        gem install wdm
+
+On *BSD, use
+
+        gem install rb-kqueue
 
 # Usage:
 
@@ -152,8 +166,10 @@ Also `--version` and `--help`, naturally.
 
 If you have `growlnotify` available on the `PATH`, it sends notifications to
 growl in addition to the console.
+
 If you have `terminal-notifier`, it sends notifications to
 the OS X notification center in addition to the console.
+
 If you have `notify-send`, it sends notifications to Freedesktop-compatible
 desktops in addition to the console.
 
@@ -238,9 +254,7 @@ rerun -p "**/*.rb" rake test
 * see also [todo.md](todo.md)
 
 ## Wacky Ideas
-* Make it work on Windows, like Guard now does. See
-  * https://github.com/guard/guard/issues/59
-  * https://github.com/guard/guard/issues/27
+
 * On OS X:
     * use a C library using growl's developer API <http://growl.info/developer/>
     * Use growl's AppleScript or SDK instead of relying on growlnotify
@@ -339,11 +353,22 @@ Based upon and/or inspired by:
 * Raul E Rangel <https://github.com/ismell> and Antonio Terceiro <https://github.com/terceiro>
 * Mike Pastore <https://github.com/mwpastore>
 * Andy Duncan <https://github.com/ajduncan>
+* Brent Van Minnen
+* Matthew O'Riordan <https://github.com/mattheworiordan>
+* Antonio Terceiro <https://github.com/terceiro>
+* <https://github.com/mattbrictson>
 
 # Version History
 
-*
+* v0.12.0
   * `--force-polling` option (thanks ajduncan)
+  * support for Windows
+     * use `Kernel.spawn` instead of `fork`
+     * use `wdm` gem for Windows Directory Monitor
+     * TODO: fix `INFO` error message
+     * TODO: fix console input contention bug
+  * support for notifications on GNU/Linux using [notify-send](http://www.linuxjournal.com/content/tech-tip-get-notifications-your-scripts-notify-send) (thanks terceiro)
+  * fix `Gem::LoadError - terminal-notifier is not part of the bundle` [bug](https://github.com/alexch/rerun/issues/108) (thanks 	mattheworiordan)
 
 * 0.11.0    7 October 2015
   * better 'changed' message

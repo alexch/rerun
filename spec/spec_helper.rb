@@ -1,6 +1,7 @@
 require "rubygems"
 require "rspec"
 #require "rspec/autorun"
+require 'date' # fix odd nested require glitch
 
 require "wrong/adapters/rspec"
 include Wrong::D

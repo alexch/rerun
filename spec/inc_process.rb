@@ -25,7 +25,7 @@ class IncProcess
   def kill
     begin
       pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
-      timeout(5) do
+      ::Timeout.timeout(5) do
         pids.each do |pid|
           # puts "sending INT to #{pid}"
           Process.kill("INT", pid) rescue Errno::ESRCH
