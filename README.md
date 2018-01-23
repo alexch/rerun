@@ -190,6 +190,7 @@ On Debian/Ubuntu, `notify-send` is availble in the `libnotify-bin` package. On o
 While the app is (re)running, you can make things happen by pressing keys:
 
 * **r** -- restart (as if a file had changed)
+* **f** -- force restart (stop and start)
 * **c** -- clear the screen
 * **x** or **q** -- exit (just like control-C)
 * **p** -- pause/unpause filesystem watching
@@ -362,6 +363,7 @@ Based upon and/or inspired by:
 
 * v0.12.0
   * `--force-polling` option (thanks ajduncan)
+  * `f` key to force stop and start (thanks mwpastore)
   * support for Windows
      * use `Kernel.spawn` instead of `fork`
      * use `wdm` gem for Windows Directory Monitor
