@@ -114,6 +114,10 @@ module Rerun
       @options[:clear]
     end
 
+    def quiet?
+      @options[:quiet]
+    end
+
     def exit?
       @options[:exit]
     end
@@ -299,7 +303,7 @@ module Rerun
     end
 
     def say msg
-      puts "#{Time.now.strftime("%T")} [rerun] #{msg}"
+      puts "#{Time.now.strftime("%T")} [rerun] #{msg}" unless quiet?
     end
 
     # non-blocking stdin reader.

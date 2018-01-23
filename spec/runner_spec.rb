@@ -28,6 +28,13 @@ module Rerun
         runner = Runner.new("foo.rb", {:clear => true})
         runner.clear?.should be_truthy
       end
+
+      it "is quiet" do
+        runner = Runner.new("foo.rb", {:quiet => true})
+        runner.quiet?.should == true
+      end
+
+      # TODO: test that quiet actually suppresses output
     end
 
     describe "running" do
