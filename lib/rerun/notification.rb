@@ -43,7 +43,9 @@ module Rerun
     end
 
     def command_named(name)
-      path = `which #{name}`.chomp
+      which_command = windows? ? 'where.exe' : 'which'
+      # TODO: remove 'INFO' error message
+      path = `#{which_command} #{name}`.chomp
       path.empty? ? nil : path
     end
 

@@ -6,7 +6,7 @@ module Rerun
     end
 
     def windows?
-       RUBY_PLATFORM =~ /mswin/i
+       RUBY_PLATFORM =~ /(mswin|mingw32)/i
     end
 
     def linux?
