@@ -118,6 +118,10 @@ module Rerun
       @options[:quiet]
     end
 
+    def verbose?
+      @options[:verbose]
+    end
+
     def exit?
       @options[:exit]
     end
@@ -251,7 +255,7 @@ module Rerun
     end
 
     def signal(signal)
-      say "Sending signal #{signal} to #{@pid}" unless signal == 0
+      say "Sending signal #{signal} to #{@pid}" unless signal == 0 if verbose?
       Process.kill(signal, @pid)
       true
     rescue

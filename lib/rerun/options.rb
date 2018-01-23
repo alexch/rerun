@@ -18,6 +18,7 @@ module Rerun
         :signal => "TERM",
         :notify => true,
         :quiet => false,
+        :verbose => false,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => [],
         :dir => DEFAULT_DIRS,
@@ -97,6 +98,10 @@ module Rerun
 
         opts.on("-q", "--quiet", "don't output any logs") do
           options[:quiet] = true
+        end
+
+        opts.on("--verbose", "log extra stuff like PIDs") do
+          options[:verbose] = true
         end
 
         opts.on_tail("-h", "--help", "--usage", "show this message") do

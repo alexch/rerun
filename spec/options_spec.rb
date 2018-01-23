@@ -14,6 +14,7 @@ module Rerun
       assert { defaults[:signal] == "TERM" }
       assert { defaults[:notify] == true }
       assert { defaults[:quiet] == false }
+      assert { defaults[:verbose] == false }
       assert { defaults[:name] == 'Rerun' }
       assert { defaults[:force_polling] == false }
 
@@ -36,6 +37,11 @@ module Rerun
     it "accepts --quiet" do
       options = Options.parse ["--quiet", "foo"]
       assert { options[:quiet] == true }
+    end
+
+    it "accepts --verbose" do
+      options = Options.parse ["--verbose", "foo"]
+      assert { options[:verbose] == true }
     end
 
     it "splits directories" do

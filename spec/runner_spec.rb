@@ -34,7 +34,13 @@ module Rerun
         runner.quiet?.should == true
       end
 
+      it "is verbose" do
+        runner = Runner.new("foo.rb", {:verbose => true})
+        runner.verbose?.should == true
+      end
+
       # TODO: test that quiet actually suppresses output
+      # TODO: test that verbose actually shows more output
     end
 
     describe "running" do
