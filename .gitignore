@@ -5,3 +5,5 @@ doc
 tmp
 node_modules
 .vagrant
+.dropbox.attr
+*__jb_tmp__
