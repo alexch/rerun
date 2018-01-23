@@ -16,6 +16,7 @@ module Rerun
         :pattern => DEFAULT_PATTERN,
         :signal => "TERM",
         :notify => true,
+        :quiet => false,
         :name => Pathname.getwd.basename.to_s.capitalize,
         :ignore => [],
         :dir => DEFAULT_DIRS,
@@ -91,6 +92,10 @@ module Rerun
         opts.on("--[no-]notify [notifier]", "send messages through a desktop notification application. Supports growl (requires growlnotify), osx (requires terminal-notifier gem), and notify-send on GNU/Linux (notify-send must be installed)") do |notifier|
           notifier = true if notifier.nil?
           options[:notify] = notifier
+        end
+
+        opts.on("-q", "--quiet", "don't output any logs") do
+          options[:quiet] = true
         end
 
         opts.on_tail("-h", "--help", "--usage", "show this message") do
