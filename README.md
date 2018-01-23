@@ -23,7 +23,7 @@ built-in facilities for monitoring the filesystem, so CPU use is very light.
 **UPDATE**: Now Rerun *does* work on Windows. Caveats:
   * not well-tested
   * unit tests don't run (need to learn more about Win32 signals)
-  * after running, it may continue to slurp up some of your console input, so run it in a separate window
+  * after running, it may continue to slurp up some of your console input, so run it in a separate window and/or use `--background` to disable on-the-fly commands, and/or press `q` to quit instead of CTRL-C
   * to avoid this persistent `INFO` error message, use`--no-notify`
     * `INFO: Could not find files for the given pattern(s)`
   * you may need to install the `wdm` gem manually: `gem install wdm`
