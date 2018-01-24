@@ -1,12 +1,25 @@
 #!/usr/bin/env ruby
-
-require 'rubygems'
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}/lib"
 $LOAD_PATH.unshift libdir unless $LOAD_PATH.include?(libdir)
 
+require 'rubygems'
+require 'shellwords'
 require 'rerun'
 require 'optparse'
 
-options = Rerun::Options.parse
+ARGS_FILE = '.rerun'
+
+def load_args_file(dir)
+  args_file = File.join(dir, ARGS_FILE)
+  args = File.read(args_file).shellsplit if File.exist?(args_file)
+end
+
+args = []
+args << load_args_file(File.expand_path('~'))
+args << load_args_file(Dir.pwd)
+args << ARGV
+args.flatten!.compact!
+options = Rerun::Options.parse(args)
+
 exit if options.nil?
 runner = Rerun::Runner.keep_running(options[:cmd], options)
