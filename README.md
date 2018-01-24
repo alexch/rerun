@@ -368,7 +368,7 @@ Based upon and/or inspired by:
 
 # Version History
 
-* v0.12.0
+* v0.12.0   23 January 2018
   * smarter `--signal` option, allowing you to specify a series of signals to try in order; also `--wait` to change how long between tries
   * `--force-polling` option (thanks ajduncan)
   * `f` key to force stop and start (thanks mwpastore)
