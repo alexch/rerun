@@ -1,6 +1,7 @@
 require 'optparse'
 require 'pathname'
 require 'rerun/watcher'
+require 'rerun/system'
 
 libdir = "#{File.expand_path(File.dirname(File.dirname(__FILE__)))}"
 
@@ -9,13 +10,15 @@ $spec = Gem::Specification.load(File.join(libdir, "..", "rerun.gemspec"))
 module Rerun
   class Options
 
+    extend Rerun::System
+
     # If you change the default pattern, please update the README.md file -- the list appears twice therein, which at the time of this comment are lines 17 and 119
     DEFAULT_PATTERN = "**/*.{rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h}"
     DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
         :pattern => DEFAULT_PATTERN,
-        :signal => "TERM",
+        :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
         :notify => true,
         :quiet => false,
         :verbose => false,
@@ -56,21 +59,21 @@ module Rerun
           options[:ignore] += [pattern]
         end
 
-        opts.on("-s signal", "--signal signal", "terminate process using this signal, default = \"#{DEFAULTS[:signal]}\"") do |signal|
+        opts.on("-s signal", "--signal signal", "terminate process using this signal. To try several signals in series, use a comma-delimited list. Default: \"#{DEFAULTS[:signal]}\"") do |signal|
           options[:signal] = signal
         end
 
-        opts.on("-r", "--restart", "expect process to restart itself (uses the HUP signal unless overridden using --signal)") do |signal|
+        opts.on("-r", "--restart", "expect process to restart itself, so just send a signal and continue watching. Uses the HUP signal unless overridden using --signal") do |signal|
           options[:restart] = true
           default_options[:signal] = "HUP"
         end
 
-        opts.on("-c", "--clear", "clear screen before each run") do
-          options[:clear] = true
-        end
-
         opts.on("-x", "--exit", "expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the process is running.") do |dir|
           options[:exit] = true
+        end
+
+        opts.on("-c", "--clear", "clear screen before each run") do
+          options[:clear] = true
         end
 
         opts.on("-b", "--background", "disable on-the-fly commands, allowing the process to be backgrounded") do
@@ -100,7 +103,7 @@ module Rerun
           options[:quiet] = true
         end
 
-        opts.on("--verbose", "log extra stuff like PIDs") do
+        opts.on("--verbose", "log extra stuff like PIDs (unless you also specified `--quiet`") do
           options[:verbose] = true
         end
 

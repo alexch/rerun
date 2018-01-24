@@ -11,7 +11,7 @@ module Rerun
 
       assert { defaults[:dir] == ["."] }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
-      assert { defaults[:signal] == "TERM" }
+      assert { defaults[:signal] == "TERM,INT,KILL" }
       assert { defaults[:notify] == true }
       assert { defaults[:quiet] == false }
       assert { defaults[:verbose] == false }
@@ -23,7 +23,7 @@ module Rerun
       assert { defaults[:background].nil? }
     end
 
-    ["--help", "-h", "--usage", "--version", "-v"].each do |arg|
+    ["--help", "-h", "--usage", "--version"].each do |arg|
       describe "when passed #{arg}" do
         it "returns nil" do
           capturing do
@@ -32,7 +32,6 @@ module Rerun
         end
       end
     end
-
 
     it "accepts --quiet" do
       options = Options.parse ["--quiet", "foo"]

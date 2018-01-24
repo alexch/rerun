@@ -1,7 +1,9 @@
 here = File.expand_path(File.dirname(__FILE__))
 require 'tmpdir'
-
+require_relative('../lib/rerun/system')
 class IncProcess
+
+  include Rerun::System
 
   attr_reader :dir, :inc_output_file
   attr_reader :dir1, :dir2
@@ -27,8 +29,12 @@ class IncProcess
       pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
       ::Timeout.timeout(5) do
         pids.each do |pid|
-          # puts "sending INT to #{pid}"
-          Process.kill("INT", pid) rescue Errno::ESRCH
+          if windows?
+            system("taskkill /F /PID #{pid}")
+          else
+            # puts "Killing #{pid} gracefully"
+            Process.kill("INT", pid) rescue Errno::ESRCH
+          end
         end
         pids.each do |pid|
           # puts "waiting for #{pid}"
@@ -37,7 +43,7 @@ class IncProcess
       end
     rescue Timeout::Error
       pids.each do |pid|
-        # puts "sending KILL to #{pid}"
+        # puts "Killing #{pid} forcefully"
         Process.kill("KILL", pid) rescue Errno::ESRCH
       end
     end

@@ -48,7 +48,7 @@ module Rerun
                     ["f", "forced restart (stop and start)"],
                     ["p", "toggle pause"],
                     ["x or q", "stop and exit"]
-                   ].map { |key, description| "  #{key} -- #{description}" }.join("\n")
+                   ].map {|key, description| "  #{key} -- #{description}"}.join("\n")
               puts
             end
           end
@@ -133,7 +133,7 @@ module Rerun
     def restart_with_signal(restart_signal)
       if @pid && (@pid != 0)
         notify "restarting", "We will be with you shortly."
-        signal(restart_signal)
+        send_signal(restart_signal)
       end
     end
 
@@ -232,7 +232,7 @@ module Rerun
       changed_files = changes.values.flatten
       if changed_files.count > 0
         message += ": "
-        message += changes.values.flatten[0..3].map { |path| path.split('/').last }.join(', ')
+        message += changes.values.flatten[0..3].map {|path| path.split('/').last}.join(', ')
         if changed_files.count > 3
           message += ", ..."
         end
@@ -251,38 +251,60 @@ module Rerun
     end
 
     def running?
-      signal(0)
+      send_signal(0)
     end
 
-    def signal(signal)
+    # Send the signal to process @pid and wait for it to die.
+    # @returns true if the process dies
+    # @returns false if either sending the signal fails or the process fails to die
+    def signal_and_wait(signal)
+
+      signal_sent = if windows?
+                      force_kill = (signal == 'KILL')
+                      system("taskkill #{'/F' if force_kill} /PID #{@pid}")
+                    else
+                      send_signal(signal)
+                    end
+
+      if signal_sent
+        # the signal was successfully sent, so wait for the process to die
+        begin
+          timeout(5) do # todo: escalation timeout setting
+            Process.wait(@pid)
+          end
+          process_status = $?
+          say "Process ended: #{process_status}" if verbose?
+          true
+        rescue Timeout::Error
+          false
+        end
+      else
+        false
+      end
+    end
+
+    # Send the signal to process @pid.
+    # @returns true if the signal is sent
+    # @returns false if sending the signal fails
+    # If sending the signal fails, the exception will be swallowed
+    # (and logged if verbose is true) and this method will return false.
+    #
+    def send_signal(signal)
       say "Sending signal #{signal} to #{@pid}" unless signal == 0 if verbose?
       Process.kill(signal, @pid)
       true
-    rescue
+    rescue => e
+      say "Signal #{signal} failed: #{e.class}: #{e.message}" if verbose?
       false
     end
 
     # todo: test escalation
     def stop
-      default_signal = (@options[:signal] unless @options[:restart]) || "TERM"
-
       if @pid && (@pid != 0)
         notify "stopping", "All good things must come to an end." unless @restarting
-        begin
-          timeout(5) do # todo: escalation timeout setting
-            # start with a polite SIGTERM
-            signal(default_signal) && Process.wait(@pid)
-          end
-        rescue Timeout::Error
-          begin
-            timeout(5) do
-              # escalate to SIGINT aka control-C since some foolish process may be ignoring SIGTERM
-              signal("INT") && Process.wait(@pid)
-            end
-          rescue Timeout::Error
-            # escalate to SIGKILL aka "kill -9" which cannot be ignored
-            signal("KILL") && Process.wait(@pid)
-          end
+        @options[:signal].split(',').each do |signal|
+          success = signal_and_wait(signal)
+          return true if success
         end
       end
     rescue => e

@@ -139,16 +139,16 @@ Run `rerun --help` to see the actual list.
 
   *On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot.*
 
-`--signal` (or `-s`) use specified signal (instead of the default SIGTERM) to terminate the previous process.
+`--signal` (or `-s`) use specified signal(s) (instead of the default `TERM,INT,KILL`) to terminate the previous process. You can use a comma-delimited list if you want to try a signal, wait up to 5 seconds for the process to die, then try again with a different signal, and so on. 
 This may be useful for forcing the respective process to terminate as quickly as possible.
 (`--signal KILL` is the equivalent of `kill -9`)
 
 `--restart` (or `-r`) expect process to restart itself, using signal HUP by default
 (e.g. `-r -s INT` will send a INT and then resume watching for changes)
 
-`--clear` (or -c) clear the screen before each run
-
 `--exit` (or -x) expect the program to exit. With this option, rerun checks the return value; without it, rerun checks that the launched process is still running.
+
+`--clear` (or -c) clear the screen before each run
 
 `--background` (or -b) disable on-the-fly commands, allowing the process to be backgrounded
 
@@ -159,6 +159,10 @@ This may be useful for forcing the respective process to terminate as quickly as
 `--name` set the app name (for display)
 
 `--force-polling` use polling instead of a native filesystem scan (useful for Vagrant)
+
+`--quiet` silences most messages
+
+`--verbose` enables even more messages (unless you also specified `--quiet`, which overrides `--verbose`)
 
 Also `--version` and `--help`, naturally.
 

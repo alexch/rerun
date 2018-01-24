@@ -29,18 +29,19 @@ module Rerun
         runner.clear?.should be_truthy
       end
 
-      it "is quiet" do
+      it "can be quiet" do
         runner = Runner.new("foo.rb", {:quiet => true})
         runner.quiet?.should == true
       end
 
-      it "is verbose" do
+      it "can be verbose" do
         runner = Runner.new("foo.rb", {:verbose => true})
         runner.verbose?.should == true
       end
 
       # TODO: test that quiet actually suppresses output
       # TODO: test that verbose actually shows more output
+      # TODO: warn that verbose is overridden by quiet if you specify both
     end
 
     describe "running" do

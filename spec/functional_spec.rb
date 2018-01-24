@@ -80,14 +80,17 @@ describe "the rerun command" do
 
   #it "sends its child process a SIGINT to restart"
 
+  include ::Rerun::System
   it "dies when sent a control-C (SIGINT)" do
-    pid = @inc.inc_parent_pid
-    # puts "test sending INT to #{pid}"
-    Process.kill("INT", pid)
-    timeout(6) {
-      # puts "test waiting for #{pid}"
-      Process.wait(@inc.rerun_pid) rescue Errno::ESRCH
-    }
+    unless windows?
+      pid = @inc.inc_parent_pid
+      # puts "test sending INT to #{pid}"
+      Process.kill("INT", pid)
+      timeout(6) {
+        # puts "test waiting for #{pid}"
+        Process.wait(@inc.rerun_pid) rescue Errno::ESRCH
+      }
+    end
   end
 
   #it "accepts a key press"
