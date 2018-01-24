@@ -164,6 +164,7 @@ module Rerun
 
       begin
         @pid = run @run_command
+        say "Rerun (#{$PID}) running #{app_name} (#{@pid})"
       rescue => e
         puts "#{e.class}: #{e.message}"
         exit
@@ -261,7 +262,7 @@ module Rerun
 
       signal_sent = if windows?
                       force_kill = (signal == 'KILL')
-                      system("taskkill #{'/F' if force_kill} /PID #{@pid}")
+                      system("taskkill /T #{'/F' if force_kill} /PID #{@pid}")
                     else
                       send_signal(signal)
                     end
@@ -269,7 +270,7 @@ module Rerun
       if signal_sent
         # the signal was successfully sent, so wait for the process to die
         begin
-          timeout(5) do # todo: escalation timeout setting
+          timeout(@options[:wait]) do
             Process.wait(@pid)
           end
           process_status = $?

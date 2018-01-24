@@ -22,11 +22,10 @@ built-in facilities for monitoring the filesystem, so CPU use is very light.
 
 **UPDATE**: Now Rerun *does* work on Windows. Caveats:
   * not well-tested
-  * unit tests don't run (need to learn more about Win32 signals)
-  * after running, it may continue to slurp up some of your console input, so run it in a separate window and/or use `--background` to disable on-the-fly commands, and/or press `q` to quit instead of CTRL-C
-  * to avoid this persistent `INFO` error message, use`--no-notify`
-    * `INFO: Could not find files for the given pattern(s)`
+  * after running, it may continue to slurp up some of your console input, so run it in a separate window, and/or use `--background` to disable on-the-fly commands, and/or press `q` to quit instead of CTRL-C
   * you may need to install the `wdm` gem manually: `gem install wdm`
+  * You may see this persistent `INFO` error message; to remove it, use`--no-notify`:
+    * `INFO: Could not find files for the given pattern(s)`
 
 # Installation:
 
@@ -143,6 +142,8 @@ Run `rerun --help` to see the actual list.
 This may be useful for forcing the respective process to terminate as quickly as possible.
 (`--signal KILL` is the equivalent of `kill -9`)
 
+`--wait sec` (or `-w`)           after asking the process to terminate, wait this long (in seconds) before either aborting, or trying the next signal in series. Default: 2 sec
+
 `--restart` (or `-r`) expect process to restart itself, using signal HUP by default
 (e.g. `-r -s INT` will send a INT and then resume watching for changes)
 
@@ -207,12 +208,14 @@ keys to be trapped, so use the `--background` option.
 The current algorithm for killing the process is:
 
 * send [SIGTERM](http://en.wikipedia.org/wiki/SIGTERM) (or the value of the `--signal` option)
-* if that doesn't work after 4 seconds, send SIGINT (aka control-C)
+* if that doesn't work after 2 seconds, send SIGINT (aka control-C)
 * if that doesn't work after 2 more seconds, send SIGKILL (aka kill -9)
 
 This seems like the most gentle and unixy way of doing things, but it does
-mean that if your program ignores SIGTERM, it takes an extra 4 to 6 seconds to
+mean that if your program ignores SIGTERM, it takes an extra 2 to 4 seconds to
 restart.
+
+If you want to use your own series of signals, use the `--signal` option. If you want to change the delay before attempting the next signal, use the `--wait` option.
 
 # Vagrant and VirtualBox
 
@@ -252,7 +255,6 @@ rerun -p "**/*.rb" rake test
 * Optionally do "bundle install" before and "bundle exec" during launch
 
 ## Nice to have
-* Smarter --signal option (specifying signal to try and a timeout to wait, repeated)
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Figure out an algorithm so "-x" is not needed (if possible) -- maybe by accepting a "--port" option or reading `config.ru`
 * Specify (or deduce) port to listen for to determine success of a web server launch
@@ -367,6 +369,7 @@ Based upon and/or inspired by:
 # Version History
 
 * v0.12.0
+  * smarter `--signal` option, allowing you to specify a series of signals to try in order; also `--wait` to change how long between tries
   * `--force-polling` option (thanks ajduncan)
   * `f` key to force stop and start (thanks mwpastore)
   * add `.c` and `.h` files to default ignore list

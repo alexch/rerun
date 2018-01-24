@@ -19,6 +19,7 @@ module Rerun
     DEFAULTS = {
         :pattern => DEFAULT_PATTERN,
         :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
+        :wait => 2,
         :notify => true,
         :quiet => false,
         :verbose => false,
@@ -62,6 +63,8 @@ module Rerun
         opts.on("-s signal", "--signal signal", "terminate process using this signal. To try several signals in series, use a comma-delimited list. Default: \"#{DEFAULTS[:signal]}\"") do |signal|
           options[:signal] = signal
         end
+
+        opts.on("-w sec", "--wait sec", "after asking the process to terminate, wait this long (in seconds) before either aborting, or trying the next signal in series. Default: #{DEFAULTS[:wait]} sec")
 
         opts.on("-r", "--restart", "expect process to restart itself, so just send a signal and continue watching. Uses the HUP signal unless overridden using --signal") do |signal|
           options[:restart] = true

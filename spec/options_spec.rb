@@ -11,7 +11,8 @@ module Rerun
 
       assert { defaults[:dir] == ["."] }
       assert { defaults[:pattern] == Options::DEFAULT_PATTERN }
-      assert { defaults[:signal] == "TERM,INT,KILL" }
+      assert { defaults[:signal].include?('KILL') }
+      assert { defaults[:wait] == 2 }
       assert { defaults[:notify] == true }
       assert { defaults[:quiet] == false }
       assert { defaults[:verbose] == false }

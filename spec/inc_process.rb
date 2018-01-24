@@ -30,7 +30,7 @@ class IncProcess
       ::Timeout.timeout(5) do
         pids.each do |pid|
           if windows?
-            system("taskkill /F /PID #{pid}")
+            system("taskkill /F /T /PID #{pid}")
           else
             # puts "Killing #{pid} gracefully"
             Process.kill("INT", pid) rescue Errno::ESRCH
