@@ -333,6 +333,10 @@ module Rerun
       puts "#{Time.now.strftime("%T")} [rerun] #{msg}" unless quiet?
     end
 
+    def stty(args)
+      system "stty #{args}"
+    end
+
     # non-blocking stdin reader.
     # returns a 1-char string if a key was pressed; otherwise nil
     #
@@ -346,7 +350,7 @@ module Rerun
         # looks like "raw" flips off the OPOST bit 0x00000001 /* enable following output processing */
         # which disables #define ONLCR		0x00000002	/* map NL to CR-NL (ala CRMOD) */
         # so this sets it back on again since all we care about is raw input, not raw output
-        system("stty raw opost")
+        stty "raw opost"
 
         c = nil
         if $stdin.ready?
@@ -354,8 +358,9 @@ module Rerun
         end
         c.chr if c
       ensure
-        system "stty -raw" # turn raw input off
+        stty "-raw" # turn raw input off
       end
+
 
       # note: according to 'man tty' the proper way restore the settings is
       # tty_state=`stty -g`

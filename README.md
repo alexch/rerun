@@ -126,6 +126,8 @@ Procfile processes locally and restart them all when necessary.
 
 # Options:
 
+These options can be specified on the command line and/or inside a `.rerun` config file (see below).
+
 `--dir` directory (or directories) to watch (default = "."). Separate multiple paths with ',' and/or use multiple `-d` options.
 
 `--pattern` glob to match inside directory. This uses the Ruby Dir glob style -- see <http://www.ruby-doc.org/core/classes/Dir.html#M002322> for details.
@@ -166,6 +168,23 @@ This may be useful for forcing the respective process to terminate as quickly as
 `--verbose` enables even more messages (unless you also specified `--quiet`, which overrides `--verbose`)
 
 Also `--version` and `--help`, naturally.
+
+## Config file
+
+If the current directory contains a file named `.rerun`, it will be parsed with the same rules as command-line arguments. Newlines are the same as any other whitespace, so you can stack options vertically, like this:
+
+```
+--quiet
+--pattern **/*.{rb,js,scss,sass,html,md}
+```
+
+Options specified on the command line will override those in the config file. You can negate boolean options with `--no-`, so for example, with the above config file, to re-enable logging, you could say:
+
+```sh
+rerun --no-quiet rackup
+```
+
+If you're not sure what options are being overwritten, use `--verbose` and rerun will show you the final result of the parsing.
 
 # Notifications
 
@@ -250,11 +269,11 @@ rerun -p "**/*.rb" rake test
 # To Do:
 
 ## Must have for v1.0
-* ".rerun" file to specify options per project or in $HOME.
 * Make sure to pass through quoted options correctly to target process [bug]
 * Optionally do "bundle install" before and "bundle exec" during launch
 
 ## Nice to have
+* ".rerun" file in $HOME
 * If the last element of the command is a `.ru` file and there's no other command then use `rackup`
 * Figure out an algorithm so "-x" is not needed (if possible) -- maybe by accepting a "--port" option or reading `config.ru`
 * Specify (or deduce) port to listen for to determine success of a web server launch
@@ -367,6 +386,9 @@ Based upon and/or inspired by:
 * <https://github.com/krissi>
 
 # Version History
+
+* 
+  * `.rerun` config file
 
 * v0.12.0   23 January 2018
   * smarter `--signal` option, allowing you to specify a series of signals to try in order; also `--wait` to change how long between tries

@@ -15,6 +15,7 @@ end
 group :test do
   gem 'rspec', ">=3.0"
   gem 'wrong', ">=0.6.2"
+  gem 'files'
 end
 
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
