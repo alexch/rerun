@@ -62,7 +62,8 @@ module Rerun
 
       @thread = Thread.new do
         @listener = Listen.to(*@directories, only: watching, ignore: ignoring, wait_for_delay: 1, force_polling: @force_polling) do |modified, added, removed|
-          if((modified.size + added.size + removed.size) > 0)
+          count = modified.size + added.size + removed.size
+          if count > 0
             @client_callback.call(:modified => modified, :added => added, :removed => removed)
           end
         end

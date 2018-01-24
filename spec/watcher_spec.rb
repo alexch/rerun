@@ -139,7 +139,7 @@ module Rerun
       @watcher.pause
       create "#{@dir}/pause_test.txt"
       @log.should be_nil
-      sleep 0.25 # work around very rare timing issue on Travis
+      sleep 0.5 # work around rare timing issue on Travis
       @watcher.unpause
       test_file = "#{@dir}/pause_test2.txt"
       create test_file
