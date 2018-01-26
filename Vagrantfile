@@ -12,7 +12,22 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "hashicorp/precise32"
+  config.vm.box = "thdengops/ubuntu-14.04-dev"     # git, openjdk7, docker, gvm (go), nvm (node), rvm (ruby), jenv (java), virtualenv (python)
+
+end
+
+"""
+# steps after launching
+rvm install ruby-2.3.1
+ruby -v
+gem install bundler
+sudo apt-get install linux-headers-3.19.0-25-generic build-essential libgmp3-dev
+
+cp -r /vagrant rerun
+vi bin/rerun # remove ^M from shebang line
+cd rerun
+bundle install
+"""
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -68,4 +83,3 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
   # SHELL
-end
