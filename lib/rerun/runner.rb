@@ -37,7 +37,7 @@ module Rerun
               say "Stopping and starting"
               restart(false)
             when 'p'
-              toggle_pause if watcher_running?
+              toggle_pause
             when 'x', 'q'
               die
               break # the break will stop this thread, in case the 'die' doesn't
@@ -72,10 +72,6 @@ module Rerun
         start
       end
       @restarting = false
-    end
-
-    def watcher_running?
-      @watcher && @watcher.running?
     end
 
     def toggle_pause
