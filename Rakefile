@@ -32,7 +32,7 @@ end
 desc 'Exit if git is dirty'
 task :check_git do
   state = `git status 2> /dev/null | tail -n1`
-  clean = (state =~ /working directory clean/)
+  clean = (state =~ /working (directory|tree) clean/)
   unless clean
     warn "can't do that on an unclean git dir"
     exit 1
