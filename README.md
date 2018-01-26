@@ -57,6 +57,26 @@ On *BSD, use
 
         gem install rb-kqueue
 
+## Installation via Gemfile / Bundler
+
+If you are using rerun inside an existing Ruby application (like a Rails or Sinatra app), you can add it to your Gemfile:
+
+``` ruby
+group :development, :test do
+  gem "rerun"
+end
+```
+
+Using a Gemfile is also an easy way to use the pre-release branch, which may have bugfixes or features you want:
+
+``` ruby
+group :development, :test do
+  gem "rerun", git: "https://github.com/alexch/rerun.git"
+end
+```
+
+When using a Gemfile, install with `bundle install` or `bundle update`, and run using `bundle exec rerun`, to guarantee you are using the rerun version specified in the Gemfile, and not a different version in a system-wide gemset.
+
 # Usage:
 
         rerun [options] [--] cmd
@@ -138,7 +158,7 @@ Run `rerun --help` to see the actual list.
 `--ignore pattern` file glob to ignore (can be set many times). To ignore a directory, you must append `'/*'` e.g.
   `--ignore 'coverage/*'`.
 
-  *On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot.*
+`--[no-]ignore-dotfiles` By default, on top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot. Setting `--no-ignore-dotfiles` allows you to monitor a relevant file like .env, but you may also have to explicitly --ignore more dotfiles and dotdirs. 
 
 `--signal` (or `-s`) use specified signal(s) (instead of the default `TERM,INT,KILL`) to terminate the previous process. You can use a comma-delimited list if you want to try a signal, wait up to 5 seconds for the process to die, then try again with a different signal, and so on. 
 This may be useful for forcing the respective process to terminate as quickly as possible.
@@ -242,14 +262,6 @@ If running inside a shared directory using Vagrant and VirtualBox, you must pass
 
 # Troubleshooting
 
-## Vagrant ##
-
-Rerun will not pick up changes made to shared folders. This means that the common
-method of using Vagrant for an execution environment and using the `/vagrant`
-shared folder for source code will not work.
-
-Instead, use [shotgun](https://rubygems.org/gems/shotgun).
-
 ## zsh ##
 
 If you are using `zsh` as your shell, and you are specifying your `--pattern` as `**/*.rb`, you may face this error
@@ -288,13 +300,13 @@ rerun -p "**/*.rb" rake test
 
 # Other projects that do similar things
 
+* Guard: <http://github.com/guard/guard>
 * Restartomatic: <http://github.com/adammck/restartomatic>
 * Shotgun: <http://github.com/rtomayko/shotgun>
 * Rack::Reloader middleware: <http://github.com/rack/rack/blob/5ca8f82fb59f0bf0e8fd438e8e91c5acf3d98e44/lib/rack/reloader.rb>
 * The Sinatra FAQ has a discussion at <http://www.sinatrarb.com/faq.html#reloading>
 * Kicker: <http://github.com/alloy/kicker/>
 * Watchr: <https://github.com/mynyml/watchr>
-* Guard: <http://github.com/guard/guard>
 * Autotest: <https://github.com/grosser/autotest>
 
 # Why would I use this instead of Shotgun?
@@ -386,6 +398,9 @@ Based upon and/or inspired by:
 * <https://github.com/krissi>
 
 # Version History
+
+* 
+  * --no-ignore-dotfiles option
 
 * v0.13.0   26 January 2018
   * bugfix: pause/unpause works again (thanks Barry!)

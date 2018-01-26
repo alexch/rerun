@@ -98,6 +98,22 @@ module Rerun
       @log.should be_nil
     end
 
+    it "does not ignore changes to dot-files" do
+      stop_watcher
+      start_watcher(ignore_dotfiles: false)
+
+      test_file = "#{@dir}/.test.txt"
+
+      create test_file
+      @log[:added].should == [test_file]
+
+      modify test_file
+      @log[:modified].should == [test_file]
+
+      remove test_file
+      @log[:removed].should == [test_file]
+    end
+
     # TODO: unify with Listen::Silencer::DEFAULT_IGNORED_DIRECTORIES
     ignored_directories = %w[
       .git .svn .hg .rbx .bundle bundle vendor/bundle log tmp vendor/ruby

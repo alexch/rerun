@@ -18,6 +18,7 @@ module Rerun
       assert {defaults[:verbose] == false}
       assert {defaults[:name] == 'Rerun'}
       assert {defaults[:force_polling] == false}
+      assert {defaults[:ignore_dotfiles] == true}
 
       assert {defaults[:clear].nil?}
       assert {defaults[:exit].nil?}
@@ -43,6 +44,11 @@ module Rerun
     it "accepts --verbose" do
       options = Options.parse args: ["--verbose", "foo"]
       assert {options[:verbose] == true}
+    end
+
+    it "accepts --no-ignore-dotfiles" do
+      options = Options.parse args: ["--no-ignore-dotfiles"]
+      assert {options[:ignore_dotfiles] == false}
     end
 
     it "splits directories" do

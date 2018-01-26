@@ -33,6 +33,7 @@ module Rerun
           :directory => ".",
           :pattern => "**/*",
           :priority => 0,
+          :ignore_dotfiles => true,
       }.merge(options)
 
       @pattern = options[:pattern]
@@ -41,6 +42,7 @@ module Rerun
       @priority = options[:priority]
       @force_polling = options[:force_polling]
       @ignore = [options[:ignore]].flatten.compact
+      @ignore_dotfiles = options[:ignore_dotfiles]
       @thread = nil
     end
 
@@ -83,8 +85,11 @@ module Rerun
 
     def ignoring
       # todo: --no-ignore-dotfiles
-      dotfiles = /^\.[^.]/ # at beginning of string, a real dot followed by any other character
-      [dotfiles] + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
+      patterns = []
+      if (@ignore_dotfiles)
+        patterns << /^\.[^.]/ # at beginning of string, a real dot followed by any other character
+      end
+      patterns + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
     end
 
     # kill the file watcher thread

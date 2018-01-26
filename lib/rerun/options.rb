@@ -17,17 +17,18 @@ module Rerun
     DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
-      :pattern => DEFAULT_PATTERN,
-      :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
-      :wait => 2,
-      :notify => true,
-      :quiet => false,
-      :verbose => false,
       :background => false,
-      :name => Pathname.getwd.basename.to_s.capitalize,
-      :ignore => [],
       :dir => DEFAULT_DIRS,
       :force_polling => false,
+      :ignore => [],
+      :ignore_dotfiles => true,
+      :name => Pathname.getwd.basename.to_s.capitalize,
+      :notify => true,
+      :pattern => DEFAULT_PATTERN,
+      :quiet => false,
+      :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
+      :verbose => false,
+      :wait => 2,
     }
 
     def self.parse args: ARGV, config_file: nil
@@ -63,8 +64,12 @@ module Rerun
           options[:pattern] = pattern
         end
 
-        o.on("-i pattern", "--ignore pattern", "file glob to ignore (can be set many times). To ignore a directory, you must append '/*' e.g. --ignore 'coverage/*'") do |pattern|
+        o.on("-i pattern", "--ignore pattern", "file glob(s) to ignore. Can be set many times. To ignore a directory, you must append '/*' e.g. --ignore 'coverage/*' . Globs do not match dotfiles by default.") do |pattern|
           options[:ignore] += [pattern]
+        end
+
+        o.on("--[no-]ignore-dotfiles", "by default, file globs do not match files that begin with a dot. Setting --no-ignore-dotfiles allows you to monitor a relevant file like .env, but you may also have to explicitly --ignore more dotfiles and dotdirs.") do |value|
+          options[:ignore_dotfiles] = value
         end
 
         o.on("-s signal", "--signal signal", "terminate process using this signal. To try several signals in series, use a comma-delimited list. Default: \"#{DEFAULTS[:signal]}\"") do |signal|
@@ -73,7 +78,7 @@ module Rerun
 
         o.on("-w sec", "--wait sec", "after asking the process to terminate, wait this long (in seconds) before either aborting, or trying the next signal in series. Default: #{DEFAULTS[:wait]} sec")
 
-        o.on("-r", "--restart", "expect process to restart itself, so just send a signal and continue watching. Uses the HUP signal unless overridden using --signal") do |signal|
+        o.on("-r", "--restart", "expect process to restart itself, so just send a signal and continue watching. Sends the HUP signal unless overridden using --signal") do |signal|
           options[:restart] = true
           default_options[:signal] = "HUP"
         end
@@ -86,7 +91,7 @@ module Rerun
           options[:clear] = value
         end
 
-        o.on("-b", "--background", "disable on-the-fly commands, allowing the process to be backgrounded") do |value|
+        o.on("-b", "--background", "disable on-the-fly keypress commands, allowing the process to be backgrounded") do |value|
           options[:background] = value
         end
 
@@ -126,9 +131,6 @@ module Rerun
           puts $spec.version
           return
         end
-
-        o.on_tail ""
-        o.on_tail "On top of --pattern and --ignore, we ignore any changes to files and dirs starting with a dot."
 
       end
 
