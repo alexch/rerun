@@ -23,10 +23,10 @@ ruby -v
 gem install bundler
 sudo apt-get install linux-headers-3.19.0-25-generic build-essential libgmp3-dev
 
-cp -r /vagrant rerun
-vi bin/rerun # remove ^M from shebang line
+rsync -avh /vagrant/ rerun
+tr -d '\015' < /vagrant/bin/rerun  > rerun/bin/rerun # remove ^M from shebang line
 cd rerun
-bundle install
+bundle update
 """
 
   # Disable automatic box update checking. If you disable this, then
