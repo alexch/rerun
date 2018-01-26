@@ -387,7 +387,8 @@ Based upon and/or inspired by:
 
 # Version History
 
-* 
+* v0.13.0   26 January 2018
+  * bugfix: pause/unpause works again (thanks Barry!)
   * `.rerun` config file
 
 * v0.12.0   23 January 2018
