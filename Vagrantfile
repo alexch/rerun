@@ -18,7 +18,8 @@ end
 
 """
 # steps after launching
-rvm install ruby-2.3.1
+rvm get latest
+rvm install ruby-2.3.4
 ruby -v
 gem install bundler
 sudo apt-get install linux-headers-3.19.0-25-generic build-essential libgmp3-dev

@@ -1,8 +1,8 @@
 ---
 language: ruby
 rvm:
-  - 2.0.0
-  - 2.2.0
+  - 2.3.4
+  - 2.4.1
 sudo: false
 cache: bundler
 
