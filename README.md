@@ -20,9 +20,9 @@ Use the `--pattern` option if you want to change this.
 As of version 0.7.0, we use the Listen gem, which tries to use your OS's
 built-in facilities for monitoring the filesystem, so CPU use is very light.
 
-**UPDATE**: Now Rerun *does* work on Windows. Caveats:
+**UPDATE**: Now Rerun *does* work on Windows! Caveats:
   * not well-tested
-  * after running, it may continue to slurp up some of your console input, so run it in a separate window, and/or use `--background` to disable on-the-fly commands, and/or press `q` to quit instead of CTRL-C
+  * you need to press Enter after keypress input
   * you may need to install the `wdm` gem manually: `gem install wdm`
   * You may see this persistent `INFO` error message; to remove it, use`--no-notify`:
     * `INFO: Could not find files for the given pattern(s)`
@@ -414,8 +414,6 @@ Based upon and/or inspired by:
   * support for Windows
      * use `Kernel.spawn` instead of `fork`
      * use `wdm` gem for Windows Directory Monitor
-     * TODO: fix `INFO` error message
-     * TODO: fix console input contention bug
   * support for notifications on GNU/Linux using [notify-send](http://www.linuxjournal.com/content/tech-tip-get-notifications-your-scripts-notify-send) (thanks terceiro)
   * fix `Gem::LoadError - terminal-notifier is not part of the bundle` [bug](https://github.com/alexch/rerun/issues/108) (thanks 	mattheworiordan)
 

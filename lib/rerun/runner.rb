@@ -337,6 +337,7 @@ module Rerun
     # returns a 1-char string if a key was pressed; otherwise nil
     #
     def key_pressed
+      return one_char if windows?
       begin
         # this "raw input" nonsense is because unix likes waiting for linefeeds before sending stdin
 
@@ -347,16 +348,10 @@ module Rerun
         # which disables #define ONLCR		0x00000002	/* map NL to CR-NL (ala CRMOD) */
         # so this sets it back on again since all we care about is raw input, not raw output
         stty "raw opost"
-
-        c = nil
-        if $stdin.ready?
-          c = $stdin.getc
-        end
-        c.chr if c
+        one_char
       ensure
         stty "-raw" # turn raw input off
       end
-
 
       # note: according to 'man tty' the proper way restore the settings is
       # tty_state=`stty -g`
@@ -364,12 +359,20 @@ module Rerun
       #   system 'stty "#{tty_state}'
       # end
       # but this way seems fine and less confusing
-
     end
 
     def clear_screen
       # see http://ascii-table.com/ansi-escape-sequences-vt-100.php
       $stdout.print "\033[H\033[2J"
+    end
+
+    private
+    def one_char
+      c = nil
+      if $stdin.ready?
+        c = $stdin.getc
+      end
+      c.chr if c
     end
 
   end
