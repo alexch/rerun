@@ -43,9 +43,9 @@ module Rerun
     end
 
     def command_named(name)
-      which_command = windows? ? 'where.exe' : 'which'
+      which_command = windows? ? 'where.exe %{cmd}' : 'which %{cmd} 2> /dev/null'
       # TODO: remove 'INFO' error message
-      path = `#{which_command} #{name}`.chomp
+      path = `#{which_command % {cmd: name}}`.chomp
       path.empty? ? nil : path
     end
 
