@@ -168,5 +168,20 @@ module Rerun
       end
     end
 
+    describe 'Usage' do
+      it "is displayed when no args are given" do
+        expect(Options).to receive(:puts) do |args|
+          expect(args.to_s).to match(/^Usage/)
+        end
+
+        Options.parse(args: [])
+      end
+
+      it "is not displayed when args are given" do
+        expect(Options).not_to receive(:puts)
+
+        Options.parse args: ["--name", "echo foo"]
+      end
+    end
   end
 end

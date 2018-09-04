@@ -134,7 +134,7 @@ module Rerun
 
       end
 
-      option_parser.parse! args
+      option_parser.parse args
       options = default_options.merge(options)
       options[:cmd] = args.join(" ").strip # todo: better arg word handling
 
