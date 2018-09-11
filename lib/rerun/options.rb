@@ -134,11 +134,10 @@ module Rerun
 
       end
 
+      puts option_parser if args.empty?
       option_parser.parse! args
       options = default_options.merge(options)
       options[:cmd] = args.join(" ").strip # todo: better arg word handling
-
-      puts option_parser if args.empty?
 
       options
     end
