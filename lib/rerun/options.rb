@@ -17,7 +17,7 @@ module Rerun
     DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
-      :background => false,
+      :background => nil,
       :dir => DEFAULT_DIRS,
       :force_polling => false,
       :ignore => [],
@@ -34,6 +34,7 @@ module Rerun
     def self.parse args: ARGV, config_file: nil
 
       default_options = DEFAULTS.dup
+      default_options[:background] = !$stdin.tty?
       options = {
         ignore: []
       }
