@@ -304,7 +304,7 @@ module Rerun
           return true if success
         end
       end
-    rescue => e
+    rescue
       false
     end
 

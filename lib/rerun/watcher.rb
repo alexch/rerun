@@ -106,7 +106,7 @@ module Rerun
     # wait for the file watcher to finish
     def join
       @thread.join if @thread
-    rescue Interrupt => e
+    rescue Interrupt
       # don't care
     end
 
