@@ -18,7 +18,7 @@ module Rerun
     #  Listen::Silencer.new(Listen::Listener.new).send :_default_ignore_patterns
     #end
 
-    attr_reader :directory, :pattern, :priority
+    attr_reader :directory, :pattern, :priority, :ignore_dotfiles
 
     # Create a file system watcher. Start it by calling #start.
     #
@@ -84,9 +84,8 @@ module Rerun
     end
 
     def ignoring
-      # todo: --no-ignore-dotfiles
       patterns = []
-      if (@ignore_dotfiles)
+      if ignore_dotfiles
         patterns << /^\.[^.]/ # at beginning of string, a real dot followed by any other character
       end
       patterns + @ignore.map { |x| Rerun::Glob.new(x).to_regexp }
@@ -131,6 +130,5 @@ module Rerun
     def adapter_name
       adapter && adapter.class.name.split('::').last
     end
-
   end
 end

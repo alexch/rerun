@@ -4,6 +4,9 @@ require 'io/wait'
 module Rerun
   class Runner
 
+    # The watcher instance that wait for changes
+    attr_reader :watcher
+
     def self.keep_running(cmd, options)
       runner = new(cmd, options)
       runner.start
@@ -198,11 +201,8 @@ module Rerun
       end
 
       unless @watcher
-
-        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore, :force_polling => force_polling) do |changes|
-
+        watcher = Watcher.new(@options) do |changes|
           message = change_message(changes)
-
           say "Change detected: #{message}"
           restart unless @restarting
         end
