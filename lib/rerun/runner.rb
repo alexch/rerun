@@ -4,6 +4,9 @@ require 'io/wait'
 module Rerun
   class Runner
 
+    # The watcher instance that wait for changes
+    attr_reader :watcher
+
     def self.keep_running(cmd, options)
       runner = new(cmd, options)
       runner.start
@@ -18,6 +21,8 @@ module Rerun
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
       @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
+      @options[:directory] ||= options.delete(:dir) || '.'
+      @options[:ignore] ||= []
     end
 
     def start_keypress_thread
@@ -91,19 +96,11 @@ module Rerun
     end
 
     def dir
-      @options[:dir]
-    end
-
-    def dirs
-      @options[:dir] || "."
+      @options[:directory]
     end
 
     def pattern
       @options[:pattern]
-    end
-
-    def ignore
-      @options[:ignore] || []
     end
 
     def clear?
@@ -198,16 +195,14 @@ module Rerun
       end
 
       unless @watcher
-
-        watcher = Watcher.new(:directory => dirs, :pattern => pattern, :ignore => ignore, :force_polling => force_polling) do |changes|
-
+        watcher = Watcher.new(@options) do |changes|
           message = change_message(changes)
-
           say "Change detected: #{message}"
           restart unless @restarting
         end
         watcher.start
         @watcher = watcher
+        ignore = @options[:ignore]
         say "Watching #{dir.join(', ')} for #{pattern}" +
               (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
               (watcher.adapter.nil? ? "" : " with #{watcher.adapter_name} adapter")
@@ -304,7 +299,7 @@ module Rerun
           return true if success
         end
       end
-    rescue => e
+    rescue
       false
     end
 

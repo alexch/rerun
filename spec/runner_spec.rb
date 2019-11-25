@@ -39,6 +39,13 @@ module Rerun
         runner.verbose?.should == true
       end
 
+      it "starts a watcher with the given options" do
+        options = Rerun::Options::DEFAULTS.dup.merge(ignore_dotfiles: false)
+        runner = Runner.new("foo.rb", options)
+        runner.start
+        runner.watcher.ignore_dotfiles.should be_falsey
+      end
+
       # TODO: test that quiet actually suppresses output
       # TODO: test that verbose actually shows more output
       # TODO: warn that verbose is overridden by quiet if you specify both
