@@ -21,6 +21,8 @@ module Rerun
     def initialize(run_command, options = {})
       @run_command, @options = run_command, options
       @run_command = "ruby #{@run_command}" if @run_command.split(' ').first =~ /\.rb$/
+      @options[:directory] ||= options.delete(:dir) || '.'
+      @options[:ignore] ||= []
     end
 
     def start_keypress_thread
@@ -94,19 +96,11 @@ module Rerun
     end
 
     def dir
-      @options[:dir]
-    end
-
-    def dirs
-      @options[:dir] || "."
+      @options[:directory]
     end
 
     def pattern
       @options[:pattern]
-    end
-
-    def ignore
-      @options[:ignore] || []
     end
 
     def clear?
@@ -208,6 +202,7 @@ module Rerun
         end
         watcher.start
         @watcher = watcher
+        ignore = @options[:ignore]
         say "Watching #{dir.join(', ')} for #{pattern}" +
               (ignore.empty? ? "" : " (ignoring #{ignore.join(',')})") +
               (watcher.adapter.nil? ? "" : " with #{watcher.adapter_name} adapter")
