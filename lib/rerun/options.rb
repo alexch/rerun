@@ -9,9 +9,6 @@ $spec = Gem::Specification.load(File.join(libdir, "..", "rerun.gemspec"))
 
 module Rerun
   class Options
-
-    extend Rerun::System
-
     # If you change the default pattern, please update the README.md file -- the list appears twice therein, which at the time of this comment are lines 17 and 119
     DEFAULT_PATTERN = "**/*.{rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h}"
     DEFAULT_DIRS = ["."]
@@ -26,7 +23,7 @@ module Rerun
       :notify => true,
       :pattern => DEFAULT_PATTERN,
       :quiet => false,
-      :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
+      :signal => (System.windows? ? "TERM,KILL" : "TERM,INT,KILL"),
       :verbose => false,
       :wait => 2,
     }

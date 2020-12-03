@@ -1,10 +1,8 @@
 here = File.expand_path(File.dirname(__FILE__))
 require 'tmpdir'
+require 'open3'
 require_relative('../lib/rerun/system')
 class IncProcess
-
-  include Rerun::System
-
   attr_reader :dir, :inc_output_file
   attr_reader :dir1, :dir2
   attr_reader :rerun_pid, :inc_parent_pid
@@ -29,8 +27,8 @@ class IncProcess
       pids = ([@inc_pid, @inc_parent_pid, @rerun_pid] - [Process.pid]).uniq
       ::Timeout.timeout(5) do
         pids.each do |pid|
-          if windows?
-            system("taskkill /F /T /PID #{pid}")
+          if Rerun::System.windows?
+            Open3.capture2('taskkill', '/F', '/T', '/PID', pid.to_s)
           else
             # puts "Killing #{pid} gracefully"
             Process.kill("INT", pid) rescue Errno::ESRCH
@@ -93,5 +91,3 @@ class IncProcess
   end
 
 end
-
-

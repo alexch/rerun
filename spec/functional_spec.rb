@@ -2,7 +2,6 @@ here = File.expand_path(File.dirname(__FILE__))
 require "#{here}/spec_helper.rb"
 require "#{here}/inc_process.rb"
 
-
 describe "the rerun command" do
   before do
     STDOUT.sync = true
@@ -80,9 +79,8 @@ describe "the rerun command" do
 
   #it "sends its child process a SIGINT to restart"
 
-  include ::Rerun::System
   it "dies when sent a control-C (SIGINT)" do
-    unless windows?
+    unless Rerun::System.windows?
       pid = @inc.inc_parent_pid
       # puts "test sending INT to #{pid}"
       Process.kill("INT", pid)
