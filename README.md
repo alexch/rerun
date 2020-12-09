@@ -399,7 +399,7 @@ Based upon and/or inspired by:
 
 # Version History
 
-* 
+* v0.13.1   9 December 2020
   * --no-ignore-dotfiles option
 
 * v0.13.0   26 January 2018
