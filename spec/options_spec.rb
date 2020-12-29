@@ -22,7 +22,17 @@ module Rerun
 
       assert {defaults[:clear].nil?}
       assert {defaults[:exit].nil?}
+    end
 
+    it 'defaults to background if stdin is not a tty' do
+      expect($stdin).to receive(:tty?).and_return(false)
+      defaults = Options.parse args: []
+      assert {defaults[:background] == true}
+    end
+
+    it 'defaults to foreground if stdin is a tty' do
+      expect($stdin).to receive(:tty?).and_return(true)
+      defaults = Options.parse args: []
       assert {defaults[:background] == false}
     end
 
