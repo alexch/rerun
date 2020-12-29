@@ -14,7 +14,7 @@ Rerun's advantage is its simple design. Since it uses `exec` and the standard
 Unix `SIGINT` and `SIGKILL` signals, you're sure the restarted app is really
 acting just like it was when you ran it from the command line the first time.
 
-By default it watches files ending in: `rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h`.
+By default it watches files ending in: `rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h,cpp,hpp,py`.
 Use the `--pattern` option if you want to change this.
 
 As of version 0.7.0, we use the Listen gem, which tries to use your OS's
