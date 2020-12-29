@@ -3,7 +3,6 @@ require 'io/wait'
 
 module Rerun
   class Runner
-
     # The watcher instance that wait for changes
     attr_reader :watcher
 
@@ -15,7 +14,6 @@ module Rerun
       sleep 10000 while true # :-(
     end
 
-    include System
     include ::Timeout
 
     def initialize(run_command, options = {})
@@ -251,7 +249,7 @@ module Rerun
     # @returns false if either sending the signal fails or the process fails to die
     def signal_and_wait(signal)
 
-      signal_sent = if windows?
+      signal_sent = if System.windows?
                       force_kill = (signal == 'KILL')
                       system("taskkill /T #{'/F' if force_kill} /PID #{@pid}")
                     else
@@ -332,7 +330,7 @@ module Rerun
     # returns a 1-char string if a key was pressed; otherwise nil
     #
     def key_pressed
-      return one_char if windows?
+      return one_char if System.windows?
       begin
         # this "raw input" nonsense is because unix likes waiting for linefeeds before sending stdin
 
