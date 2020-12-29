@@ -70,12 +70,13 @@ module Rerun
     end
 
     def with_clean_env
-      if defined?(Bundler)
-        Bundler.with_clean_env do
-          yield
-        end
+      return yield unless defined?(Bundler)
+
+      if Bundler.respond_to?(:with_unbundled_env)
+        Bundler.with_unbundled_env { yield }
       else
-        yield
+        # Deprecated on Bundler 2.1
+        Bundler.with_clean_env { yield }
       end
     end
   end
