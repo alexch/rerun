@@ -261,7 +261,7 @@ module Rerun
       if signal_sent
         # the signal was successfully sent, so wait for the process to die
         begin
-          timeout(@options[:wait]) do
+          Timeout.timeout(@options[:wait]) do
             Process.wait(@pid)
           end
           process_status = $?
