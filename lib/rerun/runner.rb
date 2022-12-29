@@ -311,7 +311,7 @@ module Rerun
 
     def read_git_head
       git_head_file = File.join(dir, '.git', 'HEAD')
-      @git_head = File.exists?(git_head_file) && File.read(git_head_file)
+      @git_head = File.exist?(git_head_file) && File.read(git_head_file)
     end
 
     def notify(title, body, background = true)
