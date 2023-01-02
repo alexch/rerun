@@ -50,7 +50,7 @@ module Rerun
       dirs = [*dirs]
       dirs.map do |d|
         d.chomp!("/")
-        unless FileTest.exists?(d) && FileTest.readable?(d) && FileTest.directory?(d)
+        unless FileTest.exist?(d) && FileTest.readable?(d) && FileTest.directory?(d)
           raise InvalidDirectoryError, "Directory '#{d}' either doesnt exist or isn't readable"
         end
         File.expand_path(d)
