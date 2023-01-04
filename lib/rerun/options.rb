@@ -76,7 +76,9 @@ module Rerun
           options[:signal] = signal
         end
 
-        o.on("-w sec", "--wait sec", "after asking the process to terminate, wait this long (in seconds) before either aborting, or trying the next signal in series. Default: #{DEFAULTS[:wait]} sec")
+        o.on("-w sec", "--wait sec", "after asking the process to terminate, wait this long (in seconds) before either aborting, or trying the next signal in series. Default: #{DEFAULTS[:wait]} sec") do |value|
+          default_options[:wait] = value
+        end
 
         o.on("-r", "--restart", "expect process to restart itself, so just send a signal and continue watching. Sends the HUP signal unless overridden using --signal") do |signal|
           options[:restart] = true
