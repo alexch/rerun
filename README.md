@@ -399,6 +399,9 @@ Based upon and/or inspired by:
 
 # Version History
 
+* v0.14.0  4 January 2023
+  * Ruby 3.2 compatibility fix: .exists? no longer exists
+
 * v0.13.1   9 December 2020
   * --no-ignore-dotfiles option
 
