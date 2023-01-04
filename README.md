@@ -227,7 +227,7 @@ now that Growl has moved to the App Store.
 
 Install [terminal-notifier](https://github.com/julienXX/terminal-notifier) using `gem install terminal-notifier`. (You may have to put it in your system gemset and/or use `sudo` too.) Using Homebrew to install terminal-notifier is not recommended.
 
-On Debian/Ubuntu, `notify-send` is availble in the `libnotify-bin` package. On other GNU/Linux systems, it might be in a package with a different name.
+On Debian/Ubuntu, `notify-send` is available in the `libnotify-bin` package. On other GNU/Linux systems, it might be in a package with a different name.
 
 # On-The-Fly Commands
 
