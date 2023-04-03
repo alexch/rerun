@@ -35,7 +35,7 @@ module Rerun
       if s.nil? and options[:notify] == true or options[:notify] == "notify-send"
         if (cmd = command_named('notify-send'))
           icon_str = "--icon #{icon}" if icon
-          s = "#{cmd} -t 500 --hint=int:transient:1 #{icon_str} \"#{app_name}: #{title}\" \"#{body}\""
+          s = "#{cmd} -t 2000 --hint=int:transient:1 #{icon_str} \"#{app_name}: #{title}\" \"#{body}\""
         end
       end
 
