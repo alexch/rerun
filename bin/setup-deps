@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")/.."
+
+mkdir -p tmp
+
+echo "at=info msg=\"checking out test dependencies\""
+
+if [ -d "tmp/wrong" ]; then
+  echo "at=info msg=\"wrong already exists, pulling latest\""
+  git -C tmp/wrong pull
+else
+  echo "at=info msg=\"cloning wrong\""
+  git clone https://github.com/alexch/wrong.git tmp/wrong
+  rm -f tmp/wrong/wrong-java.gemspec
+fi
+
+if [ -d "tmp/files" ]; then
+  echo "at=info msg=\"files already exists, pulling latest\""
+  git -C tmp/files pull
+else
+  echo "at=info msg=\"cloning files\""
+  git clone https://github.com/alexch/files.git tmp/files
+fi
+
+echo "at=info msg=\"dependencies ready\""
