@@ -160,7 +160,7 @@ module Rerun
         say "Rerun (#{$PID}) running #{app_name} (#{@pid})"
       rescue => e
         puts "#{e.class}: #{e.message}"
-        exit
+        raise ExitException
       end
 
       status_thread = Process.detach(@pid) # so if the child exits, it dies
@@ -235,7 +235,7 @@ module Rerun
     def die
       #stop_keypress_thread   # don't do this since we're probably *in* the keypress thread
       stop # stop the child process if it exists
-      exit 0 # todo: status code param
+      raise ExitException # todo: status code param
     end
 
     def join

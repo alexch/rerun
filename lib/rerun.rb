@@ -10,6 +10,8 @@ require "rerun/watcher"
 require "rerun/glob"
 
 module Rerun
-
+  # Raised when the runner wants to exit cleanly.
+  # This allows tests to catch the exit instead of terminating the process.
+  class ExitException < StandardError; end
 end
 
