@@ -364,7 +364,9 @@ module Rerun
     private
     def one_char
       c = nil
-      if $stdin.ready?
+      msg = $stdin.respond_to?(:wait_readable) ? :wait_readable : :ready?
+
+      if $stdin.send(msg)
         c = $stdin.getc
       end
       c.chr if c
