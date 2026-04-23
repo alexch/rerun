@@ -13,7 +13,7 @@ module Rerun
     extend Rerun::System
 
     # If you change the default pattern, please update the README.md file -- the list appears twice therein, which at the time of this comment are lines 17 and 119
-    DEFAULT_PATTERN = "**/*.{rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h}"
+    DEFAULT_PATTERN = "**/*.{rb,js,coffee,css,scss,sass,erb,html,haml,ru,yml,slim,md,feature,c,h,cpp,hpp,py}"
     DEFAULT_DIRS = ["."]
 
     DEFAULTS = {
