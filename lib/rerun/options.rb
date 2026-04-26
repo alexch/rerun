@@ -29,6 +29,7 @@ module Rerun
       :signal => (windows? ? "TERM,KILL" : "TERM,INT,KILL"),
       :verbose => false,
       :wait => 2,
+      :filter => [:modified, :added, :removed]
     }
 
     def self.parse args: ARGV, config_file: nil
@@ -66,6 +67,10 @@ module Rerun
 
         o.on("-i pattern", "--ignore pattern", "file glob(s) to ignore. Can be set many times. To ignore a directory, you must append '/*' e.g. --ignore 'coverage/*' . Globs do not match dotfiles by default.") do |pattern|
           options[:ignore] += [pattern]
+        end
+
+        o.on("-f changes", "--filter", "changes to respond to, default = #{DEFAULTS[:filter].join(",")}") do |value|
+          options[:filter] = value.strip.split(/\s*,\s*/).reject(&:empty?).map(&:to_sym)
         end
 
         o.on("--[no-]ignore-dotfiles", "by default, file globs do not match files that begin with a dot. Setting --no-ignore-dotfiles allows you to monitor a relevant file like .env, but you may also have to explicitly --ignore more dotfiles and dotdirs.") do |value|

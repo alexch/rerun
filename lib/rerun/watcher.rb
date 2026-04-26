@@ -32,6 +32,7 @@ module Rerun
       options = {
           :directory => ".",
           :pattern => "**/*",
+          :filter => [:modified, :added, :removed],
           :priority => 0,
           :ignore_dotfiles => true,
       }.merge(options)
@@ -39,6 +40,7 @@ module Rerun
       @pattern = options[:pattern]
       @directories = options[:directory]
       @directories = sanitize_dirs(@directories)
+      @filter = options[:filter]
       @priority = options[:priority]
       @force_polling = options[:force_polling]
       @ignore = [options[:ignore]].flatten.compact
@@ -57,6 +59,21 @@ module Rerun
       end
     end
 
+    def filter_changes(modified, added, removed)
+      changes = { modified: [], added: [], removed: [] }
+      @filter.each do |change|
+        case change
+        when :modified
+          changes[:modified] = modified
+        when :added
+          changes[:added] = added
+        when :removed
+          changes[:removed] = removed
+        end
+      end
+      changes
+    end
+
     def start
       if @thread then
         raise RuntimeError, "already started"
@@ -64,9 +81,9 @@ module Rerun
 
       @thread = Thread.new do
         @listener = Listen.to(*@directories, only: watching, ignore: ignoring, wait_for_delay: 1, force_polling: @force_polling) do |modified, added, removed|
-          count = modified.size + added.size + removed.size
-          if count > 0
-            @client_callback.call(:modified => modified, :added => added, :removed => removed)
+          changes = filter_changes(modified, added, removed)
+          if changes.each_value.map(&:size).sum > 0
+            @client_callback.call(**changes)
           end
         end
         @listener.start
