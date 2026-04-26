@@ -15,4 +15,8 @@ end
 
 exit if options.nil? or options[:cmd].nil? or options[:cmd].empty?
 
-Rerun::Runner.keep_running(options[:cmd], options)
+begin
+  Rerun::Runner.keep_running(options[:cmd], options)
+rescue Rerun::ExitException
+  exit 0
+end
