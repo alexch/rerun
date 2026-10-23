@@ -36,6 +36,11 @@ module Rerun
       end
     end
 
+    it "parses --wait as a numeric timeout" do
+      options = Options.parse args: %w[--wait 0.5 echo foo]
+      assert {options[:wait] == 0.5}
+    end
+
     it "accepts --quiet" do
       options = Options.parse args: ["--quiet", "foo"]
       assert {options[:quiet] == true}
